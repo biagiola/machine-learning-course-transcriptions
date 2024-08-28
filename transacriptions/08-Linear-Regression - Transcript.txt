@@ -1,0 +1,1754 @@
+WEBVTT
+
+1
+00:00:00.200 --> 00:00:01.033
+<v Instructor>Welcome back.</v>
+
+2
+00:00:01.033 --> 00:00:04.100
+This is ML Experts, machine learning crash course.
+
+3
+00:00:04.100 --> 00:00:07.670
+Let's say that we have a plot of some points like so.
+
+4
+00:00:07.670 --> 00:00:10.410
+If we wanted to draw a line that best summarizes
+
+5
+00:00:10.410 --> 00:00:14.230
+the trend of this data, we could draw a line like this.
+
+6
+00:00:14.230 --> 00:00:18.180
+This line summarizes the trend that as X1 goes up,
+
+7
+00:00:18.180 --> 00:00:20.750
+X2 also goes up.
+
+8
+00:00:20.750 --> 00:00:24.770
+Using this line, we can take some X1 value,
+
+9
+00:00:24.770 --> 00:00:28.220
+which we don't know the corresponding X2 value of,
+
+10
+00:00:28.220 --> 00:00:32.480
+and we can plug in the X1 value into this line
+
+11
+00:00:32.480 --> 00:00:37.430
+to get an estimate of what the X2 value would be, okay.
+
+12
+00:00:37.430 --> 00:00:40.540
+So this is the general idea behind linear regression,
+
+13
+00:00:40.540 --> 00:00:44.410
+and basically linear regression answers the question
+
+14
+00:00:44.410 --> 00:00:49.410
+of how do we find the line of best fit for the data?
+
+15
+00:00:49.510 --> 00:00:51.910
+Let's say we've just been hired by California ISO,
+
+16
+00:00:51.910 --> 00:00:55.050
+which oversees California's electric power management.
+
+17
+00:00:55.050 --> 00:00:57.240
+They'd like to be able to predict the power demand
+
+18
+00:00:57.240 --> 00:01:00.280
+of a particular region a day in advance
+
+19
+00:01:00.280 --> 00:01:02.840
+so that they can ramp up supply to the region
+
+20
+00:01:02.840 --> 00:01:05.410
+if they think demand is going to be higher.
+
+21
+00:01:05.410 --> 00:01:07.530
+Or they can route power away from the region
+
+22
+00:01:07.530 --> 00:01:10.940
+toward other needing regions, so that they don't end up
+
+23
+00:01:10.940 --> 00:01:13.253
+with too much power in a particular region.
+
+24
+00:01:14.190 --> 00:01:16.550
+Our hypothesis is that in the summer months,
+
+25
+00:01:16.550 --> 00:01:19.320
+as the temperatures rise, so does the power demand,
+
+26
+00:01:19.320 --> 00:01:21.173
+because people will turn on their AC.
+
+27
+00:01:22.410 --> 00:01:23.770
+So for our features,
+
+28
+00:01:23.770 --> 00:01:26.080
+we have the average daily regional temperature history
+
+29
+00:01:26.080 --> 00:01:27.840
+provided by the national weather service.
+
+30
+00:01:27.840 --> 00:01:28.673
+And for the labels,
+
+31
+00:01:28.673 --> 00:01:31.810
+we have the daily historical power demand per region.
+
+32
+00:01:31.810 --> 00:01:33.180
+So for a particular region,
+
+33
+00:01:33.180 --> 00:01:35.780
+we can plot the power demand of that region,
+
+34
+00:01:35.780 --> 00:01:38.393
+given some average daily temperature.
+
+35
+00:01:39.273 --> 00:01:42.150
+So the idea is that we can use linear regression
+
+36
+00:01:42.150 --> 00:01:45.520
+to find a line in which we can plug in
+
+37
+00:01:45.520 --> 00:01:47.280
+an arbitrary temperature,
+
+38
+00:01:47.280 --> 00:01:49.473
+to get out a predicted power demand.
+
+39
+00:01:50.670 --> 00:01:53.680
+The line is often called a line of best fit.
+
+40
+00:01:53.680 --> 00:01:56.960
+Now let's revisit the equation of a line.
+
+41
+00:01:56.960 --> 00:01:58.410
+The X is our input.
+
+42
+00:01:58.410 --> 00:02:00.730
+Here this would be average temperature.
+
+43
+00:02:00.730 --> 00:02:02.860
+M would be the slope of a line,
+
+44
+00:02:02.860 --> 00:02:06.610
+and B would be the Y intercept of that line.
+
+45
+00:02:06.610 --> 00:02:11.120
+So Y is our dependent variable Because it depends on X,
+
+46
+00:02:11.120 --> 00:02:13.080
+and X is our independent variable
+
+47
+00:02:13.080 --> 00:02:15.840
+which will be on our X axis here.
+
+48
+00:02:15.840 --> 00:02:19.890
+So slope is how steep the line itself is.
+
+49
+00:02:19.890 --> 00:02:22.893
+The intercept will be the shift of the line vertically.
+
+50
+00:02:23.730 --> 00:02:25.280
+The idea is that we would be able
+
+51
+00:02:25.280 --> 00:02:30.090
+to plug in sum arbitrary X to get out sum output Y
+
+52
+00:02:30.090 --> 00:02:32.060
+which would be the predicted power demand
+
+53
+00:02:32.060 --> 00:02:34.760
+in that region for that temperature.
+
+54
+00:02:34.760 --> 00:02:36.240
+Our challenge is to figure out
+
+55
+00:02:36.240 --> 00:02:38.520
+what the best line equation is,
+
+56
+00:02:38.520 --> 00:02:40.503
+which summarizes this dataset.
+
+57
+00:02:41.540 --> 00:02:44.290
+Fortunately for us, there's a formula we can use.
+
+58
+00:02:44.290 --> 00:02:47.160
+So if we have XY pairs of data,
+
+59
+00:02:47.160 --> 00:02:49.080
+we can figure out the line of best fit
+
+60
+00:02:49.080 --> 00:02:52.930
+by simply applying this formula here and got changed to A
+
+61
+00:02:52.930 --> 00:02:54.710
+'cause that's just commonly what you'll see.
+
+62
+00:02:54.710 --> 00:02:59.565
+So here is any given element XI, here's any given element Y.
+
+63
+00:02:59.565 --> 00:03:01.203
+This is just the average of X,
+
+64
+00:03:01.203 --> 00:03:04.250
+this is just the average of Y, this is average of X.
+
+65
+00:03:04.250 --> 00:03:06.800
+So we can plug in the averages
+
+66
+00:03:06.800 --> 00:03:08.780
+and then we expand the summation of top.
+
+67
+00:03:08.780 --> 00:03:13.380
+So XI, which is X1, the first one minus the average,
+
+68
+00:03:13.380 --> 00:03:15.800
+multiplied by the first power demand,
+
+69
+00:03:15.800 --> 00:03:17.720
+42,000 minus the average power demand.
+
+70
+00:03:17.720 --> 00:03:20.470
+This continues all the way through for every single pair.
+
+71
+00:03:20.470 --> 00:03:22.250
+And then in the denominator,
+
+72
+00:03:22.250 --> 00:03:24.610
+we can expand the summation, all right.
+
+73
+00:03:24.610 --> 00:03:27.877
+And it's just the axis now, except we square the terms.
+
+74
+00:03:27.877 --> 00:03:32.200
+And that leaves us with an A of 4,105.
+
+75
+00:03:32.200 --> 00:03:34.910
+To solve for B, we just take the average Y
+
+76
+00:03:34.910 --> 00:03:37.140
+and the average X, plug those in.
+
+77
+00:03:37.140 --> 00:03:39.240
+We have A, because we just solved for that.
+
+78
+00:03:39.240 --> 00:03:43.870
+So B will be negative 50,962,
+
+79
+00:03:43.870 --> 00:03:46.140
+and this is our line of best fit.
+
+80
+00:03:46.140 --> 00:03:49.370
+So for a few temperatures here in a given region,
+
+81
+00:03:49.370 --> 00:03:51.610
+we've filled out more of the values here.
+
+82
+00:03:51.610 --> 00:03:54.400
+So if we plug in our line of best fit
+
+83
+00:03:54.400 --> 00:03:57.950
+that we solve for earlier, we'll see this line here up here.
+
+84
+00:03:57.950 --> 00:03:59.750
+Now, what we can do is let's say
+
+85
+00:03:59.750 --> 00:04:01.470
+that the national weather service
+
+86
+00:04:01.470 --> 00:04:03.740
+is predicting that the temperature tomorrow on average
+
+87
+00:04:03.740 --> 00:04:07.500
+will be 25.2 degrees Celsius.
+
+88
+00:04:07.500 --> 00:04:08.530
+We can map that.
+
+89
+00:04:08.530 --> 00:04:12.520
+We just putting that into the X value here in our line.
+
+90
+00:04:12.520 --> 00:04:14.730
+We can map that to a Y value
+
+91
+00:04:14.730 --> 00:04:19.730
+of 52,484 megawatts of power demand, okay.
+
+92
+00:04:20.060 --> 00:04:22.850
+So that way we know a day in advance,
+
+93
+00:04:22.850 --> 00:04:24.410
+based on the prediction
+
+94
+00:04:24.410 --> 00:04:26.700
+of the temperature of the following day.
+
+95
+00:04:26.700 --> 00:04:30.520
+We know generally what the power demand will be.
+
+96
+00:04:30.520 --> 00:04:32.910
+So what does this coefficient actually mean?
+
+97
+00:04:32.910 --> 00:04:34.050
+This coefficient means
+
+98
+00:04:34.050 --> 00:04:37.860
+that for every one unit increase in X,
+
+99
+00:04:37.860 --> 00:04:42.860
+we'll get 4,105 units increase in Y.
+
+100
+00:04:43.140 --> 00:04:45.040
+So for instance, if we increase the temperature
+
+101
+00:04:45.040 --> 00:04:47.090
+by one degree Celsius,
+
+102
+00:04:47.090 --> 00:04:52.090
+we will get 4,105 megawatts of power demand increase.
+
+103
+00:04:53.800 --> 00:04:55.220
+So one thing that we got to make sure of
+
+104
+00:04:55.220 --> 00:04:58.140
+is that this coefficient just isn't disguised as noise.
+
+105
+00:04:58.140 --> 00:04:59.380
+Let's say that if we just put a whole bunch
+
+106
+00:04:59.380 --> 00:05:03.120
+of random points here, here, here, here, here, here, here.
+
+107
+00:05:03.120 --> 00:05:05.640
+Technically this would still learn a line.
+
+108
+00:05:05.640 --> 00:05:06.540
+So we have to make sure
+
+109
+00:05:06.540 --> 00:05:08.840
+that this coefficient just isn't noise.
+
+110
+00:05:08.840 --> 00:05:09.740
+One thing we can do
+
+111
+00:05:09.740 --> 00:05:12.490
+is to check the P value of the coefficient.
+
+112
+00:05:12.490 --> 00:05:15.440
+A P value is a probability that this relationship
+
+113
+00:05:15.440 --> 00:05:18.800
+or a stronger relationship could have been observed
+
+114
+00:05:18.800 --> 00:05:22.410
+among random data points also called the null hypothesis.
+
+115
+00:05:22.410 --> 00:05:25.150
+The P value, even though completely arbitrary,
+
+116
+00:05:25.150 --> 00:05:28.880
+is usually required to be less than or equal to .05.
+
+117
+00:05:28.880 --> 00:05:30.050
+This means that there needs to be
+
+118
+00:05:30.050 --> 00:05:34.030
+a 5% chance or less that this relationship or coefficient
+
+119
+00:05:34.030 --> 00:05:37.350
+could have been explained by random noise.
+
+120
+00:05:37.350 --> 00:05:38.470
+So fortunately for us,
+
+121
+00:05:38.470 --> 00:05:40.340
+this condition is fulfilled in our case
+
+122
+00:05:40.340 --> 00:05:44.720
+as our P value is .0009, which is less than .05.
+
+123
+00:05:44.720 --> 00:05:46.870
+So technically we can deem this coefficient
+
+124
+00:05:46.870 --> 00:05:49.410
+to be statistically significant
+
+125
+00:05:49.410 --> 00:05:52.060
+since it passes our null hypothesis test.
+
+126
+00:05:52.060 --> 00:05:54.950
+Some practitioners rely on more stringent requirements,
+
+127
+00:05:54.950 --> 00:05:59.220
+say a P value of .001, but it's generally .05.
+
+128
+00:05:59.220 --> 00:06:01.720
+Finally, since we've sampled the features and labels,
+
+129
+00:06:01.720 --> 00:06:04.210
+such that we've only used the summer temperatures
+
+130
+00:06:04.210 --> 00:06:06.960
+and then we've only used the past five years of data,
+
+131
+00:06:06.960 --> 00:06:10.070
+the coefficient that we see is actually an estimate
+
+132
+00:06:10.070 --> 00:06:13.670
+based on some actual coefficient that would exist
+
+133
+00:06:13.670 --> 00:06:16.620
+if we had used all of the data in all of history
+
+134
+00:06:16.620 --> 00:06:19.760
+and our measurements were absolutely perfect
+
+135
+00:06:19.760 --> 00:06:23.430
+and we were absolutely generating this much power demand,
+
+136
+00:06:23.430 --> 00:06:24.263
+things like that.
+
+137
+00:06:24.263 --> 00:06:25.640
+So if everything was perfect,
+
+138
+00:06:25.640 --> 00:06:29.330
+this coefficient would actually be a different value likely.
+
+139
+00:06:29.330 --> 00:06:31.850
+To get an idea of how close this coefficient is
+
+140
+00:06:31.850 --> 00:06:34.690
+to the actual value of the coefficient,
+
+141
+00:06:34.690 --> 00:06:37.420
+we can use something called a confidence interval.
+
+142
+00:06:37.420 --> 00:06:41.120
+So our confidence interval is between 3,100
+
+143
+00:06:41.120 --> 00:06:44.800
+and 5,000, okay, at 95%.
+
+144
+00:06:44.800 --> 00:06:46.970
+This means there's a 95% chance
+
+145
+00:06:46.970 --> 00:06:49.750
+that the true value of the coefficient lies
+
+146
+00:06:49.750 --> 00:06:53.800
+in the interval between 3,100 and 5,000.
+
+147
+00:06:53.800 --> 00:06:55.760
+So really, for every degree increase,
+
+148
+00:06:55.760 --> 00:07:00.180
+there's a 95% chance that we'll see between a 3,100
+
+149
+00:07:00.180 --> 00:07:04.560
+and a 5,000 megawatt increase in power demand.
+
+150
+00:07:04.560 --> 00:07:08.680
+Be careful that if your confidence interval contains zero,
+
+151
+00:07:08.680 --> 00:07:12.110
+then your coefficient is not statistically significant.
+
+152
+00:07:12.110 --> 00:07:14.570
+So this non-zero statistically-significant
+
+153
+00:07:14.570 --> 00:07:17.490
+confidence interval coefficient implies a relationship
+
+154
+00:07:17.490 --> 00:07:20.760
+between the temperature and the power demand.
+
+155
+00:07:20.760 --> 00:07:23.730
+This relationship is referred to as a correlation.
+
+156
+00:07:23.730 --> 00:07:26.090
+We can quantify correlation with the term R,
+
+157
+00:07:26.090 --> 00:07:28.767
+which has a range of negative one to one.
+
+158
+00:07:28.767 --> 00:07:31.860
+The negative R represents a negative correlation,
+
+159
+00:07:31.860 --> 00:07:35.390
+and a positive R represents a positive correlation.
+
+160
+00:07:35.390 --> 00:07:38.810
+A correlation of zero represents no correlation at all.
+
+161
+00:07:38.810 --> 00:07:41.800
+For our data, we have a correlation of .99,
+
+162
+00:07:41.800 --> 00:07:45.980
+which is fantastic because that means our temperature
+
+163
+00:07:45.980 --> 00:07:49.069
+and our power demand correlate strongly.
+
+164
+00:07:49.069 --> 00:07:50.110
+But it's important to recognize
+
+165
+00:07:50.110 --> 00:07:53.380
+that R does not say anything about causation.
+
+166
+00:07:53.380 --> 00:07:54.780
+You've probably heard that.
+
+167
+00:07:54.780 --> 00:07:58.520
+And it just means exactly that R doesn't say anything
+
+168
+00:07:58.520 --> 00:07:59.480
+about what causes what.
+
+169
+00:07:59.480 --> 00:08:01.030
+For instance, this average temperature,
+
+170
+00:08:01.030 --> 00:08:04.430
+we could've put it over here and put power demand over here.
+
+171
+00:08:04.430 --> 00:08:07.840
+And then we would see, oh, as power demand rises,
+
+172
+00:08:07.840 --> 00:08:09.860
+the average temperature goes up.
+
+173
+00:08:09.860 --> 00:08:11.560
+So that's not what this is measuring.
+
+174
+00:08:11.560 --> 00:08:12.393
+We would still see
+
+175
+00:08:12.393 --> 00:08:14.770
+the same correlation coefficient there, .99.
+
+176
+00:08:14.770 --> 00:08:18.080
+But we have to be careful in that.
+
+177
+00:08:18.080 --> 00:08:21.190
+We're not specifying what's causing what.
+
+178
+00:08:21.190 --> 00:08:23.040
+All right, so now that we have correlation figured out,
+
+179
+00:08:23.040 --> 00:08:25.120
+the next step is to get R-squared value
+
+180
+00:08:25.120 --> 00:08:27.260
+which we get by squaring R.
+
+181
+00:08:27.260 --> 00:08:28.520
+This is a commonly used metric
+
+182
+00:08:28.520 --> 00:08:31.700
+to determine how well the line fits the data.
+
+183
+00:08:31.700 --> 00:08:34.710
+It's a percent, so it lies between zero and one.
+
+184
+00:08:34.710 --> 00:08:37.600
+We can see this by taking the mean of our examples
+
+185
+00:08:37.600 --> 00:08:39.760
+and measuring the residuals, which is the distance
+
+186
+00:08:39.760 --> 00:08:43.790
+between the example and the mean of all the examples.
+
+187
+00:08:43.790 --> 00:08:47.310
+And if we sum up that number and put it aside,
+
+188
+00:08:47.310 --> 00:08:49.410
+let's say it's 100.
+
+189
+00:08:49.410 --> 00:08:52.070
+And then we sum up the residuals compared
+
+190
+00:08:52.070 --> 00:08:55.540
+to our line of best fit, and sum those up,
+
+191
+00:08:55.540 --> 00:08:57.500
+let's say it's two.
+
+192
+00:08:57.500 --> 00:09:01.790
+What R-squared represents is the explain difference
+
+193
+00:09:01.790 --> 00:09:04.210
+we went from 100 to two.
+
+194
+00:09:04.210 --> 00:09:08.130
+So we've explained 98% of the variance
+
+195
+00:09:08.130 --> 00:09:10.560
+by just fitting the data to this line.
+
+196
+00:09:10.560 --> 00:09:12.620
+What this means is that the other 2%
+
+197
+00:09:12.620 --> 00:09:15.720
+of the variance of the data isn't explained
+
+198
+00:09:15.720 --> 00:09:17.410
+by our temperature variable.
+
+199
+00:09:17.410 --> 00:09:20.440
+One idea is to include more features than just temperature
+
+200
+00:09:20.440 --> 00:09:23.310
+to see if you can get a higher R-squared value
+
+201
+00:09:23.310 --> 00:09:25.993
+and thus explain more of the variance.
+
+202
+00:09:26.900 --> 00:09:28.150
+Remember, even though that the goal
+
+203
+00:09:28.150 --> 00:09:30.280
+is to get a high R-squared,
+
+204
+00:09:30.280 --> 00:09:33.760
+it's not necessarily going to be ever 100%
+
+205
+00:09:33.760 --> 00:09:37.420
+since there's typically noise in real-world environments.
+
+206
+00:09:37.420 --> 00:09:39.400
+We're not gonna go too deep into it,
+
+207
+00:09:39.400 --> 00:09:41.530
+but if you wanna know how P value
+
+208
+00:09:41.530 --> 00:09:43.610
+and confidence intervals are derived,
+
+209
+00:09:43.610 --> 00:09:44.880
+we're gonna visit it quickly.
+
+210
+00:09:44.880 --> 00:09:47.770
+We can get a P value by finding what's called
+
+211
+00:09:47.770 --> 00:09:50.450
+the standard error, the coefficient, okay.
+
+212
+00:09:50.450 --> 00:09:53.890
+So this is just, it's a formula, all right.
+
+213
+00:09:53.890 --> 00:09:56.000
+Then we'll take our coefficient, which is A,
+
+214
+00:09:56.000 --> 00:09:57.770
+and divided by that standard error
+
+215
+00:09:57.770 --> 00:10:00.590
+to get what's called a T statistic, all right.
+
+216
+00:10:00.590 --> 00:10:04.480
+And then we plug that T statistic into our T distribution.
+
+217
+00:10:04.480 --> 00:10:08.650
+What we'll do is we'll get a area under the T distribution
+
+218
+00:10:08.650 --> 00:10:10.160
+from our T statistic value,
+
+219
+00:10:10.160 --> 00:10:13.920
+and the P value is obtained by the sum of the areas
+
+220
+00:10:13.920 --> 00:10:18.080
+under that T statistic portion of the T distribution.
+
+221
+00:10:18.080 --> 00:10:20.060
+For confidence intervals,
+
+222
+00:10:20.060 --> 00:10:22.920
+we take that same standard error of the coefficient,
+
+223
+00:10:22.920 --> 00:10:25.670
+and to get a 95% confidence interval,
+
+224
+00:10:25.670 --> 00:10:28.230
+we take the coefficient, okay,
+
+225
+00:10:28.230 --> 00:10:33.060
+minus 1.96 times the standard error coefficient, all right,
+
+226
+00:10:33.060 --> 00:10:35.230
+that's our low end of the range.
+
+227
+00:10:35.230 --> 00:10:39.900
+And our range ranges from that to the high end of our range,
+
+228
+00:10:39.900 --> 00:10:43.630
+which is the coefficient, which was our A,
+
+229
+00:10:43.630 --> 00:10:48.540
+plus 1.96 times the standard error coefficient.
+
+230
+00:10:48.540 --> 00:10:50.370
+R-squared on the other hand can be calculated
+
+231
+00:10:50.370 --> 00:10:54.070
+by taking the variance of those errors or residuals,
+
+232
+00:10:54.070 --> 00:10:56.320
+dividing by the variance of Y.
+
+233
+00:10:56.320 --> 00:10:57.690
+And you just one minus that
+
+234
+00:10:57.690 --> 00:10:59.200
+and that'll give you your R-squared.
+
+235
+00:10:59.200 --> 00:11:01.520
+As well, the adjusted R-squared incorporates
+
+236
+00:11:01.520 --> 00:11:03.270
+the R-squared itself along with
+
+237
+00:11:03.270 --> 00:11:07.040
+the number of independent variables we use in our model.
+
+238
+00:11:07.040 --> 00:11:08.070
+All right, so let's say our model
+
+239
+00:11:08.070 --> 00:11:10.550
+is doing exceptionally well and we want to expand that out
+
+240
+00:11:10.550 --> 00:11:13.670
+to different regions other than just one.
+
+241
+00:11:13.670 --> 00:11:16.440
+However, other regions are not populated equally.
+
+242
+00:11:16.440 --> 00:11:18.880
+And we want to represent that in our model.
+
+243
+00:11:18.880 --> 00:11:19.780
+We can add a feature
+
+244
+00:11:19.780 --> 00:11:23.270
+to the examples called approximate population size, okay?
+
+245
+00:11:23.270 --> 00:11:25.750
+And that's going to be small, medium or large.
+
+246
+00:11:25.750 --> 00:11:28.110
+We can also include the region type, right?
+
+247
+00:11:28.110 --> 00:11:29.590
+So we can have an industrial region,
+
+248
+00:11:29.590 --> 00:11:31.900
+commercial region or residential region.
+
+249
+00:11:31.900 --> 00:11:33.340
+The idea is that these features
+
+250
+00:11:33.340 --> 00:11:35.730
+are important in terms of power demand.
+
+251
+00:11:35.730 --> 00:11:40.380
+This feature is ordinal and this feature is categorical.
+
+252
+00:11:40.380 --> 00:11:41.610
+We can incorporate these features
+
+253
+00:11:41.610 --> 00:11:44.570
+into our linear regression model like so.
+
+254
+00:11:44.570 --> 00:11:48.410
+All that we did was replace alpha with betas.
+
+255
+00:11:48.410 --> 00:11:51.860
+And so for instance, temperature is now a beta times X.
+
+256
+00:11:51.860 --> 00:11:54.240
+Be comfortable seeing any type of letters here.
+
+257
+00:11:54.240 --> 00:11:56.970
+Just know that you're just multiplying numbers.
+
+258
+00:11:56.970 --> 00:11:59.969
+And here we've included our ordinal feature
+
+259
+00:11:59.969 --> 00:12:02.380
+to designate region size.
+
+260
+00:12:02.380 --> 00:12:04.520
+So that would be small, medium and large
+
+261
+00:12:04.520 --> 00:12:05.940
+for zero, one and two.
+
+262
+00:12:05.940 --> 00:12:09.670
+What this means is that X will be zero for small,
+
+263
+00:12:09.670 --> 00:12:11.780
+one for medium and two for large.
+
+264
+00:12:11.780 --> 00:12:15.580
+Here in order to represent categorical variables
+
+265
+00:12:15.580 --> 00:12:18.200
+in linear regression, we're going to use one-hot encoding.
+
+266
+00:12:18.200 --> 00:12:20.460
+So what this means is that X3
+
+267
+00:12:20.460 --> 00:12:22.610
+is basically all the same variable,
+
+268
+00:12:22.610 --> 00:12:24.120
+but they're one-hot encoded
+
+269
+00:12:24.120 --> 00:12:28.080
+such that only one of these terms
+
+270
+00:12:28.080 --> 00:12:30.610
+will be present at any given time.
+
+271
+00:12:30.610 --> 00:12:31.960
+This term will be present
+
+272
+00:12:31.960 --> 00:12:35.090
+when we're dealing with an industrial example,
+
+273
+00:12:35.090 --> 00:12:36.400
+this term will be present
+
+274
+00:12:36.400 --> 00:12:38.580
+when we're dealing with a residential example,
+
+275
+00:12:38.580 --> 00:12:39.730
+and this term will be present
+
+276
+00:12:39.730 --> 00:12:42.030
+when we're dealing with a commercial example.
+
+277
+00:12:42.030 --> 00:12:43.760
+It's typical in linear regression.
+
+278
+00:12:43.760 --> 00:12:45.480
+We'll take the one-hot encoding
+
+279
+00:12:45.480 --> 00:12:47.900
+and represent at least one state at zero, zero.
+
+280
+00:12:47.900 --> 00:12:49.880
+So this is the same thing.
+
+281
+00:12:49.880 --> 00:12:52.720
+It's just saying that this term will be here for industrial,
+
+282
+00:12:52.720 --> 00:12:54.950
+this term will be here for residential,
+
+283
+00:12:54.950 --> 00:12:57.310
+and neither of these terms will be here for commercial.
+
+284
+00:12:57.310 --> 00:12:58.830
+So we just took our one-hot encoding
+
+285
+00:12:58.830 --> 00:13:02.170
+and made sure to represent zero zero with it,
+
+286
+00:13:02.170 --> 00:13:04.820
+so now we need one less variable.
+
+287
+00:13:04.820 --> 00:13:06.530
+Now that we've introduced more features
+
+288
+00:13:06.530 --> 00:13:08.020
+or independent variables
+
+289
+00:13:08.020 --> 00:13:10.730
+to predict our label or dependent variable,
+
+290
+00:13:10.730 --> 00:13:13.340
+we really only have to worry about one additional thing.
+
+291
+00:13:13.340 --> 00:13:16.310
+Since the features are called independent variables,
+
+292
+00:13:16.310 --> 00:13:18.970
+what happens if they aren't so independent?
+
+293
+00:13:18.970 --> 00:13:20.310
+For instance, what if we decided
+
+294
+00:13:20.310 --> 00:13:22.980
+to introduce a feature of humidity?
+
+295
+00:13:22.980 --> 00:13:24.860
+And what if it also just happens
+
+296
+00:13:24.860 --> 00:13:28.290
+that temperature and humidity correlate?
+
+297
+00:13:28.290 --> 00:13:30.960
+This correlation between independent variables
+
+298
+00:13:30.960 --> 00:13:34.500
+or features is called collinearity or multicollinearity
+
+299
+00:13:34.500 --> 00:13:36.100
+if multiple features do it.
+
+300
+00:13:36.100 --> 00:13:37.760
+Collinearity won't affect
+
+301
+00:13:37.760 --> 00:13:40.360
+our performance of the model itself.
+
+302
+00:13:40.360 --> 00:13:43.180
+So our R-squared will remain unchanged.
+
+303
+00:13:43.180 --> 00:13:45.640
+Our model can still make effective predictions,
+
+304
+00:13:45.640 --> 00:13:47.860
+however, the way we interpret the coefficients
+
+305
+00:13:47.860 --> 00:13:48.820
+will have to change.
+
+306
+00:13:48.820 --> 00:13:50.300
+For instance, if we still wanted
+
+307
+00:13:50.300 --> 00:13:53.040
+to interpret this temperature coefficient,
+
+308
+00:13:53.040 --> 00:13:54.650
+our assumption was that in order
+
+309
+00:13:54.650 --> 00:13:57.210
+to interpret the temperature coefficient,
+
+310
+00:13:57.210 --> 00:14:00.350
+and its contribution toward power demand increase,
+
+311
+00:14:00.350 --> 00:14:02.890
+all else in the equation would have to remain the same.
+
+312
+00:14:02.890 --> 00:14:05.620
+But since these now correlate, we can't say for sure
+
+313
+00:14:05.620 --> 00:14:07.600
+that all of these will stay the same
+
+314
+00:14:07.600 --> 00:14:11.340
+when we just evaluate a single degree temperature change.
+
+315
+00:14:11.340 --> 00:14:15.580
+So at least how can we detect that variables are collinear?
+
+316
+00:14:15.580 --> 00:14:18.040
+Well, we can look at the features VIF
+
+317
+00:14:18.040 --> 00:14:20.280
+or variance inflation factor.
+
+318
+00:14:20.280 --> 00:14:23.320
+VIF is derived from finding the correlation itself
+
+319
+00:14:23.320 --> 00:14:25.060
+between certain features.
+
+320
+00:14:25.060 --> 00:14:28.870
+A VIF of one implies no collinearity.
+
+321
+00:14:28.870 --> 00:14:32.280
+VIF of one to five is a moderate collinearity
+
+322
+00:14:32.280 --> 00:14:33.330
+but you still probably don't have
+
+323
+00:14:33.330 --> 00:14:34.890
+to do any form of mitigation.
+
+324
+00:14:34.890 --> 00:14:36.370
+And anything above five,
+
+325
+00:14:36.370 --> 00:14:38.510
+it's going to be a severe collinearity
+
+326
+00:14:38.510 --> 00:14:41.180
+and you'll probably want to use a mitigation strategy.
+
+327
+00:14:41.180 --> 00:14:44.210
+One of those strategies is centering your features.
+
+328
+00:14:44.210 --> 00:14:47.250
+It just means subtracting the average feature value
+
+329
+00:14:47.250 --> 00:14:50.220
+from the feature itself, and that will center your features
+
+330
+00:14:50.220 --> 00:14:53.140
+and can lower the variance inflation factor.
+
+331
+00:14:53.140 --> 00:14:55.530
+So one interesting thing now that we can incorporate
+
+332
+00:14:55.530 --> 00:14:59.530
+since we have multiple features, are feature interactions.
+
+333
+00:14:59.530 --> 00:15:01.000
+If we think that the power demand
+
+334
+00:15:01.000 --> 00:15:05.180
+of a small residential region is going to behave differently
+
+335
+00:15:05.180 --> 00:15:07.340
+than a small industrial region,
+
+336
+00:15:07.340 --> 00:15:09.290
+then we can model this distinction
+
+337
+00:15:09.290 --> 00:15:11.040
+by using an interaction term.
+
+338
+00:15:11.040 --> 00:15:14.460
+This simply means multiplying the two features together.
+
+339
+00:15:14.460 --> 00:15:17.470
+We had to add two here because these are one-hot encoded,
+
+340
+00:15:17.470 --> 00:15:19.220
+but really only one of these
+
+341
+00:15:19.220 --> 00:15:21.180
+will be present at any given time
+
+342
+00:15:21.180 --> 00:15:22.720
+after introducing the interaction term
+
+343
+00:15:22.720 --> 00:15:23.930
+if the R-squared goes up
+
+344
+00:15:23.930 --> 00:15:26.210
+and the P value of the interaction term is significant,
+
+345
+00:15:26.210 --> 00:15:27.820
+then you can be reasonably confident
+
+346
+00:15:27.820 --> 00:15:30.270
+that these terms are in fact interacting.
+
+347
+00:15:30.270 --> 00:15:32.260
+A rather unintuitive question that arises
+
+348
+00:15:32.260 --> 00:15:35.320
+is can we multiply a feature with itself?
+
+349
+00:15:35.320 --> 00:15:37.890
+The answer is yes, but why would we want to?
+
+350
+00:15:37.890 --> 00:15:39.710
+Imagine we added the winter months
+
+351
+00:15:39.710 --> 00:15:41.670
+along with the summer months to our model.
+
+352
+00:15:41.670 --> 00:15:43.440
+As the temperature gets colder,
+
+353
+00:15:43.440 --> 00:15:45.400
+the power demand goes up as well
+
+354
+00:15:45.400 --> 00:15:47.230
+because people turn on their heat.
+
+355
+00:15:47.230 --> 00:15:49.850
+If we fit this data with our existing model,
+
+356
+00:15:49.850 --> 00:15:51.510
+then we'd get this line.
+
+357
+00:15:51.510 --> 00:15:53.360
+It does minimize the mean squared error,
+
+358
+00:15:53.360 --> 00:15:55.310
+but only as much as a line can.
+
+359
+00:15:55.310 --> 00:15:58.530
+So if we add a term where we square the temperature
+
+360
+00:15:58.530 --> 00:16:00.410
+or multiply it by itself,
+
+361
+00:16:00.410 --> 00:16:02.780
+then we're now able to fit a curve.
+
+362
+00:16:02.780 --> 00:16:04.720
+This is because the equation for a parabola
+
+363
+00:16:04.720 --> 00:16:06.750
+contains that squared term.
+
+364
+00:16:06.750 --> 00:16:08.160
+You can actually even do cubix,
+
+365
+00:16:08.160 --> 00:16:10.860
+where you multiply the same term by itself three times.
+
+366
+00:16:10.860 --> 00:16:11.693
+What does that do?
+
+367
+00:16:11.693 --> 00:16:14.670
+Well, that gives us an extra bend over here.
+
+368
+00:16:14.670 --> 00:16:16.620
+We can even do to the fourth power
+
+369
+00:16:16.620 --> 00:16:19.230
+which would give us another bend over here.
+
+370
+00:16:19.230 --> 00:16:21.300
+And now our model looks like this.
+
+371
+00:16:21.300 --> 00:16:24.300
+One thing to note is that you can put so many terms in
+
+372
+00:16:24.300 --> 00:16:25.980
+that you over-fit your data,
+
+373
+00:16:25.980 --> 00:16:28.550
+and it may not generalize well to the test set.
+
+374
+00:16:28.550 --> 00:16:32.150
+But you can put a one over X or log of X
+
+375
+00:16:32.150 --> 00:16:34.150
+to fit any range of functions.
+
+376
+00:16:34.150 --> 00:16:35.180
+Now, the only rule
+
+377
+00:16:35.180 --> 00:16:38.760
+is that you have to follow the pattern of the coefficient
+
+378
+00:16:38.760 --> 00:16:41.220
+times sum function of X,
+
+379
+00:16:41.220 --> 00:16:43.730
+coefficient times sum function of X.
+
+380
+00:16:43.730 --> 00:16:45.060
+If you do something like this,
+
+381
+00:16:45.060 --> 00:16:48.350
+you then have nonlinear regression, okay?
+
+382
+00:16:48.350 --> 00:16:50.030
+Nonlinear regression is powerful.
+
+383
+00:16:50.030 --> 00:16:51.580
+We're not going to touch on it right now,
+
+384
+00:16:51.580 --> 00:16:52.920
+more than we already have.
+
+385
+00:16:52.920 --> 00:16:55.210
+So now we can finally train our linear regression model
+
+386
+00:16:55.210 --> 00:16:57.640
+to fit a curve for more than one region
+
+387
+00:16:57.640 --> 00:16:59.800
+in which we have multiple types to features.
+
+388
+00:16:59.800 --> 00:17:02.580
+We can use it by simply plugging in some X value
+
+389
+00:17:02.580 --> 00:17:04.560
+to get out sum Y value.
+
+390
+00:17:04.560 --> 00:17:06.190
+One thing to look out for when fitting data
+
+391
+00:17:06.190 --> 00:17:07.810
+is called Simpson's paradox.
+
+392
+00:17:07.810 --> 00:17:09.900
+For example, when we expanded our model
+
+393
+00:17:09.900 --> 00:17:11.040
+to different regions,
+
+394
+00:17:11.040 --> 00:17:13.530
+we included the label for the region size.
+
+395
+00:17:13.530 --> 00:17:16.270
+So let's say our model started out in a large region.
+
+396
+00:17:16.270 --> 00:17:18.370
+And as we expanded to a medium or small,
+
+397
+00:17:18.370 --> 00:17:22.060
+we included that label along with the data of indicating
+
+398
+00:17:22.060 --> 00:17:25.720
+that it was in fact from small or medium region.
+
+399
+00:17:25.720 --> 00:17:27.020
+Now, since we did that,
+
+400
+00:17:27.020 --> 00:17:29.470
+we actually got to learn lines like this,
+
+401
+00:17:29.470 --> 00:17:31.910
+because we knew that we had to separate them out
+
+402
+00:17:31.910 --> 00:17:36.460
+and learn separate lines from them based on the region.
+
+403
+00:17:36.460 --> 00:17:38.830
+However, imagine if we didn't include the features
+
+404
+00:17:38.830 --> 00:17:40.580
+of the region size,
+
+405
+00:17:40.580 --> 00:17:43.210
+adding data would have looked like this, right?
+
+406
+00:17:43.210 --> 00:17:45.970
+So we would have been existing in a large region.
+
+407
+00:17:45.970 --> 00:17:48.870
+We would have added our medium data and our small data,
+
+408
+00:17:48.870 --> 00:17:52.750
+and the model wouldn't have no one to differentiate them.
+
+409
+00:17:52.750 --> 00:17:56.280
+So it would have learned a single line for this data
+
+410
+00:17:56.280 --> 00:17:58.460
+that would have looked like this.
+
+411
+00:17:58.460 --> 00:17:59.790
+This is extremely dangerous.
+
+412
+00:17:59.790 --> 00:18:03.130
+What this is saying is as temperature goes up,
+
+413
+00:18:03.130 --> 00:18:07.320
+power demand goes down, which we know is just not true.
+
+414
+00:18:07.320 --> 00:18:10.240
+This is Simpson's paradox, it's something to look out for.
+
+415
+00:18:10.240 --> 00:18:13.450
+And really a good way to avoid it
+
+416
+00:18:13.450 --> 00:18:16.870
+is to add as many dimensions to our model
+
+417
+00:18:16.870 --> 00:18:19.990
+which segment the data we're trying to predict, right?
+
+418
+00:18:19.990 --> 00:18:24.610
+So in our case, we added these dimensions to our model,
+
+419
+00:18:24.610 --> 00:18:26.900
+which indicated segments of our data
+
+420
+00:18:26.900 --> 00:18:30.870
+which allowed Simpson's paradox to be avoided.
+
+421
+00:18:30.870 --> 00:18:32.240
+So finally to wrap this up,
+
+422
+00:18:32.240 --> 00:18:35.500
+a good linear record software package
+
+423
+00:18:35.500 --> 00:18:37.240
+that I like is called Stats Model.
+
+424
+00:18:37.240 --> 00:18:40.250
+It lets you conduct multiple regression,
+
+425
+00:18:40.250 --> 00:18:42.400
+which is multiple coefficients
+
+426
+00:18:42.400 --> 00:18:44.460
+and multiple independent variables.
+
+427
+00:18:44.460 --> 00:18:48.530
+And then it will also give you R-squared, your P values,
+
+428
+00:18:48.530 --> 00:18:50.000
+and there is even a path
+
+429
+00:18:50.000 --> 00:18:53.170
+to get you your variance inflation factors as well.
+
+430
+00:18:53.170 --> 00:18:56.350
+FYI, the close form, linear regression formula
+
+431
+00:18:56.350 --> 00:18:59.610
+that we used to calculate those lines, it's N-cubed.
+
+432
+00:18:59.610 --> 00:19:01.420
+So it's not actually used in practice.
+
+433
+00:19:01.420 --> 00:19:03.500
+Libraries use another method
+
+434
+00:19:03.500 --> 00:19:06.190
+based on a singular value decomposition,
+
+435
+00:19:06.190 --> 00:19:07.670
+which we'll talk about later.
+
+436
+00:19:07.670 --> 00:19:09.360
+But for now, that's it for this video.
+
+437
+00:19:09.360 --> 00:19:11.960
+Thanks for joining, join us on our next video as well
+
+438
+00:19:11.960 --> 00:19:14.423
+as we continue our machine learning journey.
+

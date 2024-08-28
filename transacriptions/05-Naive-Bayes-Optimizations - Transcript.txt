@@ -1,0 +1,2466 @@
+WEBVTT
+
+1
+00:00:00.650 --> 00:00:01.483
+<v Illustrator>Well, welcome back</v>
+
+2
+00:00:01.483 --> 00:00:04.720
+to ML Experts Machine Learning Crash course.
+
+3
+00:00:04.720 --> 00:00:07.020
+In this session, we're gonna build on our understanding
+
+4
+00:00:07.020 --> 00:00:08.560
+of the Naive Bayes model,
+
+5
+00:00:08.560 --> 00:00:12.763
+as well as expand our definition of supervised learning.
+
+6
+00:00:13.600 --> 00:00:16.160
+So far, we've only been able to classify
+
+7
+00:00:16.160 --> 00:00:20.240
+between two classes, either a spam or not spam,
+
+8
+00:00:20.240 --> 00:00:22.330
+but what if there's more classes?
+
+9
+00:00:22.330 --> 00:00:23.780
+For instance, let's say we work
+
+10
+00:00:23.780 --> 00:00:27.280
+for the social journaling company medium,
+
+11
+00:00:27.280 --> 00:00:29.490
+and they have a bunch of content creators
+
+12
+00:00:29.490 --> 00:00:31.560
+that create articles,
+
+13
+00:00:31.560 --> 00:00:34.270
+what if we want to automatically classify articles
+
+14
+00:00:34.270 --> 00:00:37.770
+that they create into classes or tags
+
+15
+00:00:37.770 --> 00:00:42.770
+such as finance, politics or lifestyles slash travel blogs
+
+16
+00:00:43.140 --> 00:00:45.710
+automatically without them having to do anything
+
+17
+00:00:45.710 --> 00:00:47.730
+or without us having to hire people
+
+18
+00:00:47.730 --> 00:00:51.640
+to read the articles and classify them for us.
+
+19
+00:00:51.640 --> 00:00:55.240
+Well, we can actually use Naive Bayes for this as well.
+
+20
+00:00:55.240 --> 00:00:58.270
+Let's revisit the old spam model that we used.
+
+21
+00:00:58.270 --> 00:01:01.010
+In the denominator, you can see that we actually
+
+22
+00:01:01.010 --> 00:01:02.520
+only have two terms, right?
+
+23
+00:01:02.520 --> 00:01:04.930
+We have one term for each class
+
+24
+00:01:05.850 --> 00:01:08.070
+to evaluate it as if it were spam
+
+25
+00:01:08.070 --> 00:01:10.960
+and as if it were not spam.
+
+26
+00:01:10.960 --> 00:01:12.650
+And if you need to refresh,
+
+27
+00:01:12.650 --> 00:01:17.170
+just go ahead and look at the previous Naive Bayes video.
+
+28
+00:01:17.170 --> 00:01:19.650
+We need to update this model to incorporate
+
+29
+00:01:19.650 --> 00:01:21.490
+more than just these two classes.
+
+30
+00:01:21.490 --> 00:01:23.950
+So somewhat obviously, right?
+
+31
+00:01:23.950 --> 00:01:27.200
+We can just go from two classes to three classes
+
+32
+00:01:27.200 --> 00:01:30.050
+by incorporating three terms instead of two.
+
+33
+00:01:30.050 --> 00:01:31.960
+So we'd have a term for tech,
+
+34
+00:01:31.960 --> 00:01:34.980
+a term for finance and a term for politics.
+
+35
+00:01:34.980 --> 00:01:37.980
+We can actually generalize these summations here
+
+36
+00:01:37.980 --> 00:01:40.900
+with the symbol so that we would actually
+
+37
+00:01:40.900 --> 00:01:44.060
+just sum through every single class C.
+
+38
+00:01:44.060 --> 00:01:45.390
+So if we had five classes,
+
+39
+00:01:45.390 --> 00:01:49.270
+we could just write this and see would be five classes.
+
+40
+00:01:49.270 --> 00:01:52.180
+All right, so now we can actually rewrite a condensed form
+
+41
+00:01:52.180 --> 00:01:55.640
+of our Naive Bayes model with this summation here
+
+42
+00:01:55.640 --> 00:01:57.310
+in the denominator.
+
+43
+00:01:57.310 --> 00:02:00.030
+Let's go through the other terms to see what has changed
+
+44
+00:02:00.030 --> 00:02:01.920
+and what hasn't.
+
+45
+00:02:01.920 --> 00:02:05.103
+Let's start first with the prior of sum class K.
+
+46
+00:02:06.470 --> 00:02:09.660
+Let's say that we wanted to evaluate the prior of tech.
+
+47
+00:02:09.660 --> 00:02:11.410
+Similar to the spam example,
+
+48
+00:02:11.410 --> 00:02:14.990
+all we'd have to do is count the number of tech articles
+
+49
+00:02:14.990 --> 00:02:17.220
+and count the number of non-tech articles,
+
+50
+00:02:17.220 --> 00:02:19.490
+and then just take the ratio of the two.
+
+51
+00:02:19.490 --> 00:02:24.003
+So here we have two tech articles, for non-tech articles
+
+52
+00:02:24.003 --> 00:02:28.700
+that would give us a prior of tech of 33%.
+
+53
+00:02:28.700 --> 00:02:30.910
+Moving on to the likelihood term,
+
+54
+00:02:30.910 --> 00:02:32.020
+we have a couple of options.
+
+55
+00:02:32.020 --> 00:02:35.100
+We could treat this the same exact way we treated
+
+56
+00:02:35.100 --> 00:02:37.490
+the spam likelihoods, okay?
+
+57
+00:02:37.490 --> 00:02:39.210
+As a refresher, what we did there
+
+58
+00:02:39.210 --> 00:02:41.850
+was we just counted the number of spam messages
+
+59
+00:02:41.850 --> 00:02:45.000
+that contained a particular term here, wallet
+
+60
+00:02:45.000 --> 00:02:49.050
+and divided by the total number of spam messages.
+
+61
+00:02:49.050 --> 00:02:50.090
+So in this case,
+
+62
+00:02:50.090 --> 00:02:53.750
+the word wallet appeared in this message one,
+
+63
+00:02:53.750 --> 00:02:55.860
+but not this message, the other,
+
+64
+00:02:55.860 --> 00:03:00.860
+so we got a 50% likelihood there of the word wallet
+
+65
+00:03:01.070 --> 00:03:03.260
+appearing in a spam message.
+
+66
+00:03:03.260 --> 00:03:05.100
+There's a case for not wanting to do this,
+
+67
+00:03:05.100 --> 00:03:07.643
+with longer messages or articles.
+
+68
+00:03:08.740 --> 00:03:10.210
+Let's say we have two articles,
+
+69
+00:03:10.210 --> 00:03:13.330
+one on the left is a tech based article.
+
+70
+00:03:13.330 --> 00:03:17.920
+It talks about how Apple is using their own M1 chips,
+
+71
+00:03:17.920 --> 00:03:20.780
+and in the article, it mentions TSMC,
+
+72
+00:03:20.780 --> 00:03:23.260
+which is Taiwan Semiconductor Manufacturing Company
+
+73
+00:03:23.260 --> 00:03:25.970
+and it mentions Taiwan a single time.
+
+74
+00:03:25.970 --> 00:03:28.940
+The article on the right, however, is a travel blog,
+
+75
+00:03:28.940 --> 00:03:31.230
+this blogger had gone through Asia
+
+76
+00:03:31.230 --> 00:03:34.133
+and mentions Taiwan several times in their article.
+
+77
+00:03:35.480 --> 00:03:37.240
+The problem is that if we only model
+
+78
+00:03:37.240 --> 00:03:39.370
+the presence or absence of words,
+
+79
+00:03:39.370 --> 00:03:43.790
+then these two articles would appear to be the same
+
+80
+00:03:43.790 --> 00:03:47.180
+in terms of the word Taiwan to our Bernoulli model,
+
+81
+00:03:47.180 --> 00:03:50.770
+which is the model we used in the spam classification.
+
+82
+00:03:50.770 --> 00:03:54.220
+However, if we don't use the Bernoulli model anymore,
+
+83
+00:03:54.220 --> 00:03:57.060
+and we switched to a multinomial model,
+
+84
+00:03:57.060 --> 00:04:00.470
+what we'll be modeling instead is the counts
+
+85
+00:04:00.470 --> 00:04:03.570
+of each word in an article instead of the mere presence
+
+86
+00:04:03.570 --> 00:04:05.460
+or absence of a word.
+
+87
+00:04:05.460 --> 00:04:07.630
+Let's say that we wanted to get the likelihood
+
+88
+00:04:07.630 --> 00:04:11.700
+that the word computer appears in a tech article.
+
+89
+00:04:11.700 --> 00:04:14.550
+What we'd do is we would take all of the tech articles
+
+90
+00:04:14.550 --> 00:04:18.140
+with the word computer, that would be article one and two,
+
+91
+00:04:18.140 --> 00:04:21.380
+and then separate them from all of the tech articles
+
+92
+00:04:21.380 --> 00:04:23.600
+without the word computer.
+
+93
+00:04:23.600 --> 00:04:25.890
+Then we would count the number of times
+
+94
+00:04:25.890 --> 00:04:29.110
+that the word computer appeared in the articles
+
+95
+00:04:29.110 --> 00:04:31.100
+with the word computer in them,
+
+96
+00:04:31.100 --> 00:04:34.830
+and that would go in the numerator of our calculation
+
+97
+00:04:34.830 --> 00:04:35.950
+and in the denominator,
+
+98
+00:04:35.950 --> 00:04:38.770
+we would put the total number of words
+
+99
+00:04:38.770 --> 00:04:43.120
+across all of the articles within the tech tag.
+
+100
+00:04:43.120 --> 00:04:47.520
+So here article one had 47 words, article two had 82 words,
+
+101
+00:04:47.520 --> 00:04:49.940
+article three had 96 words,
+
+102
+00:04:49.940 --> 00:04:53.200
+we would sum all of those up and put them in the denominator
+
+103
+00:04:53.200 --> 00:04:55.270
+of our probability calculator.
+
+104
+00:04:55.270 --> 00:04:56.840
+So if you remember,
+
+105
+00:04:56.840 --> 00:04:59.600
+just to review what we did with the spam model,
+
+106
+00:04:59.600 --> 00:05:01.870
+we would take our input message,
+
+107
+00:05:01.870 --> 00:05:06.270
+we would map that to be in terms of our known vocabulary.
+
+108
+00:05:06.270 --> 00:05:10.320
+This would be our model and we'd model either the absence
+
+109
+00:05:10.320 --> 00:05:12.860
+or the presence of a particular word,
+
+110
+00:05:12.860 --> 00:05:16.860
+and we'd have our priors of spam and priors of not spam,
+
+111
+00:05:16.860 --> 00:05:18.580
+and then we'd have our spam likelihood maps
+
+112
+00:05:18.580 --> 00:05:21.593
+and our non-spam likelihood maps.
+
+113
+00:05:22.780 --> 00:05:24.710
+For this case, since we have multiple classes,
+
+114
+00:05:24.710 --> 00:05:26.640
+we're gonna have multiple priors
+
+115
+00:05:26.640 --> 00:05:28.790
+and we're going to have a likelihood map
+
+116
+00:05:28.790 --> 00:05:30.963
+for each class as well.
+
+117
+00:05:32.430 --> 00:05:35.720
+The model is going to look the exact same
+
+118
+00:05:35.720 --> 00:05:38.040
+in terms of like the denominator in the prior,
+
+119
+00:05:38.040 --> 00:05:41.140
+the likelihood, however, will change.
+
+120
+00:05:41.140 --> 00:05:43.500
+Specifically, let's look at how that will change
+
+121
+00:05:43.500 --> 00:05:45.563
+with regards to an input message.
+
+122
+00:05:46.670 --> 00:05:48.910
+So we'll have our input message
+
+123
+00:05:48.910 --> 00:05:52.430
+and we'll calculate the likelihoods in this way.
+
+124
+00:05:52.430 --> 00:05:55.700
+So stock will have its own likelihood
+
+125
+00:05:55.700 --> 00:05:58.780
+of the probability of stock given some class.
+
+126
+00:05:58.780 --> 00:06:01.520
+ETF will also have its own term, fire will have some.
+
+127
+00:06:01.520 --> 00:06:04.710
+This looks very similar to how we modeled it
+
+128
+00:06:04.710 --> 00:06:06.300
+in the Bernoulli way,
+
+129
+00:06:06.300 --> 00:06:09.943
+however, the difference here is that if we reorder these,
+
+130
+00:06:10.780 --> 00:06:13.790
+we can see that this term actually appears twice
+
+131
+00:06:13.790 --> 00:06:16.790
+since the word stock is in our message twice
+
+132
+00:06:16.790 --> 00:06:19.590
+we can see that we actually hit that probability twice.
+
+133
+00:06:19.590 --> 00:06:23.700
+Okay, so we can actually combine them into powers.
+
+134
+00:06:23.700 --> 00:06:26.550
+So the probability of stock given sum class
+
+135
+00:06:26.550 --> 00:06:28.530
+times the probability of stock given sum class,
+
+136
+00:06:28.530 --> 00:06:30.480
+it's just the probability of stock given class
+
+137
+00:06:30.480 --> 00:06:31.850
+to the second power.
+
+138
+00:06:31.850 --> 00:06:33.480
+ETF only appeared one time,
+
+139
+00:06:33.480 --> 00:06:35.630
+so it would only be to the power of one.
+
+140
+00:06:35.630 --> 00:06:37.150
+What these really are,
+
+141
+00:06:37.150 --> 00:06:40.580
+is just a count of the number of words
+
+142
+00:06:40.580 --> 00:06:43.450
+with respect to the element in our vocabulary, right?
+
+143
+00:06:43.450 --> 00:06:46.780
+So if we wanted to model the input message W
+
+144
+00:06:46.780 --> 00:06:50.000
+we would say, okay, the zero with word in our vocabulary
+
+145
+00:06:50.000 --> 00:06:51.860
+occurs zero times,
+
+146
+00:06:51.860 --> 00:06:54.570
+the first zero times,
+
+147
+00:06:54.570 --> 00:06:57.420
+this element in our vocabulary appears twice
+
+148
+00:06:57.420 --> 00:07:00.510
+and we would model that as just the power
+
+149
+00:07:00.510 --> 00:07:03.380
+of the probability of the likelihood.
+
+150
+00:07:03.380 --> 00:07:07.210
+Okay, so now we have the representation of our input message
+
+151
+00:07:07.210 --> 00:07:08.853
+in terms of their counts.
+
+152
+00:07:10.230 --> 00:07:13.510
+So let's say that we wanted to evaluate this message
+
+153
+00:07:13.510 --> 00:07:17.050
+in terms of it being in the category of finance.
+
+154
+00:07:17.050 --> 00:07:21.250
+Okay, so first we would replace this prior here,
+
+155
+00:07:21.250 --> 00:07:24.640
+and then we would expand these likelihood terms out,
+
+156
+00:07:24.640 --> 00:07:26.440
+and then all we would do is apply
+
+157
+00:07:26.440 --> 00:07:30.620
+our vocabulary representation as powers
+
+158
+00:07:31.540 --> 00:07:33.160
+to the likelihoods themselves.
+
+159
+00:07:33.160 --> 00:07:37.340
+So if you have a count of zero, then your power zero,
+
+160
+00:07:37.340 --> 00:07:40.330
+and you would just have a value of one.
+
+161
+00:07:40.330 --> 00:07:43.300
+However, since stock appears twice in our message,
+
+162
+00:07:43.300 --> 00:07:46.580
+then the probability of stock given some finance article,
+
+163
+00:07:46.580 --> 00:07:49.870
+we actually put a two in the power
+
+164
+00:07:49.870 --> 00:07:54.870
+and for talk, since talk only occurs a single time
+
+165
+00:07:55.230 --> 00:07:57.477
+that would just have a power of one.
+
+166
+00:07:57.477 --> 00:08:00.060
+But we can run those calculations.
+
+167
+00:08:00.060 --> 00:08:01.920
+Now, you may have noticed that there,
+
+168
+00:08:01.920 --> 00:08:05.330
+we could still run into the issue of having a zero element
+
+169
+00:08:05.330 --> 00:08:06.163
+in the numerator.
+
+170
+00:08:06.163 --> 00:08:08.350
+We talked about this with the spam example,
+
+171
+00:08:08.350 --> 00:08:10.750
+and we use something called Laplace smoothing,
+
+172
+00:08:10.750 --> 00:08:12.740
+we'll take a similar approach here.
+
+173
+00:08:12.740 --> 00:08:16.250
+So going back to the likelihood of the word computer
+
+174
+00:08:16.250 --> 00:08:18.330
+appearing in a tech article,
+
+175
+00:08:18.330 --> 00:08:21.090
+nothing would change in terms of our counts
+
+176
+00:08:21.090 --> 00:08:23.980
+or our calculation, except for the fact
+
+177
+00:08:23.980 --> 00:08:27.080
+that we would add one to the numerator
+
+178
+00:08:27.080 --> 00:08:31.540
+and two to the denominator to include Laplace smoothing.
+
+179
+00:08:31.540 --> 00:08:34.920
+This would ensure that we don't get those zero probabilities
+
+180
+00:08:34.920 --> 00:08:36.960
+in our likelihood calculations.
+
+181
+00:08:36.960 --> 00:08:40.060
+So now let's go ahead and look at the denominator.
+
+182
+00:08:40.060 --> 00:08:42.380
+Let's expand this condensed form.
+
+183
+00:08:42.380 --> 00:08:44.550
+So we're actually iterating through every class.
+
+184
+00:08:44.550 --> 00:08:46.730
+We've already calculated this finance terms,
+
+185
+00:08:46.730 --> 00:08:49.320
+so we can go ahead and get rid of that.
+
+186
+00:08:49.320 --> 00:08:52.560
+We can look up our priors for tech and politics,
+
+187
+00:08:52.560 --> 00:08:54.290
+we can expand these terms
+
+188
+00:08:54.290 --> 00:08:56.810
+in terms of our vocabulary as well.
+
+189
+00:08:56.810 --> 00:09:01.570
+We would apply the powers rule here as well with the counts.
+
+190
+00:09:01.570 --> 00:09:03.120
+So we can crunch those numbers
+
+191
+00:09:03.120 --> 00:09:05.940
+and we get 0.27 for the denominator.
+
+192
+00:09:05.940 --> 00:09:09.630
+So if we crunch these numbers up top, we get 0.16,
+
+193
+00:09:09.630 --> 00:09:12.430
+we can substitute in the 0.27 for the denominator,
+
+194
+00:09:12.430 --> 00:09:16.790
+this results in a 59% probability that this input article
+
+195
+00:09:16.790 --> 00:09:19.310
+should belong in the finance category
+
+196
+00:09:19.310 --> 00:09:21.450
+or receive the finance tag.
+
+197
+00:09:21.450 --> 00:09:23.010
+To improve our model performance
+
+198
+00:09:23.010 --> 00:09:25.350
+we can actually do something a bit more clever
+
+199
+00:09:25.350 --> 00:09:30.303
+with this vocabulary representation of the input message.
+
+200
+00:09:31.890 --> 00:09:34.290
+Let's say that we had the word travel, okay?
+
+201
+00:09:34.290 --> 00:09:36.550
+And let's say we had six articles,
+
+202
+00:09:36.550 --> 00:09:38.800
+for instance, article three contains the word travel
+
+203
+00:09:38.800 --> 00:09:41.693
+10 times and so on for all the other articles,
+
+204
+00:09:42.790 --> 00:09:46.270
+we can do something called a term frequency calculation.
+
+205
+00:09:46.270 --> 00:09:47.997
+All right, so we count the number of times
+
+206
+00:09:47.997 --> 00:09:51.390
+the word travels appears in say article one,
+
+207
+00:09:51.390 --> 00:09:54.770
+and we divide by the number of total words in article one,
+
+208
+00:09:54.770 --> 00:09:56.653
+and we can get the term frequency.
+
+209
+00:09:57.850 --> 00:09:59.970
+If we leave that aside for just a second,
+
+210
+00:09:59.970 --> 00:10:03.270
+then we calculate the inverse document frequency,
+
+211
+00:10:03.270 --> 00:10:07.370
+which is the document here is equivalent to the articles.
+
+212
+00:10:07.370 --> 00:10:08.730
+So there were six articles,
+
+213
+00:10:08.730 --> 00:10:12.150
+so six divided by the number of documents
+
+214
+00:10:12.150 --> 00:10:16.130
+where the word travel appears, which was also six,
+
+215
+00:10:16.130 --> 00:10:19.180
+the log of one is zero, okay?
+
+216
+00:10:19.180 --> 00:10:22.030
+So we can calculate something called a TF-IDF score,
+
+217
+00:10:22.030 --> 00:10:26.223
+which is a term frequency, inverse document frequency term.
+
+218
+00:10:27.200 --> 00:10:29.720
+We just multiply TF and IDF together.
+
+219
+00:10:29.720 --> 00:10:34.720
+So 0.002 and zero to get a final TF-IDF of zero.
+
+220
+00:10:35.440 --> 00:10:38.470
+So what does TF-IDF tell us actually,
+
+221
+00:10:38.470 --> 00:10:40.310
+well, you remember the stop word list
+
+222
+00:10:40.310 --> 00:10:43.690
+we removed a lot of the words like the, or for,
+
+223
+00:10:43.690 --> 00:10:46.070
+because we realized that those words were so common
+
+224
+00:10:46.070 --> 00:10:48.160
+that they weren't informative.
+
+225
+00:10:48.160 --> 00:10:50.730
+Well, in our specific example,
+
+226
+00:10:50.730 --> 00:10:54.910
+travel just happened to be not informative at all.
+
+227
+00:10:54.910 --> 00:10:57.830
+Every single article contained that at least once
+
+228
+00:10:57.830 --> 00:11:02.830
+so here at TF-IDF has zeroed out the value of travel.
+
+229
+00:11:03.480 --> 00:11:06.770
+So it basically is a way to express importance
+
+230
+00:11:06.770 --> 00:11:09.900
+or unimportance of a particular word.
+
+231
+00:11:09.900 --> 00:11:12.280
+So how can we use this to our advantage?
+
+232
+00:11:12.280 --> 00:11:16.550
+Well, let's say that we have our vocabulary representation
+
+233
+00:11:16.550 --> 00:11:20.880
+of an input message, this circled word here is travel,
+
+234
+00:11:20.880 --> 00:11:23.980
+if we apply TF-IDF to the entire vector,
+
+235
+00:11:23.980 --> 00:11:28.250
+what it would do, it would zero out our word of travel.
+
+236
+00:11:28.250 --> 00:11:30.680
+For reference, we wouldn't change how we actually use this,
+
+237
+00:11:30.680 --> 00:11:34.160
+we would still go through and raise every single term
+
+238
+00:11:34.160 --> 00:11:36.810
+to the power of whatever the value is.
+
+239
+00:11:36.810 --> 00:11:39.420
+So what we've done so far is we've changed
+
+240
+00:11:39.420 --> 00:11:43.730
+our Naive Bayes model to include multiple classes
+
+241
+00:11:43.730 --> 00:11:46.660
+and to also represent the counts of words
+
+242
+00:11:46.660 --> 00:11:48.290
+instead of the presence of words,
+
+243
+00:11:48.290 --> 00:11:52.180
+which means we switched from Bernoulli to multinomial
+
+244
+00:11:52.180 --> 00:11:55.680
+and we've used this to categorize articles
+
+245
+00:11:55.680 --> 00:11:57.560
+into different classes.
+
+246
+00:11:57.560 --> 00:12:01.730
+What this does is it allows users to create content
+
+247
+00:12:01.730 --> 00:12:04.450
+and automatically have tags added
+
+248
+00:12:04.450 --> 00:12:06.360
+so that people can discover the articles
+
+249
+00:12:06.360 --> 00:12:09.420
+through search better, and we can also refine
+
+250
+00:12:09.420 --> 00:12:12.690
+recommendation engines with these features as well.
+
+251
+00:12:12.690 --> 00:12:16.000
+So moving on, let's pretend that we are working
+
+252
+00:12:16.000 --> 00:12:18.890
+for a food delivery company, Uber Eats,
+
+253
+00:12:18.890 --> 00:12:22.950
+and their goal is to create a marketing campaign
+
+254
+00:12:22.950 --> 00:12:26.820
+where they will send promotional discounts out to customers.
+
+255
+00:12:26.820 --> 00:12:30.870
+Option one is to send money to everyone equally.
+
+256
+00:12:30.870 --> 00:12:33.030
+So all of the customers would get,
+
+257
+00:12:33.030 --> 00:12:35.190
+say $5 off their next order,
+
+258
+00:12:35.190 --> 00:12:38.890
+as long as they order within the next week or so.
+
+259
+00:12:38.890 --> 00:12:43.050
+Maybe what we can do is use past promotional data
+
+260
+00:12:43.050 --> 00:12:48.050
+along with newer customer data to selectively decide
+
+261
+00:12:48.220 --> 00:12:51.720
+who should get the promotional discounts,
+
+262
+00:12:51.720 --> 00:12:54.860
+such that we can maximize the probability
+
+263
+00:12:54.860 --> 00:12:56.660
+that those people will convert
+
+264
+00:12:56.660 --> 00:12:59.310
+to what we'll call a habitual user,
+
+265
+00:12:59.310 --> 00:13:01.870
+someone who orders at least three times a week.
+
+266
+00:13:01.870 --> 00:13:04.550
+In order to create a model like this, we need some features.
+
+267
+00:13:04.550 --> 00:13:06.240
+So for the customer data,
+
+268
+00:13:06.240 --> 00:13:08.230
+we're going to have their average bill amount,
+
+269
+00:13:08.230 --> 00:13:12.040
+their usage by week, by month and by year,
+
+270
+00:13:12.040 --> 00:13:14.200
+and we're gonna label these customers
+
+271
+00:13:14.200 --> 00:13:15.930
+according to past promotions,
+
+272
+00:13:15.930 --> 00:13:19.710
+our customer was converted to a habitual user
+
+273
+00:13:19.710 --> 00:13:22.760
+after receiving the promotion, then the label is a one,
+
+274
+00:13:22.760 --> 00:13:26.480
+if this customer did not convert to a habitual user,
+
+275
+00:13:26.480 --> 00:13:28.960
+then the label would be a zero.
+
+276
+00:13:28.960 --> 00:13:31.640
+What we've done is we have a single vector X,
+
+277
+00:13:31.640 --> 00:13:33.230
+which represents a customer.
+
+278
+00:13:33.230 --> 00:13:37.780
+X one is going to be their usage within the past week,
+
+279
+00:13:37.780 --> 00:13:40.510
+X two is going to be their usage within the past month,
+
+280
+00:13:40.510 --> 00:13:43.700
+and X three is going to be their average spend amount.
+
+281
+00:13:43.700 --> 00:13:47.360
+You'll notice that their yearly usage isn't included,
+
+282
+00:13:47.360 --> 00:13:50.120
+we didn't find that feature to be very predictive,
+
+283
+00:13:50.120 --> 00:13:54.190
+so we've stuck with these two features in terms of usage
+
+284
+00:13:54.190 --> 00:13:56.920
+and this one in terms of average spend amount.
+
+285
+00:13:56.920 --> 00:13:58.570
+Now there's several customers.
+
+286
+00:13:58.570 --> 00:14:01.630
+So here we have six customers X and four
+
+287
+00:14:01.630 --> 00:14:05.460
+that customer used the service three times in the past week,
+
+288
+00:14:05.460 --> 00:14:09.390
+they used the service six times within the past month
+
+289
+00:14:09.390 --> 00:14:13.510
+and their average spend amount was $13 and 31 cents.
+
+290
+00:14:13.510 --> 00:14:16.060
+Each of these customers will actually have a label
+
+291
+00:14:16.060 --> 00:14:16.900
+tied to them.
+
+292
+00:14:16.900 --> 00:14:18.330
+Customer one here,
+
+293
+00:14:18.330 --> 00:14:21.890
+they used the service two times in the last week,
+
+294
+00:14:21.890 --> 00:14:23.380
+seven times within the last month
+
+295
+00:14:23.380 --> 00:14:27.410
+and their average spend amount per order was about $23.
+
+296
+00:14:27.410 --> 00:14:29.490
+We put them in the habitual category
+
+297
+00:14:29.490 --> 00:14:32.870
+because after receiving a promotional discount
+
+298
+00:14:32.870 --> 00:14:34.840
+and taking advantage of it,
+
+299
+00:14:34.840 --> 00:14:38.860
+this user converted to a habitual user within 30 days.
+
+300
+00:14:38.860 --> 00:14:41.270
+However, this user X five,
+
+301
+00:14:41.270 --> 00:14:45.810
+they didn't convert to a habitual user within 30 days.
+
+302
+00:14:45.810 --> 00:14:49.063
+So we put them as a not habitual label.
+
+303
+00:14:50.170 --> 00:14:53.780
+How do we actually use this with a naive Bayes model?
+
+304
+00:14:53.780 --> 00:14:56.700
+Well, for spam, we used the Bernoulli representation
+
+305
+00:14:56.700 --> 00:14:59.690
+where we modeled the presence or absence of words.
+
+306
+00:14:59.690 --> 00:15:01.400
+For articles, for medium
+
+307
+00:15:01.400 --> 00:15:03.490
+we used the multinomial model,
+
+308
+00:15:03.490 --> 00:15:06.160
+which modeled the count of the words.
+
+309
+00:15:06.160 --> 00:15:08.420
+For promotions, we're actually going to use
+
+310
+00:15:08.420 --> 00:15:09.990
+the Gaussian model.
+
+311
+00:15:09.990 --> 00:15:12.770
+Now let's take a look at exactly what that is.
+
+312
+00:15:12.770 --> 00:15:16.920
+Here's our typical model that where W is the word vector.
+
+313
+00:15:16.920 --> 00:15:20.600
+We're going to replace that with X
+
+314
+00:15:20.600 --> 00:15:22.700
+to represent the customer,
+
+315
+00:15:22.700 --> 00:15:24.570
+and these likelihoods
+
+316
+00:15:24.570 --> 00:15:26.330
+are going to be the only thing that changes.
+
+317
+00:15:26.330 --> 00:15:28.400
+With Bernoulli, these likelihoods were one thing,
+
+318
+00:15:28.400 --> 00:15:30.420
+with multinomial, these likelihoods were another,
+
+319
+00:15:30.420 --> 00:15:33.190
+and with Gaussian these likelihoods will be yet another,
+
+320
+00:15:33.190 --> 00:15:35.550
+but everything else will be more or less the same.
+
+321
+00:15:35.550 --> 00:15:37.890
+Let's take a look at what exactly this is.
+
+322
+00:15:37.890 --> 00:15:39.490
+We actually only care about the means
+
+323
+00:15:39.490 --> 00:15:42.560
+and the standard deviations of our customary data.
+
+324
+00:15:42.560 --> 00:15:44.360
+Let's take a look at how to calculate
+
+325
+00:15:44.360 --> 00:15:46.470
+this and see how this all connects.
+
+326
+00:15:46.470 --> 00:15:49.350
+We have our habitual customers and non-habitual customers,
+
+327
+00:15:49.350 --> 00:15:50.380
+now, what we're gonna do
+
+328
+00:15:50.380 --> 00:15:53.550
+is we're going to define a mean and a standard deviation
+
+329
+00:15:53.550 --> 00:15:57.280
+for the first set of features per class.
+
+330
+00:15:57.280 --> 00:15:58.810
+So on average,
+
+331
+00:15:58.810 --> 00:16:03.200
+the habitual users had one order in the past week.
+
+332
+00:16:03.200 --> 00:16:06.260
+Their standard deviation was 0.81.
+
+333
+00:16:06.260 --> 00:16:09.000
+The non-habitual users on average
+
+334
+00:16:09.000 --> 00:16:12.850
+placed 1.6 orders within the past week
+
+335
+00:16:12.850 --> 00:16:15.570
+and their standard deviation was 0.94.
+
+336
+00:16:15.570 --> 00:16:17.000
+We can continue this pattern,
+
+337
+00:16:17.000 --> 00:16:19.670
+for instance, the habitual users,
+
+338
+00:16:19.670 --> 00:16:22.480
+the users who did convert to habitual users
+
+339
+00:16:22.480 --> 00:16:24.260
+after receiving a promotion,
+
+340
+00:16:24.260 --> 00:16:29.260
+on average, they placed 3.66 orders within the past month.
+
+341
+00:16:29.300 --> 00:16:30.520
+For the final feature,
+
+342
+00:16:30.520 --> 00:16:34.970
+the non-habitual users on average
+
+343
+00:16:34.970 --> 00:16:38.710
+spent $16 and 20 cents per order.
+
+344
+00:16:38.710 --> 00:16:41.300
+These are the means for feature one, feature two,
+
+345
+00:16:41.300 --> 00:16:43.900
+feature three, these are the standard deviations,
+
+346
+00:16:43.900 --> 00:16:46.910
+and we've separated them out by class.
+
+347
+00:16:46.910 --> 00:16:50.760
+Okay, so now let's plug this into our model.
+
+348
+00:16:50.760 --> 00:16:51.960
+This is a likelihood
+
+349
+00:16:51.960 --> 00:16:54.430
+and what we're asking is what's the probability
+
+350
+00:16:54.430 --> 00:16:57.780
+of seeing a particular feature in feature one,
+
+351
+00:16:57.780 --> 00:17:00.840
+given that the user converted to a habitual user
+
+352
+00:17:00.840 --> 00:17:03.010
+after receiving that promotion?
+
+353
+00:17:03.010 --> 00:17:05.510
+And this is the formula that we need to solve,
+
+354
+00:17:05.510 --> 00:17:07.990
+we'll begin by substituting the standard deviations
+
+355
+00:17:07.990 --> 00:17:11.000
+and the means for the habitual class.
+
+356
+00:17:11.000 --> 00:17:16.000
+So here we have 0.81, 0.81, 0.81 and of course, one.
+
+357
+00:17:17.150 --> 00:17:20.550
+All we did is we substituted in the standard deviations
+
+358
+00:17:20.550 --> 00:17:24.710
+for the habitual class and the means for the habitual class
+
+359
+00:17:24.710 --> 00:17:26.530
+for feature one.
+
+360
+00:17:26.530 --> 00:17:27.870
+Let's plug in an example,
+
+361
+00:17:27.870 --> 00:17:30.040
+to see how we can calculate this likelihood.
+
+362
+00:17:30.040 --> 00:17:33.410
+We wanna know the probability that a customer
+
+363
+00:17:33.410 --> 00:17:36.220
+has ordered twice in the last week,
+
+364
+00:17:36.220 --> 00:17:37.470
+and since it's feature one,
+
+365
+00:17:37.470 --> 00:17:40.720
+given that they will convert to a habitual user.
+
+366
+00:17:40.720 --> 00:17:45.660
+And all that means is we plug into for X and then we solve.
+
+367
+00:17:45.660 --> 00:17:48.770
+So the likelihood that a customer
+
+368
+00:17:48.770 --> 00:17:50.840
+orders twice in the last week,
+
+369
+00:17:50.840 --> 00:17:54.670
+given that they will convert to a habitual user is 23%.
+
+370
+00:17:54.670 --> 00:17:57.970
+Okay, so now we know how to calculate the likelihoods,
+
+371
+00:17:57.970 --> 00:17:59.610
+we just have to do that for every feature.
+
+372
+00:17:59.610 --> 00:18:02.940
+So we'll do that for X one, we'll do that for X two,
+
+373
+00:18:02.940 --> 00:18:06.860
+and likewise, every single standard deviation and mean
+
+374
+00:18:06.860 --> 00:18:08.960
+will be different for those features as well.
+
+375
+00:18:08.960 --> 00:18:12.670
+Let's go ahead quickly and see how we calculate the prior.
+
+376
+00:18:12.670 --> 00:18:14.520
+Prior is very easy to calculate
+
+377
+00:18:14.520 --> 00:18:17.650
+we just count the number of habitual users,
+
+378
+00:18:17.650 --> 00:18:19.890
+and we count the number of non-habitual users,
+
+379
+00:18:19.890 --> 00:18:21.370
+and we take the ratio of them.
+
+380
+00:18:21.370 --> 00:18:24.690
+So six out of 17 of the total users are habitual,
+
+381
+00:18:24.690 --> 00:18:28.157
+so that's the prior of habitual users six over 17,
+
+382
+00:18:28.157 --> 00:18:32.320
+and the prior of a non-habitual user is 11 over 17.
+
+383
+00:18:32.320 --> 00:18:34.860
+So we can plug that in because right now we wanna solve
+
+384
+00:18:34.860 --> 00:18:36.570
+for K equals to one,
+
+385
+00:18:36.570 --> 00:18:39.210
+here one is going to be a habitual user
+
+386
+00:18:39.210 --> 00:18:42.310
+and zero will be a non-habitual user.
+
+387
+00:18:42.310 --> 00:18:45.260
+And let's say that we want to keep this example,
+
+388
+00:18:45.260 --> 00:18:48.150
+so we can plug those numbers in, solve that,
+
+389
+00:18:48.150 --> 00:18:51.260
+in the numerator, we've already solved that 0.013,
+
+390
+00:18:51.260 --> 00:18:54.070
+so in the denominator will also be the same.
+
+391
+00:18:54.070 --> 00:18:55.600
+Again, this is our example.
+
+392
+00:18:55.600 --> 00:18:56.980
+We plug in those values,
+
+393
+00:18:56.980 --> 00:19:01.980
+we get out a number and the probability that this user
+
+394
+00:19:01.990 --> 00:19:05.270
+given these features will convert to a habitual user
+
+395
+00:19:05.270 --> 00:19:08.660
+after receiving the promotion is 76%.
+
+396
+00:19:08.660 --> 00:19:10.170
+I think that's a pretty good chance
+
+397
+00:19:10.170 --> 00:19:12.350
+and I'd send them the promotion.
+
+398
+00:19:12.350 --> 00:19:14.310
+Similar to how we did it in the spam filter
+
+399
+00:19:14.310 --> 00:19:16.290
+we could decide on a threshold and say,
+
+400
+00:19:16.290 --> 00:19:20.270
+if it's greater than 50%, then send them the discount.
+
+401
+00:19:20.270 --> 00:19:22.090
+However, for marketing budgets,
+
+402
+00:19:22.090 --> 00:19:23.720
+it could work quite differently.
+
+403
+00:19:23.720 --> 00:19:26.010
+Let's say that this was our entire population,
+
+404
+00:19:26.010 --> 00:19:29.090
+and let's say the probability of users
+
+405
+00:19:29.090 --> 00:19:30.980
+converting to habitual users,
+
+406
+00:19:30.980 --> 00:19:33.580
+let's say we left the threshold at 50%,
+
+407
+00:19:33.580 --> 00:19:37.720
+that could separate the people like that.
+
+408
+00:19:37.720 --> 00:19:40.850
+Now, typically for marketing, it will work differently,
+
+409
+00:19:40.850 --> 00:19:44.090
+you'll usually have a budget say of $100,000
+
+410
+00:19:44.090 --> 00:19:47.350
+and you wanna give everyone a $5.
+
+411
+00:19:47.350 --> 00:19:50.080
+So that means you have to find 20,000 people
+
+412
+00:19:50.080 --> 00:19:54.140
+who are most likely to convert to habitual users,
+
+413
+00:19:54.140 --> 00:19:57.290
+and let's say that threshold is 83%.
+
+414
+00:19:57.290 --> 00:20:00.250
+So then what would happen is we'd run every customer
+
+415
+00:20:00.250 --> 00:20:01.083
+through our model,
+
+416
+00:20:01.083 --> 00:20:04.630
+and if they have an 83% chance or greater
+
+417
+00:20:04.630 --> 00:20:06.570
+of converting to a habitual user
+
+418
+00:20:06.570 --> 00:20:08.120
+after receiving the promotion,
+
+419
+00:20:08.120 --> 00:20:11.620
+we will send them that promotion to 20,000 people
+
+420
+00:20:11.620 --> 00:20:13.470
+and we will have used
+
+421
+00:20:13.470 --> 00:20:15.980
+all of our marketing budget of $100,000.
+
+422
+00:20:15.980 --> 00:20:19.730
+What we've successfully done is maximized the return
+
+423
+00:20:19.730 --> 00:20:23.750
+on our $100,000 by only sending to those users
+
+424
+00:20:23.750 --> 00:20:27.350
+who are likely to convert to habitual customers.
+
+425
+00:20:27.350 --> 00:20:29.920
+Okay, so our model is running quite well,
+
+426
+00:20:29.920 --> 00:20:30.940
+things are going fine,
+
+427
+00:20:30.940 --> 00:20:32.640
+our data engineer comes to us and says,
+
+428
+00:20:32.640 --> 00:20:36.030
+hey, we have a new feature, let us know if it helps.
+
+429
+00:20:36.030 --> 00:20:39.530
+And this new feature is a service preference.
+
+430
+00:20:39.530 --> 00:20:43.243
+Service preference can either be pickup, take out or both.
+
+431
+00:20:44.130 --> 00:20:46.920
+How do we handle this categorical feature?
+
+432
+00:20:46.920 --> 00:20:50.470
+Basically, we just have to put in a categorical likelihood
+
+433
+00:20:50.470 --> 00:20:52.540
+alongside all of the other likelihoods
+
+434
+00:20:52.540 --> 00:20:53.373
+that we're calculating.
+
+435
+00:20:53.373 --> 00:20:55.310
+We can actually mix and match here.
+
+436
+00:20:55.310 --> 00:20:58.170
+So how do we actually calculate categorical likelihood?
+
+437
+00:20:58.170 --> 00:21:00.010
+Well, if we're looking for the likelihood
+
+438
+00:21:00.010 --> 00:21:02.700
+that someone's service preference is pickup,
+
+439
+00:21:02.700 --> 00:21:05.950
+given that the label is one,
+
+440
+00:21:05.950 --> 00:21:08.070
+then we simply count up the habitual users
+
+441
+00:21:08.070 --> 00:21:10.630
+whose service preference is pickup
+
+442
+00:21:10.630 --> 00:21:12.920
+and divide by the total number of habitual users.
+
+443
+00:21:12.920 --> 00:21:16.660
+So here that's two over six, which is 33%.
+
+444
+00:21:16.660 --> 00:21:18.340
+Likewise, if we wanted to calculate
+
+445
+00:21:18.340 --> 00:21:21.930
+the likelihood of service preference being pickup,
+
+446
+00:21:21.930 --> 00:21:25.360
+given that the person did not convert to a habitual user,
+
+447
+00:21:25.360 --> 00:21:29.400
+we would simply count up the number of non-habitual users
+
+448
+00:21:29.400 --> 00:21:32.740
+whose preference is pickup and divide by the total number
+
+449
+00:21:32.740 --> 00:21:34.310
+of non-habitual users.
+
+450
+00:21:34.310 --> 00:21:37.040
+So that's how we can categorical likelihood
+
+451
+00:21:37.040 --> 00:21:40.050
+and we can actually mix that in with numerical features,
+
+452
+00:21:40.050 --> 00:21:42.580
+using the Gaussian likelihood.
+
+453
+00:21:42.580 --> 00:21:45.650
+So what happens when our customer base begins to shift?
+
+454
+00:21:45.650 --> 00:21:49.170
+So we launch our model out and it's working well,
+
+455
+00:21:49.170 --> 00:21:53.290
+so more users are converting to habitual users.
+
+456
+00:21:53.290 --> 00:21:55.070
+Well, there's two things that we can do.
+
+457
+00:21:55.070 --> 00:21:57.220
+One, we can retrain the model.
+
+458
+00:21:57.220 --> 00:21:59.550
+So if our population goes from here,
+
+459
+00:21:59.550 --> 00:22:01.530
+you can retrain the model,
+
+460
+00:22:01.530 --> 00:22:04.150
+and then if it moves like this, we retrain the model,
+
+461
+00:22:04.150 --> 00:22:06.660
+say once a month or once a week.
+
+462
+00:22:06.660 --> 00:22:10.470
+Another way that we can do it is more of an online learning
+
+463
+00:22:10.470 --> 00:22:13.280
+it's called where for every single user
+
+464
+00:22:13.280 --> 00:22:14.660
+that ends up converting,
+
+465
+00:22:14.660 --> 00:22:16.530
+so for instance, if this person,
+
+466
+00:22:16.530 --> 00:22:20.090
+all of a sudden converts after receiving the promotion,
+
+467
+00:22:20.090 --> 00:22:23.040
+we now have another piece of labeled data
+
+468
+00:22:23.040 --> 00:22:26.280
+so we can go into our model and update those parameters
+
+469
+00:22:26.280 --> 00:22:28.760
+just as that one person converted.
+
+470
+00:22:28.760 --> 00:22:31.830
+We would stop the need for massive updates
+
+471
+00:22:31.830 --> 00:22:33.610
+and retraining from scratch,
+
+472
+00:22:33.610 --> 00:22:36.380
+and we would incrementally train the model
+
+473
+00:22:36.380 --> 00:22:39.710
+as users moved over from non-habitual to habitual.
+
+474
+00:22:39.710 --> 00:22:44.420
+Or likewise, if someone moved from habitual to non-habitual.
+
+475
+00:22:44.420 --> 00:22:48.580
+But one thing to note is that there will be problems
+
+476
+00:22:48.580 --> 00:22:50.780
+when it comes to implementing this.
+
+477
+00:22:50.780 --> 00:22:53.050
+One of those problems is going to have to deal
+
+478
+00:22:53.050 --> 00:22:56.329
+with these likelihood term multiplications
+
+479
+00:22:56.329 --> 00:22:59.130
+in the numerators and the denominators.
+
+480
+00:22:59.130 --> 00:23:01.440
+Let's say that we have 100 features,
+
+481
+00:23:01.440 --> 00:23:04.300
+so that means we're going to be multiplying 100 things,
+
+482
+00:23:04.300 --> 00:23:07.090
+if those values are between zero and one,
+
+483
+00:23:07.090 --> 00:23:09.130
+and they are because of probabilities,
+
+484
+00:23:09.130 --> 00:23:14.040
+then that number will gradually go towards zero.
+
+485
+00:23:14.040 --> 00:23:16.100
+So for instance, as an example,
+
+486
+00:23:16.100 --> 00:23:19.720
+you can open up a Python interpreter or anything like that,
+
+487
+00:23:19.720 --> 00:23:22.930
+and just start with the number one
+
+488
+00:23:22.930 --> 00:23:26.423
+and then divide that number by 10, 400 times,
+
+489
+00:23:27.260 --> 00:23:29.010
+you're gonna get at zero.
+
+490
+00:23:29.010 --> 00:23:31.210
+Even though the answer isn't technically zero,
+
+491
+00:23:31.210 --> 00:23:32.880
+it's a very small number,
+
+492
+00:23:32.880 --> 00:23:35.200
+software typically has problems representing
+
+493
+00:23:35.200 --> 00:23:38.330
+such infinitesimally small digits.
+
+494
+00:23:38.330 --> 00:23:40.750
+So we need a solution to figure this out,
+
+495
+00:23:40.750 --> 00:23:43.260
+and we can just take the log of the numerator.
+
+496
+00:23:43.260 --> 00:23:44.240
+And you might be thinking,
+
+497
+00:23:44.240 --> 00:23:45.970
+well, we still have these multiplications
+
+498
+00:23:45.970 --> 00:23:47.210
+what did we solve?
+
+499
+00:23:47.210 --> 00:23:49.010
+Well, an interesting property of the log
+
+500
+00:23:49.010 --> 00:23:53.180
+is that can separate out the terms in the log
+
+501
+00:23:53.180 --> 00:23:55.960
+and separate them out with an addition.
+
+502
+00:23:55.960 --> 00:23:58.570
+So now what this does is it allows us to represent
+
+503
+00:23:58.570 --> 00:24:02.400
+our same model without all of the repeated multiplications
+
+504
+00:24:02.400 --> 00:24:04.880
+that can erase the number to zero.
+
+505
+00:24:04.880 --> 00:24:05.880
+One final thing to note,
+
+506
+00:24:05.880 --> 00:24:08.470
+we technically don't need to calculate the denominator
+
+507
+00:24:08.470 --> 00:24:10.680
+because the denominator is going to be constant
+
+508
+00:24:10.680 --> 00:24:12.720
+for every single class that we evaluate.
+
+509
+00:24:12.720 --> 00:24:16.350
+So what we can actually do is just evaluate the numerator
+
+510
+00:24:16.350 --> 00:24:18.860
+and then take the maximum value of the numerator.
+
+511
+00:24:18.860 --> 00:24:22.240
+So our formula actually turns into this,
+
+512
+00:24:22.240 --> 00:24:25.590
+where this is actually a proportion to sign, not equal to,
+
+513
+00:24:25.590 --> 00:24:27.950
+since we're not dividing by the numerator anymore,
+
+514
+00:24:27.950 --> 00:24:30.480
+we can't technically say this is equal,
+
+515
+00:24:30.480 --> 00:24:32.370
+but it will definitely be proportional
+
+516
+00:24:32.370 --> 00:24:35.590
+since the only thing that's changing is the numerator.
+
+517
+00:24:35.590 --> 00:24:38.930
+So next up I wanna cover memory optimizations, okay?
+
+518
+00:24:38.930 --> 00:24:41.840
+Imagine we have 10,000 words in our vocabulary
+
+519
+00:24:41.840 --> 00:24:45.420
+that we've discovered across 1,000 articles.
+
+520
+00:24:45.420 --> 00:24:48.610
+If we assume a 32 bit to represent each of these elements,
+
+521
+00:24:48.610 --> 00:24:51.460
+then we're going to get a 40 gigabyte matrix.
+
+522
+00:24:51.460 --> 00:24:54.790
+Fortunately for us, most of these elements are zero
+
+523
+00:24:54.790 --> 00:24:56.250
+because a lot of these articles
+
+524
+00:24:56.250 --> 00:24:58.390
+will only contain some of the words.
+
+525
+00:24:58.390 --> 00:25:00.410
+How we represent sparse matrices
+
+526
+00:25:00.410 --> 00:25:04.980
+well, one way is to take the, i, j as the key.
+
+527
+00:25:04.980 --> 00:25:09.060
+So for instance, this would be three, one for this element
+
+528
+00:25:09.060 --> 00:25:10.800
+and the value would just be the value
+
+529
+00:25:10.800 --> 00:25:12.440
+in the original matrix.
+
+530
+00:25:12.440 --> 00:25:15.400
+And if the value and the original matrix is zero,
+
+531
+00:25:15.400 --> 00:25:18.400
+we just don't put that element in the hash map.
+
+532
+00:25:18.400 --> 00:25:22.030
+Another way we can reduce the size of this vocabulary
+
+533
+00:25:22.030 --> 00:25:24.150
+is to take advantage of n-grams.
+
+534
+00:25:24.150 --> 00:25:27.440
+So right now, every single word gets its own entry
+
+535
+00:25:27.440 --> 00:25:28.750
+in this vocabulary.
+
+536
+00:25:28.750 --> 00:25:33.030
+These are called one-grams, for instance, stock and market.
+
+537
+00:25:33.030 --> 00:25:36.580
+An example of a two-gram would be stock market.
+
+538
+00:25:36.580 --> 00:25:41.020
+So here instead of stocks and market taking up V1 and V2,
+
+539
+00:25:41.020 --> 00:25:43.850
+V1, would just take up take up a stock market.
+
+540
+00:25:43.850 --> 00:25:48.370
+So finally we can just ditch the entire vocabulary in itself
+
+541
+00:25:48.370 --> 00:25:51.210
+and take advantage of something called feature hashing.
+
+542
+00:25:51.210 --> 00:25:52.820
+This is actually a really cool concept.
+
+543
+00:25:52.820 --> 00:25:56.800
+We take a word, we put it inside of a hash function,
+
+544
+00:25:56.800 --> 00:25:59.320
+we get the value of the hash function,
+
+545
+00:25:59.320 --> 00:26:02.980
+we mode it by how much ever space we want to use.
+
+546
+00:26:02.980 --> 00:26:06.280
+So let's say we wanna use 10,000 elements worth of space
+
+547
+00:26:06.280 --> 00:26:10.780
+to represent a vocabulary, and we get an index I,
+
+548
+00:26:10.780 --> 00:26:13.470
+we map this index I to an array
+
+549
+00:26:13.470 --> 00:26:15.810
+and we simply increment that element.
+
+550
+00:26:15.810 --> 00:26:18.113
+So that would now go from a zero to a one.
+
+551
+00:26:18.950 --> 00:26:21.040
+Let's say we got the word market in here,
+
+552
+00:26:21.040 --> 00:26:24.330
+we'd hash function in the market, we'd get that.
+
+553
+00:26:24.330 --> 00:26:26.300
+We take the modulates of 10,000,
+
+554
+00:26:26.300 --> 00:26:29.260
+we'd get another index that would be here
+
+555
+00:26:29.260 --> 00:26:31.970
+and we'd increment that index from zero to one.
+
+556
+00:26:31.970 --> 00:26:33.860
+Let's say we got the word update,
+
+557
+00:26:33.860 --> 00:26:35.940
+let's say it hash to the same value,
+
+558
+00:26:35.940 --> 00:26:38.120
+which means they would mode to the same value,
+
+559
+00:26:38.120 --> 00:26:41.060
+we would simply update that index again.
+
+560
+00:26:41.060 --> 00:26:44.440
+So for collisions, we just keep updating.
+
+561
+00:26:44.440 --> 00:26:46.610
+Now what's really interesting about this,
+
+562
+00:26:46.610 --> 00:26:47.870
+is this means we can handle
+
+563
+00:26:47.870 --> 00:26:50.440
+arbitrary length documents, right?
+
+564
+00:26:50.440 --> 00:26:52.820
+Because as long as the words keep coming in,
+
+565
+00:26:52.820 --> 00:26:57.460
+we can represent them by just incrementing specific indices,
+
+566
+00:26:57.460 --> 00:26:59.880
+given a particular word.
+
+567
+00:26:59.880 --> 00:27:03.060
+Another interesting thing is that we don't have to retrain
+
+568
+00:27:03.060 --> 00:27:07.210
+models so often for every single new word that comes up
+
+569
+00:27:07.210 --> 00:27:09.580
+because these new words can just be hashed
+
+570
+00:27:09.580 --> 00:27:13.000
+to a specific index and then we can continue on.
+
+571
+00:27:13.000 --> 00:27:14.240
+Finally for spam,
+
+572
+00:27:14.240 --> 00:27:16.620
+let's say an adversary gets a hold
+
+573
+00:27:16.620 --> 00:27:20.590
+of whatever vocabulary that you use to detect spam,
+
+574
+00:27:20.590 --> 00:27:23.380
+here they wouldn't have a vocabulary to obtain,
+
+575
+00:27:23.380 --> 00:27:25.750
+so it can be beneficial that way.
+
+576
+00:27:25.750 --> 00:27:27.200
+One thing to keep in mind as well,
+
+577
+00:27:27.200 --> 00:27:30.660
+so Naive Bayes classifiers are good at classifying.
+
+578
+00:27:30.660 --> 00:27:32.840
+Okay, between zero and one,
+
+579
+00:27:32.840 --> 00:27:35.050
+however, they're bad at estimating.
+
+580
+00:27:35.050 --> 00:27:37.580
+So take the probabilities with a grain of salt,
+
+581
+00:27:37.580 --> 00:27:39.220
+but thanks to the threshold,
+
+582
+00:27:39.220 --> 00:27:41.690
+they actually end up being good classifiers.
+
+583
+00:27:41.690 --> 00:27:45.650
+In general, a good library for Naive Bayes is scikit-learn,
+
+584
+00:27:45.650 --> 00:27:48.970
+they allow you to use TF-IDF,
+
+585
+00:27:48.970 --> 00:27:51.500
+they support feature hashing, stop words, n-grams.
+
+586
+00:27:51.500 --> 00:27:54.660
+They support Bernoulli, multinomial, Gaussian.
+
+587
+00:27:54.660 --> 00:27:58.480
+And one thing in case it wasn't clear,
+
+588
+00:27:58.480 --> 00:28:00.880
+you can only use the Gaussian likelihood
+
+589
+00:28:00.880 --> 00:28:04.310
+if the values that you're trying to estimate
+
+590
+00:28:04.310 --> 00:28:06.220
+are Gaussian in themselves.
+
+591
+00:28:06.220 --> 00:28:09.010
+So if your data follows a power distribution,
+
+592
+00:28:09.010 --> 00:28:11.340
+it's probably not going to work very well
+
+593
+00:28:11.340 --> 00:28:13.630
+using the Gaussian likelihood.
+
+594
+00:28:13.630 --> 00:28:15.860
+So they actually support something called KDE,
+
+595
+00:28:15.860 --> 00:28:17.150
+we're not gonna get too far into it,
+
+596
+00:28:17.150 --> 00:28:19.660
+it's called kernel density estimation,
+
+597
+00:28:19.660 --> 00:28:22.680
+all it does is it tries to estimate
+
+598
+00:28:22.680 --> 00:28:25.280
+the distribution of your data
+
+599
+00:28:25.280 --> 00:28:28.560
+through a series of typically Gaussian distribution.
+
+600
+00:28:28.560 --> 00:28:30.840
+So even if you're unsure
+
+601
+00:28:30.840 --> 00:28:33.350
+about what distribution your data actually follows,
+
+602
+00:28:33.350 --> 00:28:36.600
+you can use KDE to help you figure that out.
+
+603
+00:28:36.600 --> 00:28:37.610
+That's it for this video.
+
+604
+00:28:37.610 --> 00:28:39.370
+So just to wrap this up,
+
+605
+00:28:39.370 --> 00:28:44.370
+what we did is we figured out how to use larger documents
+
+606
+00:28:44.570 --> 00:28:46.120
+with Naive Bayes classifier.
+
+607
+00:28:46.120 --> 00:28:49.480
+With that we needed a multi-classification,
+
+608
+00:28:49.480 --> 00:28:51.950
+we needed to use the multinomial likelihood,
+
+609
+00:28:51.950 --> 00:28:55.130
+when we don't have words and we have continuous data,
+
+610
+00:28:55.130 --> 00:28:58.680
+we can use the Gaussian likelihood.
+
+611
+00:28:58.680 --> 00:29:02.250
+We figured out how to get rid of the vocabulary completely
+
+612
+00:29:02.250 --> 00:29:04.810
+and instead we can use feature hashing,
+
+613
+00:29:04.810 --> 00:29:07.010
+and we also figured out some cool libraries
+
+614
+00:29:07.010 --> 00:29:09.843
+that we can use to implement the stuff on our own.
+
+615
+00:29:10.830 --> 00:29:13.230
+Thanks for joining us in this video, join us next video
+
+616
+00:29:13.230 --> 00:29:15.483
+as we continue our machine learning journey.
+

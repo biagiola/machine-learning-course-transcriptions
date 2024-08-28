@@ -1,0 +1,1590 @@
+WEBVTT
+
+1
+00:00:01.580 --> 00:00:03.860
+<v Instructor>Welcome back everybody to ML Experts</v>
+
+2
+00:00:03.860 --> 00:00:05.950
+machine learning crash course.
+
+3
+00:00:05.950 --> 00:00:07.390
+In this video, we're going to go over
+
+4
+00:00:07.390 --> 00:00:10.510
+something called singular value decomposition.
+
+5
+00:00:10.510 --> 00:00:11.830
+What if we had a bunch of data
+
+6
+00:00:11.830 --> 00:00:14.110
+and we didn't really know much about it?
+
+7
+00:00:14.110 --> 00:00:16.130
+There could be underlying patterns in the data,
+
+8
+00:00:16.130 --> 00:00:18.170
+and some of the patterns could potentially tell us
+
+9
+00:00:18.170 --> 00:00:21.160
+a lot more than the other patterns.
+
+10
+00:00:21.160 --> 00:00:24.270
+What we'd like to be able to do is take data,
+
+11
+00:00:24.270 --> 00:00:26.410
+look for patterns in the data,
+
+12
+00:00:26.410 --> 00:00:29.250
+separate out these patterns from the data itself,
+
+13
+00:00:29.250 --> 00:00:31.920
+hopefully order them by importance,
+
+14
+00:00:31.920 --> 00:00:35.300
+and then we'd be able to walk away with an understanding
+
+15
+00:00:35.300 --> 00:00:37.480
+about how the data behaves.
+
+16
+00:00:37.480 --> 00:00:41.880
+We can use singular value decomposition for this, or SVD.
+
+17
+00:00:41.880 --> 00:00:43.370
+Let's take a look at these points.
+
+18
+00:00:43.370 --> 00:00:45.840
+So we have three points here for two dimensions,
+
+19
+00:00:45.840 --> 00:00:48.850
+so this is X one X two for each point.
+
+20
+00:00:48.850 --> 00:00:50.150
+Let's go ahead and plot them.
+
+21
+00:00:50.150 --> 00:00:51.900
+All right, so now that we've of them,
+
+22
+00:00:51.900 --> 00:00:54.160
+what would you say is a general idea
+
+23
+00:00:54.160 --> 00:00:57.610
+you'd like to take away or summarize about this data?
+
+24
+00:00:57.610 --> 00:00:59.830
+Well, generally I think it's important for us to note
+
+25
+00:00:59.830 --> 00:01:01.677
+that we have two points close together,
+
+26
+00:01:01.677 --> 00:01:03.820
+and one point further away.
+
+27
+00:01:03.820 --> 00:01:08.780
+Now, SVD states that our input array, A,
+
+28
+00:01:08.780 --> 00:01:11.130
+which was our data point,
+
+29
+00:01:11.130 --> 00:01:15.000
+can be represented by three different matrices.
+
+30
+00:01:15.000 --> 00:01:17.970
+Let's assume that we can solve for each of these matrices.
+
+31
+00:01:17.970 --> 00:01:21.870
+For now here, we'll take care of this transpose.
+
+32
+00:01:21.870 --> 00:01:26.000
+So how do we use this to help us summarize our data?
+
+33
+00:01:26.000 --> 00:01:29.690
+So let's go ahead and define something called A one.
+
+34
+00:01:29.690 --> 00:01:32.770
+A one will take the first column of U,
+
+35
+00:01:32.770 --> 00:01:36.440
+it will take the first value of sigma here,
+
+36
+00:01:36.440 --> 00:01:40.470
+and then it will take the first row of the transpose.
+
+37
+00:01:40.470 --> 00:01:41.570
+If we take this result,
+
+38
+00:01:41.570 --> 00:01:43.960
+so we'll multiply this element by these two,
+
+39
+00:01:43.960 --> 00:01:46.200
+and then we'll multiply these,
+
+40
+00:01:46.200 --> 00:01:48.870
+what we get is three new points.
+
+41
+00:01:48.870 --> 00:01:52.320
+Now, if we plot these points, let's see what happens.
+
+42
+00:01:52.320 --> 00:01:55.320
+So here we have plotted our three points.
+
+43
+00:01:55.320 --> 00:01:56.630
+So what did this do for us,
+
+44
+00:01:56.630 --> 00:02:00.650
+and why is this different than the original three points?
+
+45
+00:02:00.650 --> 00:02:03.500
+Now, if we look closely, we can see that these points
+
+46
+00:02:03.500 --> 00:02:05.960
+actually lie on a single line.
+
+47
+00:02:05.960 --> 00:02:09.210
+Now, let's take this line and just put it in one dimension
+
+48
+00:02:09.210 --> 00:02:11.403
+which means all we have to do is rotate it.
+
+49
+00:02:12.600 --> 00:02:15.480
+Now we said earlier that we wanna preserve the fact
+
+50
+00:02:15.480 --> 00:02:17.290
+that these two points are close,
+
+51
+00:02:17.290 --> 00:02:19.720
+and this point over here is further away
+
+52
+00:02:19.720 --> 00:02:21.420
+from these two points.
+
+53
+00:02:21.420 --> 00:02:24.690
+Now, what's interesting is if we look at these two points,
+
+54
+00:02:24.690 --> 00:02:27.730
+and we look at our new one dimensional data,
+
+55
+00:02:27.730 --> 00:02:30.010
+these two points actually got placed
+
+56
+00:02:30.010 --> 00:02:32.160
+next to each other, relatively.
+
+57
+00:02:32.160 --> 00:02:33.670
+As well, this point over here
+
+58
+00:02:33.670 --> 00:02:35.550
+which was further away from these two points
+
+59
+00:02:35.550 --> 00:02:37.070
+got placed over here.
+
+60
+00:02:37.070 --> 00:02:39.050
+So all while reducing our dimensions
+
+61
+00:02:39.050 --> 00:02:42.030
+from two dimensions to one dimension,
+
+62
+00:02:42.030 --> 00:02:46.100
+we still preserve the relative location of the points.
+
+63
+00:02:46.100 --> 00:02:47.617
+Now you may be tempted to say,
+
+64
+00:02:47.617 --> 00:02:50.370
+"Well, I can reduce this to one dimension,
+
+65
+00:02:50.370 --> 00:02:52.650
+all that I need to do is map each point
+
+66
+00:02:52.650 --> 00:02:55.750
+onto the one access here."
+
+67
+00:02:55.750 --> 00:02:57.500
+Well, let's give that a shot.
+
+68
+00:02:57.500 --> 00:02:59.860
+If we do that, we see that we've eliminated
+
+69
+00:02:59.860 --> 00:03:04.010
+the X two value here, we're just left with the X one values.
+
+70
+00:03:04.010 --> 00:03:06.570
+Interestingly, though, we can see that these two points
+
+71
+00:03:06.570 --> 00:03:10.240
+are closer together, then this point is the outlier.
+
+72
+00:03:10.240 --> 00:03:13.990
+In reality, these two points are actually closer.
+
+73
+00:03:13.990 --> 00:03:18.060
+So the benefit of SVD is that to form a projection
+
+74
+00:03:18.060 --> 00:03:21.530
+instead of just going directly down to the axis itself,
+
+75
+00:03:21.530 --> 00:03:24.050
+it allows the axis to rotate,
+
+76
+00:03:24.050 --> 00:03:27.030
+then it will map those points onto the axis,
+
+77
+00:03:27.030 --> 00:03:29.470
+and then we can rotate those points back
+
+78
+00:03:29.470 --> 00:03:32.840
+to get our one dimensional representation.
+
+79
+00:03:32.840 --> 00:03:35.810
+So really, that's exactly what these terms are doing.
+
+80
+00:03:35.810 --> 00:03:38.020
+We can see here this term, U,
+
+81
+00:03:38.020 --> 00:03:40.930
+is just simply rotating this line over here.
+
+82
+00:03:40.930 --> 00:03:45.430
+Now sigma is mapping our points into one dimension,
+
+83
+00:03:45.430 --> 00:03:49.310
+and then finally we're rotating that line again.
+
+84
+00:03:49.310 --> 00:03:53.940
+So here, these terms actually do a rotation, a scaling,
+
+85
+00:03:53.940 --> 00:03:57.450
+or a projection, and then finally a rotation again.
+
+86
+00:03:57.450 --> 00:04:00.770
+So earlier, we just used the first column here,
+
+87
+00:04:00.770 --> 00:04:03.670
+the first value here, and then the first row here
+
+88
+00:04:03.670 --> 00:04:06.320
+this was called a rank one approximation,
+
+89
+00:04:06.320 --> 00:04:09.490
+which is why we call the previous array A one.
+
+90
+00:04:09.490 --> 00:04:11.990
+Now, if we multiply all of these matrices together
+
+91
+00:04:11.990 --> 00:04:15.750
+in their entirety, we would end up with our original data.
+
+92
+00:04:15.750 --> 00:04:19.160
+So let's get intuition about what these values mean.
+
+93
+00:04:19.160 --> 00:04:20.640
+So if we take this value here
+
+94
+00:04:20.640 --> 00:04:24.680
+which is the first element in this diagonal matrix,
+
+95
+00:04:24.680 --> 00:04:26.720
+and we put that element in the numerator,
+
+96
+00:04:26.720 --> 00:04:28.250
+and then we divide by the sum
+
+97
+00:04:28.250 --> 00:04:30.110
+of all the elements in the diagonal,
+
+98
+00:04:30.110 --> 00:04:33.250
+we get how much of the variance is explained
+
+99
+00:04:33.250 --> 00:04:36.010
+by this particular representation.
+
+100
+00:04:36.010 --> 00:04:39.740
+Again, this is the rank one approximation.
+
+101
+00:04:39.740 --> 00:04:43.200
+Now, if we want to use the second value here only
+
+102
+00:04:43.200 --> 00:04:46.750
+and we're going to ignore the rank one approximation,
+
+103
+00:04:46.750 --> 00:04:49.920
+so here we'll just use the second column here,
+
+104
+00:04:49.920 --> 00:04:52.790
+we'll use the second value in this diagonal matrix,
+
+105
+00:04:52.790 --> 00:04:56.730
+and then we'll use the second row in the matrix V.
+
+106
+00:04:56.730 --> 00:05:01.131
+Now what this gives us is another rotated line,
+
+107
+00:05:01.131 --> 00:05:04.580
+but this rotated line is going to be perpendicular
+
+108
+00:05:04.580 --> 00:05:08.800
+to our first rank one approximation line.
+
+109
+00:05:08.800 --> 00:05:10.360
+So what this line represents
+
+110
+00:05:10.360 --> 00:05:14.310
+is the next best representation for our line
+
+111
+00:05:14.310 --> 00:05:17.540
+if we were going to reduce it to one dimension.
+
+112
+00:05:17.540 --> 00:05:20.020
+So here, let's conduct the same process we did earlier
+
+113
+00:05:20.020 --> 00:05:22.230
+with our rank one approximation.
+
+114
+00:05:22.230 --> 00:05:25.520
+So we'll map these points onto this line here,
+
+115
+00:05:25.520 --> 00:05:26.760
+and we'll now have our points
+
+116
+00:05:26.760 --> 00:05:29.280
+on a single one dimensional line.
+
+117
+00:05:29.280 --> 00:05:31.560
+Now, you can see here that this isn't
+
+118
+00:05:31.560 --> 00:05:34.640
+as good of a representation of our data,
+
+119
+00:05:34.640 --> 00:05:37.890
+this is because it is the second most important factor
+
+120
+00:05:37.890 --> 00:05:38.840
+about our data.
+
+121
+00:05:38.840 --> 00:05:41.300
+So here we can see that using just these
+
+122
+00:05:41.300 --> 00:05:43.110
+as an approximation for our data
+
+123
+00:05:43.110 --> 00:05:48.110
+only explain 34.3% of the variance of our original matrix.
+
+124
+00:05:48.610 --> 00:05:50.100
+So one question that could come up
+
+125
+00:05:50.100 --> 00:05:53.870
+is we use this column to get our rank one approximation
+
+126
+00:05:53.870 --> 00:05:56.670
+along with this value and this row here.
+
+127
+00:05:56.670 --> 00:05:59.740
+Now, if we only wanted to use the second column here
+
+128
+00:05:59.740 --> 00:06:01.640
+we would use the second value here,
+
+129
+00:06:01.640 --> 00:06:04.270
+and this second row here.
+
+130
+00:06:04.270 --> 00:06:08.070
+So you might be wondering, well, where do we use this,
+
+131
+00:06:08.070 --> 00:06:10.900
+and why is this diagonal matrix
+
+132
+00:06:10.900 --> 00:06:12.970
+having these zeros over here?
+
+133
+00:06:12.970 --> 00:06:16.080
+Well, we actually don't use this.
+
+134
+00:06:16.080 --> 00:06:19.350
+As well, this being an M by N matrix
+
+135
+00:06:19.350 --> 00:06:23.620
+means that there will be M minus N rows that we don't use.
+
+136
+00:06:23.620 --> 00:06:25.150
+And the same goes for here,
+
+137
+00:06:25.150 --> 00:06:29.510
+there will only be M minus N rows that we don't use.
+
+138
+00:06:29.510 --> 00:06:32.460
+All right, so let's see what we can actually do with SVD.
+
+139
+00:06:32.460 --> 00:06:33.450
+Let's say we were just hired
+
+140
+00:06:33.450 --> 00:06:35.690
+by an online video platform, Vimeo.
+
+141
+00:06:35.690 --> 00:06:38.530
+An assortment of copyright claims have come flooding in,
+
+142
+00:06:38.530 --> 00:06:40.870
+basically these content creators
+
+143
+00:06:40.870 --> 00:06:43.200
+upload their content to Vimeo.
+
+144
+00:06:43.200 --> 00:06:46.860
+The idea is that Vimeo will show ads alongside their videos
+
+145
+00:06:46.860 --> 00:06:50.310
+and the content creators will receive some form of revenue.
+
+146
+00:06:50.310 --> 00:06:53.890
+Now, what could happen is a less than desirable character
+
+147
+00:06:53.890 --> 00:06:56.570
+could download these videos,
+
+148
+00:06:56.570 --> 00:07:00.160
+and they could upload basically the same exact videos
+
+149
+00:07:00.160 --> 00:07:02.340
+that these content creators created
+
+150
+00:07:02.340 --> 00:07:04.320
+and then begin to collect revenue
+
+151
+00:07:04.320 --> 00:07:07.000
+from these content creators property.
+
+152
+00:07:07.000 --> 00:07:10.130
+What should be fair is this person should get no revenue,
+
+153
+00:07:10.130 --> 00:07:12.080
+and then all of these content creators,
+
+154
+00:07:12.080 --> 00:07:15.550
+the original content creators, should receive the revenue.
+
+155
+00:07:15.550 --> 00:07:16.950
+We need to fix this.
+
+156
+00:07:16.950 --> 00:07:18.410
+So one solution
+
+157
+00:07:18.410 --> 00:07:21.240
+is that when content creators upload their video,
+
+158
+00:07:21.240 --> 00:07:23.990
+we embed a key in the video
+
+159
+00:07:23.990 --> 00:07:26.800
+such that when someone downloads the video
+
+160
+00:07:26.800 --> 00:07:28.360
+and tries to re-upload it,
+
+161
+00:07:28.360 --> 00:07:31.380
+our system will scan the video for keys
+
+162
+00:07:31.380 --> 00:07:34.670
+and if this user doesn't own this particular key,
+
+163
+00:07:34.670 --> 00:07:36.543
+then we'll just reject the upload.
+
+164
+00:07:37.500 --> 00:07:40.020
+What this will do is allow us to eliminate
+
+165
+00:07:40.020 --> 00:07:44.080
+human intervention in the case of blatant copyright abuse.
+
+166
+00:07:44.080 --> 00:07:46.480
+So how can we implement this?
+
+167
+00:07:46.480 --> 00:07:50.210
+Now, we're going to play off of the idea of a watermark.
+
+168
+00:07:50.210 --> 00:07:53.410
+A watermark is a somewhat transparent word or image
+
+169
+00:07:53.410 --> 00:07:55.180
+placed on top of photos
+
+170
+00:07:55.180 --> 00:07:58.620
+to clearly display copyright ownership.
+
+171
+00:07:58.620 --> 00:08:01.550
+We don't wanna put obnoxious watermarks
+
+172
+00:08:01.550 --> 00:08:03.160
+in our creator's videos though,
+
+173
+00:08:03.160 --> 00:08:05.430
+so we'll have to do something more clever.
+
+174
+00:08:05.430 --> 00:08:08.770
+What we can do is when our content creator uploads video,
+
+175
+00:08:08.770 --> 00:08:11.580
+we can put in a humanly imperceptible watermark
+
+176
+00:08:11.580 --> 00:08:14.720
+in each frame, such that if any content creator
+
+177
+00:08:14.720 --> 00:08:16.170
+uploads the same video,
+
+178
+00:08:16.170 --> 00:08:18.400
+we can scan for all of our known watermarks
+
+179
+00:08:18.400 --> 00:08:20.060
+and reject the upload.
+
+180
+00:08:20.060 --> 00:08:23.410
+So how we do this is we're first going to generate a key,
+
+181
+00:08:23.410 --> 00:08:27.240
+think of it as a QR code or black and white pixels.
+
+182
+00:08:27.240 --> 00:08:30.270
+We'll place this key randomly across the video
+
+183
+00:08:30.270 --> 00:08:32.280
+in case someone crops it like this
+
+184
+00:08:32.280 --> 00:08:36.290
+and we can just find the key in subsequent frames.
+
+185
+00:08:36.290 --> 00:08:37.460
+Remember, we're doing this
+
+186
+00:08:37.460 --> 00:08:40.320
+for every single video that gets uploaded,
+
+187
+00:08:40.320 --> 00:08:42.790
+and every content creator or account
+
+188
+00:08:42.790 --> 00:08:45.110
+will get their own unique key.
+
+189
+00:08:45.110 --> 00:08:47.510
+Now, these QR codes or keys
+
+190
+00:08:47.510 --> 00:08:49.970
+are just an arrangement of black and white pixels,
+
+191
+00:08:49.970 --> 00:08:52.760
+so how we'd represent that in terms of a gray scale,
+
+192
+00:08:52.760 --> 00:08:55.240
+like if we don't wanna represent red, green, blue
+
+193
+00:08:55.240 --> 00:08:57.760
+if we just wanted to represent black and white,
+
+194
+00:08:57.760 --> 00:09:00.130
+we can just assign these pixels a value
+
+195
+00:09:00.130 --> 00:09:02.540
+of either zero or 255.
+
+196
+00:09:02.540 --> 00:09:05.350
+255 will be white, zero will be black,
+
+197
+00:09:05.350 --> 00:09:07.830
+and that will generate our key for the user.
+
+198
+00:09:07.830 --> 00:09:10.020
+So how do we hide this into the video
+
+199
+00:09:10.020 --> 00:09:13.730
+such that people can't see a QR code in the video?
+
+200
+00:09:13.730 --> 00:09:16.460
+Well, what we can do is take our QR code
+
+201
+00:09:16.460 --> 00:09:19.140
+and apply singular value decomposition to it.
+
+202
+00:09:19.140 --> 00:09:22.803
+This will give us our matrices, U sigma and V transpose.
+
+203
+00:09:24.320 --> 00:09:28.140
+Okay, so once we apply SVD to this QR code,
+
+204
+00:09:28.140 --> 00:09:31.150
+we'll take the rank one approximation of it.
+
+205
+00:09:31.150 --> 00:09:34.120
+Let's say that results in this vector here.
+
+206
+00:09:34.120 --> 00:09:36.610
+So let's set this rank one approximation
+
+207
+00:09:36.610 --> 00:09:39.020
+of our QR code aside.
+
+208
+00:09:39.020 --> 00:09:43.690
+Next, we'll take a look at a video that a user has uploaded.
+
+209
+00:09:43.690 --> 00:09:47.200
+What we'll do is for every frame of the video,
+
+210
+00:09:47.200 --> 00:09:51.200
+we will take a random section of the video,
+
+211
+00:09:51.200 --> 00:09:53.470
+say a square or rectangle,
+
+212
+00:09:53.470 --> 00:09:56.330
+and these will be the gray scale pixel values,
+
+213
+00:09:56.330 --> 00:09:58.700
+again, technically you'd represent these videos
+
+214
+00:09:58.700 --> 00:09:59.930
+with red, green, blue,
+
+215
+00:09:59.930 --> 00:10:02.300
+but for our example,
+
+216
+00:10:02.300 --> 00:10:04.880
+we're just going to represent them as gray scale
+
+217
+00:10:04.880 --> 00:10:07.080
+which means every pixel will just get a value
+
+218
+00:10:07.080 --> 00:10:10.010
+between zero and 255.
+
+219
+00:10:10.010 --> 00:10:12.100
+We'll take that little square
+
+220
+00:10:12.100 --> 00:10:15.440
+that we took from a single frame in the video,
+
+221
+00:10:15.440 --> 00:10:18.920
+it will perform singular value decomposition on it.
+
+222
+00:10:18.920 --> 00:10:21.970
+So now let's bring back the rank one approximation
+
+223
+00:10:21.970 --> 00:10:24.790
+of the QR code that we generated for this user,
+
+224
+00:10:24.790 --> 00:10:26.160
+and now we need to figure out
+
+225
+00:10:26.160 --> 00:10:31.160
+how we want to hide this information in this SVD.
+
+226
+00:10:31.200 --> 00:10:34.750
+Now, remember we said that the rank one approximation
+
+227
+00:10:34.750 --> 00:10:39.560
+explains the most variance out of any other row or column
+
+228
+00:10:39.560 --> 00:10:40.920
+that we could use.
+
+229
+00:10:40.920 --> 00:10:42.570
+Now what we'll do is we'll plot
+
+230
+00:10:42.570 --> 00:10:44.740
+the amount of information we get
+
+231
+00:10:44.740 --> 00:10:47.150
+per row and column that we have.
+
+232
+00:10:47.150 --> 00:10:50.680
+So for instance, the rank one approximation is here,
+
+233
+00:10:50.680 --> 00:10:53.350
+and all of these approximations,
+
+234
+00:10:53.350 --> 00:10:57.940
+they sum to 100% of the total information of the image.
+
+235
+00:10:57.940 --> 00:11:00.070
+Because as we said earlier,
+
+236
+00:11:00.070 --> 00:11:04.660
+if you use all of the rows and the columns in the SVD,
+
+237
+00:11:04.660 --> 00:11:09.070
+you'll get back 100% of the original information.
+
+238
+00:11:09.070 --> 00:11:11.180
+All right, so now, instead of just looking
+
+239
+00:11:11.180 --> 00:11:14.580
+at every single individual row and column
+
+240
+00:11:14.580 --> 00:11:16.840
+in that information content,
+
+241
+00:11:16.840 --> 00:11:20.080
+now we'll just take the summation as we go along.
+
+242
+00:11:20.080 --> 00:11:22.820
+So here's the rank one approximation,
+
+243
+00:11:22.820 --> 00:11:25.980
+the rank two approximation uses the rank one
+
+244
+00:11:25.980 --> 00:11:27.260
+plus the rank two,
+
+245
+00:11:27.260 --> 00:11:28.830
+the rank three approximation
+
+246
+00:11:28.830 --> 00:11:31.244
+technically uses the rank one approximation
+
+247
+00:11:31.244 --> 00:11:33.340
+and the second row, second column,
+
+248
+00:11:33.340 --> 00:11:36.310
+and the third row, third column in that SVD.
+
+249
+00:11:36.310 --> 00:11:39.770
+Now what we see is we get this large information gain
+
+250
+00:11:39.770 --> 00:11:42.990
+by using the first, we'll just call it R ranks,
+
+251
+00:11:42.990 --> 00:11:44.600
+we get a very large spike
+
+252
+00:11:44.600 --> 00:11:47.110
+in the total information of the image,
+
+253
+00:11:47.110 --> 00:11:50.740
+but as we approach the 200, 300, 400 ranks
+
+254
+00:11:50.740 --> 00:11:54.460
+we see that we don't get as much information from those
+
+255
+00:11:54.460 --> 00:11:58.170
+as we got from the rank one, two, and three approximations.
+
+256
+00:11:58.170 --> 00:12:00.470
+What we'd like to do is to be able to find a rank
+
+257
+00:12:00.470 --> 00:12:05.090
+which covers about 95% of the information of the image.
+
+258
+00:12:05.090 --> 00:12:09.050
+Now, 95 here is a rough estimate, it could be higher,
+
+259
+00:12:09.050 --> 00:12:11.300
+but generally the goal is to figure out
+
+260
+00:12:11.300 --> 00:12:14.370
+at which rank does adding more ranks
+
+261
+00:12:14.370 --> 00:12:16.730
+become humanly imperceptible.
+
+262
+00:12:16.730 --> 00:12:19.470
+For our example, it actually was 95%
+
+263
+00:12:19.470 --> 00:12:22.330
+such that if we added more ranks, people couldn't notice,
+
+264
+00:12:22.330 --> 00:12:24.710
+so here that was ranked 175.
+
+265
+00:12:24.710 --> 00:12:26.200
+What we'll do is we'll take
+
+266
+00:12:26.200 --> 00:12:29.850
+our first rank approximation of our QR code,
+
+267
+00:12:29.850 --> 00:12:34.597
+and we'll embed it into the 175 rank of the SVD.
+
+268
+00:12:35.520 --> 00:12:40.150
+So let's say that this 175th row looks like this,
+
+269
+00:12:40.150 --> 00:12:43.690
+and remember, we want to embed our QR code in it,
+
+270
+00:12:43.690 --> 00:12:45.980
+what we can do is take these values
+
+271
+00:12:45.980 --> 00:12:47.710
+and simply append them
+
+272
+00:12:47.710 --> 00:12:50.510
+to the end of the decimals at this place.
+
+273
+00:12:50.510 --> 00:12:53.050
+Then what we'll do is replace this element
+
+274
+00:12:53.050 --> 00:12:57.000
+with this new updated value, which contains our keys
+
+275
+00:12:57.000 --> 00:12:59.730
+appended to the lowest decimal places.
+
+276
+00:12:59.730 --> 00:13:01.330
+So how do we use this?
+
+277
+00:13:01.330 --> 00:13:02.670
+Well, let's assume
+
+278
+00:13:02.670 --> 00:13:05.760
+that we don't have any better system set up yet,
+
+279
+00:13:05.760 --> 00:13:09.110
+so what we'll do is for every video that gets uploaded
+
+280
+00:13:09.110 --> 00:13:12.750
+per frame, we'll go through every single possible box
+
+281
+00:13:12.750 --> 00:13:15.410
+that we could have on that frame.
+
+282
+00:13:15.410 --> 00:13:17.900
+So let's say that we've extracted a particular box
+
+283
+00:13:17.900 --> 00:13:20.960
+from a single frame of a video that just got uploaded,
+
+284
+00:13:20.960 --> 00:13:23.750
+what we'll do is we'll take the SVD of that,
+
+285
+00:13:23.750 --> 00:13:26.430
+we'll look at the 175th row,
+
+286
+00:13:26.430 --> 00:13:31.040
+or whatever row gives us 95% of the variance explained,
+
+287
+00:13:31.040 --> 00:13:33.570
+then for every single key that we have,
+
+288
+00:13:33.570 --> 00:13:37.380
+we will check to see if the key is embedded
+
+289
+00:13:37.380 --> 00:13:39.240
+in that particular row.
+
+290
+00:13:39.240 --> 00:13:41.690
+Here it is, one of the keys that we have
+
+291
+00:13:41.690 --> 00:13:45.400
+matches this particular row, so we will reject the upload.
+
+292
+00:13:45.400 --> 00:13:47.960
+Now in practice there are better ways that we can do this
+
+293
+00:13:47.960 --> 00:13:51.120
+such that we don't have to scan every possible box
+
+294
+00:13:51.120 --> 00:13:52.720
+and every single frame,
+
+295
+00:13:52.720 --> 00:13:54.290
+we can also find a better way
+
+296
+00:13:54.290 --> 00:13:56.300
+than checking every single key that we have
+
+297
+00:13:56.300 --> 00:13:58.080
+by clever hashing techniques.
+
+298
+00:13:58.080 --> 00:14:00.720
+But for now, let's just assume that this is our method.
+
+299
+00:14:00.720 --> 00:14:02.110
+So how would this look?
+
+300
+00:14:02.110 --> 00:14:03.900
+So we have our content creators,
+
+301
+00:14:03.900 --> 00:14:06.250
+they upload their video content,
+
+302
+00:14:06.250 --> 00:14:08.270
+we now have our watermarking service
+
+303
+00:14:08.270 --> 00:14:11.323
+which embeds keys per user into the video,
+
+304
+00:14:12.290 --> 00:14:13.123
+then what we have
+
+305
+00:14:13.123 --> 00:14:16.000
+is if someone downloads a video from our site
+
+306
+00:14:16.000 --> 00:14:17.080
+and then re-uploads it
+
+307
+00:14:17.080 --> 00:14:19.950
+in an effort to collect some of their revenue,
+
+308
+00:14:19.950 --> 00:14:22.600
+we will scan this video for their watermark,
+
+309
+00:14:22.600 --> 00:14:25.903
+and we will reject their upload if we find a match.
+
+310
+00:14:27.210 --> 00:14:29.670
+So we've talked about why SVD is useful
+
+311
+00:14:29.670 --> 00:14:32.750
+and what each of these terms can represent,
+
+312
+00:14:32.750 --> 00:14:36.203
+however, we haven't figured out where these terms come from.
+
+313
+00:14:37.180 --> 00:14:38.090
+So we need to talk
+
+314
+00:14:38.090 --> 00:14:40.850
+about something called eigendecomposition.
+
+315
+00:14:40.850 --> 00:14:44.140
+Eigendecomposition states that any matrix that is square
+
+316
+00:14:44.140 --> 00:14:48.053
+can be broken down into eigenvectors and eigenvalues.
+
+317
+00:14:49.010 --> 00:14:50.520
+Now in this video, we won't be covering
+
+318
+00:14:50.520 --> 00:14:52.630
+eigenvalues and eigenvectors,
+
+319
+00:14:52.630 --> 00:14:55.740
+but there's a few problems with eigendecomposition.
+
+320
+00:14:55.740 --> 00:14:58.108
+One, it only works on square matrices.
+
+321
+00:14:58.108 --> 00:14:59.997
+Two, these eigenvalues,
+
+322
+00:14:59.997 --> 00:15:03.120
+they don't necessarily lie between zero and one,
+
+323
+00:15:03.120 --> 00:15:05.910
+as well, these ranks of these eigenvectors
+
+324
+00:15:05.910 --> 00:15:07.690
+are not perpendicular.
+
+325
+00:15:07.690 --> 00:15:10.270
+So we can't break down our data
+
+326
+00:15:10.270 --> 00:15:12.723
+in the same way that we did with SVD.
+
+327
+00:15:13.640 --> 00:15:17.250
+SVD solves these problems by allowing any sort of matrix,
+
+328
+00:15:17.250 --> 00:15:19.440
+it doesn't have to be square.
+
+329
+00:15:19.440 --> 00:15:22.210
+Additionally, this term is the eigenvalues
+
+330
+00:15:22.210 --> 00:15:24.070
+of A times A transpose,
+
+331
+00:15:24.070 --> 00:15:27.270
+this allows these values to lie between zero and one.
+
+332
+00:15:27.270 --> 00:15:29.500
+Finally, this value is just the eigenvectors
+
+333
+00:15:29.500 --> 00:15:31.020
+of A transpose A.
+
+334
+00:15:31.020 --> 00:15:34.440
+To get the value of U, we can simply solve this equation.
+
+335
+00:15:34.440 --> 00:15:36.730
+So now we know where SVD comes from
+
+336
+00:15:36.730 --> 00:15:39.370
+as it relates to eigendecomposition.
+
+337
+00:15:39.370 --> 00:15:41.310
+We also now know that SVD
+
+338
+00:15:41.310 --> 00:15:44.810
+is a generalized version of eigendecomposition.
+
+339
+00:15:44.810 --> 00:15:47.020
+It applies to any sized matrix.
+
+340
+00:15:47.020 --> 00:15:48.780
+So now that we've talked about this,
+
+341
+00:15:48.780 --> 00:15:51.050
+let's go ahead and talk about something called PCA,
+
+342
+00:15:51.050 --> 00:15:53.280
+which is principal component analysis.
+
+343
+00:15:53.280 --> 00:15:55.330
+Earlier, we talked about how A
+
+344
+00:15:55.330 --> 00:15:57.930
+would be equal to VLV transpose.
+
+345
+00:15:57.930 --> 00:16:00.090
+That was the eigendecomposition.
+
+346
+00:16:00.090 --> 00:16:03.950
+Well, now what if we took our A, and we standardized it,
+
+347
+00:16:03.950 --> 00:16:05.760
+so that means we subtracted the mean
+
+348
+00:16:05.760 --> 00:16:08.110
+and divided by the standard deviation,
+
+349
+00:16:08.110 --> 00:16:10.760
+and then we divided by N minus one.
+
+350
+00:16:10.760 --> 00:16:13.550
+What that means is we have a correlation matrix.
+
+351
+00:16:13.550 --> 00:16:15.197
+We talked about correlation earlier
+
+352
+00:16:15.197 --> 00:16:17.214
+and the same concept applies here.
+
+353
+00:16:17.214 --> 00:16:21.190
+The problem is this computation is typically unstable.
+
+354
+00:16:21.190 --> 00:16:25.840
+So instead, what's typically done to get PCA is we use SVD,
+
+355
+00:16:25.840 --> 00:16:28.850
+but instead we put the standardized matrix A in there
+
+356
+00:16:28.850 --> 00:16:30.250
+which means we subtract the mean
+
+357
+00:16:30.250 --> 00:16:32.340
+and divide by the standard deviation.
+
+358
+00:16:32.340 --> 00:16:35.360
+And what that gives us is this here U sigma
+
+359
+00:16:35.360 --> 00:16:37.470
+is now our principal component.
+
+360
+00:16:37.470 --> 00:16:41.020
+So we can perform PCA, or principal component analysis,
+
+361
+00:16:41.020 --> 00:16:44.100
+by performing SVD on the standardized matrix.
+
+362
+00:16:44.100 --> 00:16:46.200
+So, one thing that we covered earlier in the course
+
+363
+00:16:46.200 --> 00:16:47.680
+is that a lot of our algorithms
+
+364
+00:16:47.680 --> 00:16:49.770
+were vulnerable to high dimensionality.
+
+365
+00:16:49.770 --> 00:16:54.770
+We can use PCA or SVD for dimensionality reduction.
+
+366
+00:16:54.890 --> 00:16:56.560
+So earlier, we drew this graph
+
+367
+00:16:56.560 --> 00:16:59.210
+such that the percent of information was here
+
+368
+00:16:59.210 --> 00:17:02.063
+and the total information representation was here,
+
+369
+00:17:02.063 --> 00:17:05.950
+what we can do is we can approximate our data
+
+370
+00:17:05.950 --> 00:17:07.360
+by a given rank.
+
+371
+00:17:07.360 --> 00:17:08.880
+So let's say that we wanted to find
+
+372
+00:17:08.880 --> 00:17:11.260
+some approximation of our data
+
+373
+00:17:11.260 --> 00:17:14.850
+that can cover 95% of the variance of our data
+
+374
+00:17:14.850 --> 00:17:17.230
+without using all 400 dimensions,
+
+375
+00:17:17.230 --> 00:17:21.220
+well, now we can use only 175 dimensions
+
+376
+00:17:21.220 --> 00:17:24.840
+to represent 95% of our data.
+
+377
+00:17:24.840 --> 00:17:27.920
+This can be immensely helpful for a lot of algorithms.
+
+378
+00:17:27.920 --> 00:17:30.500
+Keep in mind that PCA and SVD
+
+379
+00:17:30.500 --> 00:17:33.430
+assume a linear correlation between your variables.
+
+380
+00:17:33.430 --> 00:17:34.950
+However, there are nonlinear
+
+381
+00:17:34.950 --> 00:17:36.750
+dimensionality reduction techniques.
+
+382
+00:17:36.750 --> 00:17:38.800
+You can use something called kernel PCA.
+
+383
+00:17:38.800 --> 00:17:40.530
+This actually uses the same kernel trick
+
+384
+00:17:40.530 --> 00:17:42.710
+we talked about in the previous videos.
+
+385
+00:17:42.710 --> 00:17:44.660
+What this would do is project this data
+
+386
+00:17:44.660 --> 00:17:46.150
+into a higher dimension,
+
+387
+00:17:46.150 --> 00:17:48.840
+and then reduce the dimensions to one dimension.
+
+388
+00:17:48.840 --> 00:17:51.520
+For me, I think this is really impressive.
+
+389
+00:17:51.520 --> 00:17:53.690
+So to wrap up, let's go over some libraries
+
+390
+00:17:53.690 --> 00:17:56.300
+that you can use for PCA.
+
+391
+00:17:56.300 --> 00:17:57.577
+Even though we say PCA,
+
+392
+00:17:57.577 --> 00:18:01.750
+typically software will use SPD as the implementation.
+
+393
+00:18:01.750 --> 00:18:03.260
+So I like to use scikit-learn,
+
+394
+00:18:03.260 --> 00:18:06.890
+they offer PCA as well as kernel PCA.
+
+395
+00:18:06.890 --> 00:18:09.490
+Well, that wraps up this video, thanks for joining.
+
+396
+00:18:09.490 --> 00:18:10.670
+Join us next time
+
+397
+00:18:10.670 --> 00:18:13.513
+as we continue our machine learning journey.
+

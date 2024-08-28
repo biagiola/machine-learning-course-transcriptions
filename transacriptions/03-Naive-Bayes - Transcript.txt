@@ -1,0 +1,1854 @@
+WEBVTT
+
+1
+00:00:00.170 --> 00:00:01.250
+<v Lecturer>Welcome back everybody.</v>
+
+2
+00:00:01.250 --> 00:00:04.690
+This is ML Experts machine learning crash course.
+
+3
+00:00:04.690 --> 00:00:07.340
+In this episode, we're going to be going over a model
+
+4
+00:00:07.340 --> 00:00:10.300
+called the Naive Bayes Classifier.
+
+5
+00:00:10.300 --> 00:00:13.480
+Let's say that as you're watching this video,
+
+6
+00:00:13.480 --> 00:00:16.280
+you're also scrolling through your Instagram feed.
+
+7
+00:00:16.280 --> 00:00:19.180
+Suddenly, someone sends you a direct message
+
+8
+00:00:19.180 --> 00:00:20.880
+and do you decide to click on it.
+
+9
+00:00:20.880 --> 00:00:25.440
+You proceed to read the message, from bot_123.
+
+10
+00:00:25.440 --> 00:00:28.550
+Hey, want to 10x your money?
+
+11
+00:00:28.550 --> 00:00:33.550
+Send Bitcoin to this address to get 1000% in three days.
+
+12
+00:00:35.040 --> 00:00:37.500
+You're probably skeptical, and so am I.
+
+13
+00:00:37.500 --> 00:00:39.740
+My suspicions are one,
+
+14
+00:00:39.740 --> 00:00:42.880
+I don't recognize the sender, this person here.
+
+15
+00:00:42.880 --> 00:00:45.240
+They're talking about some sort of quick returns.
+
+16
+00:00:45.240 --> 00:00:46.530
+They mentioned Bitcoin
+
+17
+00:00:46.530 --> 00:00:48.520
+and how they want me to send them some,
+
+18
+00:00:48.520 --> 00:00:50.600
+and finally they don't use my name.
+
+19
+00:00:50.600 --> 00:00:52.370
+But whatever my suspicions are,
+
+20
+00:00:52.370 --> 00:00:54.250
+I'm not going to or reply to this message
+
+21
+00:00:54.250 --> 00:00:56.910
+and now I've been needlessly distracted
+
+22
+00:00:56.910 --> 00:00:58.920
+from my Instagram feed.
+
+23
+00:00:58.920 --> 00:01:00.280
+What would have been really nice
+
+24
+00:01:00.280 --> 00:01:02.830
+is if Instagram could have detected
+
+25
+00:01:02.830 --> 00:01:05.510
+that this message was probably suspicious
+
+26
+00:01:05.510 --> 00:01:09.030
+and set the message aside, not send me a push notification
+
+27
+00:01:09.030 --> 00:01:12.430
+and let me read the message at my own convenience later.
+
+28
+00:01:12.430 --> 00:01:13.930
+If I were going to implement this,
+
+29
+00:01:13.930 --> 00:01:16.190
+I would create some sort of filter rules.
+
+30
+00:01:16.190 --> 00:01:18.090
+These filter rules would indicate
+
+31
+00:01:18.090 --> 00:01:21.440
+whether or not I should be sent a push notification
+
+32
+00:01:21.440 --> 00:01:23.800
+or if the message should just go in my inbox
+
+33
+00:01:23.800 --> 00:01:27.010
+and not necessarily alert me right away about it.
+
+34
+00:01:27.010 --> 00:01:29.490
+The first rule would be if I'm not following them
+
+35
+00:01:29.490 --> 00:01:31.840
+and they send me a message, then filter it.
+
+36
+00:01:31.840 --> 00:01:33.750
+Likewise, if they're not following me.
+
+37
+00:01:33.750 --> 00:01:35.770
+And finally, if the first message
+
+38
+00:01:35.770 --> 00:01:38.330
+that they send to me doesn't contain my name,
+
+39
+00:01:38.330 --> 00:01:39.920
+then also filter.
+
+40
+00:01:39.920 --> 00:01:43.220
+Now, I'd apply these rules for about a month or so
+
+41
+00:01:43.220 --> 00:01:48.220
+and see if the needless distractions decreased in some way.
+
+42
+00:01:48.510 --> 00:01:51.060
+It's worth noting here that these rules aren't perfect.
+
+43
+00:01:51.060 --> 00:01:52.760
+Messages that are relevant
+
+44
+00:01:52.760 --> 00:01:55.550
+to me could be filtered out as well.
+
+45
+00:01:55.550 --> 00:01:57.210
+Messages that are spam
+
+46
+00:01:57.210 --> 00:02:01.410
+or suspicious could be sent as a push notification anyway.
+
+47
+00:02:01.410 --> 00:02:03.070
+What these rules effectively do
+
+48
+00:02:03.070 --> 00:02:06.240
+is they create a function and this function takes in
+
+49
+00:02:06.240 --> 00:02:09.570
+a particular message and it maps that message
+
+50
+00:02:09.570 --> 00:02:13.460
+to a value of filter or don't filter.
+
+51
+00:02:13.460 --> 00:02:16.500
+Let's see if we can replace our filter rule function
+
+52
+00:02:16.500 --> 00:02:18.570
+with some machine learning model.
+
+53
+00:02:18.570 --> 00:02:21.690
+Now, these filter rules are actually a heuristic
+
+54
+00:02:21.690 --> 00:02:24.400
+in the sense that they trade off something optimal
+
+55
+00:02:24.400 --> 00:02:26.540
+for something simple and quick.
+
+56
+00:02:26.540 --> 00:02:29.330
+Now, one idea is that we can apply filter rules
+
+57
+00:02:29.330 --> 00:02:31.870
+to the contents of the particular message.
+
+58
+00:02:31.870 --> 00:02:34.180
+For instance, we could have filtered here based
+
+59
+00:02:34.180 --> 00:02:35.940
+on the word Bitcoin.
+
+60
+00:02:35.940 --> 00:02:37.230
+Let's look more into that.
+
+61
+00:02:37.230 --> 00:02:39.400
+Here, we have six messages
+
+62
+00:02:39.400 --> 00:02:42.350
+and these were all detected to be spam
+
+63
+00:02:42.350 --> 00:02:43.970
+and what we've done is we've gone
+
+64
+00:02:43.970 --> 00:02:46.430
+through each of these spam messages
+
+65
+00:02:46.430 --> 00:02:51.400
+and collected common words into a filter word list.
+
+66
+00:02:51.400 --> 00:02:53.740
+Then we can add a filter rule
+
+67
+00:02:53.740 --> 00:02:57.809
+which says if a particular message contains two
+
+68
+00:02:57.809 --> 00:03:01.430
+or more of the words on this filter list,
+
+69
+00:03:01.430 --> 00:03:04.320
+then go ahead and filter that message out.
+
+70
+00:03:04.320 --> 00:03:07.260
+Now, this filter list and this particular rule
+
+71
+00:03:07.260 --> 00:03:11.040
+of the two words could work for some messages.
+
+72
+00:03:11.040 --> 00:03:13.100
+But what if these words can be found
+
+73
+00:03:13.100 --> 00:03:15.950
+in legitimate and spam messages?
+
+74
+00:03:15.950 --> 00:03:18.480
+For instance, I'd really like to be notified
+
+75
+00:03:18.480 --> 00:03:20.210
+if someone reached out to me and said,
+
+76
+00:03:20.210 --> 00:03:22.030
+hey I found your wallet.
+
+77
+00:03:22.030 --> 00:03:23.580
+I wouldn't like to be notified
+
+78
+00:03:23.580 --> 00:03:25.310
+if a bot reached out and said,
+
+79
+00:03:25.310 --> 00:03:27.330
+send money to my apple wallet.
+
+80
+00:03:27.330 --> 00:03:30.100
+Here, both messages contain the word wallet.
+
+81
+00:03:30.100 --> 00:03:32.650
+So what we would really like from our model
+
+82
+00:03:32.650 --> 00:03:36.340
+is to take in a message and produce the chance
+
+83
+00:03:36.340 --> 00:03:38.930
+of the particular message being spam.
+
+84
+00:03:38.930 --> 00:03:42.380
+Chance in our case is equivalent to probability.
+
+85
+00:03:42.380 --> 00:03:44.020
+And in probability notation,
+
+86
+00:03:44.020 --> 00:03:48.850
+we would write P of spam given some message.
+
+87
+00:03:48.850 --> 00:03:51.460
+This is a conditional probability statement.
+
+88
+00:03:51.460 --> 00:03:54.250
+All it's saying is what's the probability
+
+89
+00:03:54.250 --> 00:03:57.210
+of spam given some particular message.
+
+90
+00:03:57.210 --> 00:04:00.270
+Now, ease of reading, we're going to replace message
+
+91
+00:04:00.270 --> 00:04:01.920
+with vector w.
+
+92
+00:04:01.920 --> 00:04:05.630
+Here, vector w is just list of words.
+
+93
+00:04:05.630 --> 00:04:07.880
+So how do we actually figure this out?
+
+94
+00:04:07.880 --> 00:04:11.810
+Well, there is a formula available called Bayes theorem.
+
+95
+00:04:11.810 --> 00:04:13.990
+So what does this actually mean?
+
+96
+00:04:13.990 --> 00:04:17.270
+Let's pretend for a moment that there's just a numerator.
+
+97
+00:04:17.270 --> 00:04:19.950
+As well, let's get rid of these probabilities.
+
+98
+00:04:19.950 --> 00:04:22.420
+Now, starting with the left hand side here,
+
+99
+00:04:22.420 --> 00:04:25.280
+consider what absolutely must be true
+
+100
+00:04:25.280 --> 00:04:29.900
+for us to get a spam message given some particular words.
+
+101
+00:04:29.900 --> 00:04:31.870
+It sounds obvious, but for one,
+
+102
+00:04:31.870 --> 00:04:33.960
+we have to get a spam message,
+
+103
+00:04:33.960 --> 00:04:37.000
+and two the exact words in question
+
+104
+00:04:37.000 --> 00:04:41.120
+and no other words have to appear in that spam message.
+
+105
+00:04:41.120 --> 00:04:43.140
+If both of these things are true,
+
+106
+00:04:43.140 --> 00:04:45.430
+then we did fulfill the left-hand side
+
+107
+00:04:45.430 --> 00:04:47.610
+and we did get a spam message
+
+108
+00:04:47.610 --> 00:04:49.820
+with those particular words in it.
+
+109
+00:04:49.820 --> 00:04:53.930
+Well, not every message that we receive is going to be spam,
+
+110
+00:04:53.930 --> 00:04:56.930
+but some fraction are, say 10%.
+
+111
+00:04:56.930 --> 00:04:59.890
+As well, for every spam message that we do receive,
+
+112
+00:04:59.890 --> 00:05:03.440
+they're not going to contain the exact word in question
+
+113
+00:05:03.440 --> 00:05:06.370
+but some will, say 5%.
+
+114
+00:05:06.370 --> 00:05:08.260
+These percentages that we're mentioning
+
+115
+00:05:08.260 --> 00:05:09.660
+are just probabilities.
+
+116
+00:05:09.660 --> 00:05:13.530
+And since we're looking for the probability that we got spam
+
+117
+00:05:13.530 --> 00:05:16.770
+given some particular words, we have to add probabilities
+
+118
+00:05:16.770 --> 00:05:18.080
+on the right hand side.
+
+119
+00:05:18.080 --> 00:05:21.010
+Note that and here is just multiplication
+
+120
+00:05:21.010 --> 00:05:22.620
+in terms of probability.
+
+121
+00:05:22.620 --> 00:05:24.760
+Okay, so I think we get the idea.
+
+122
+00:05:24.760 --> 00:05:26.800
+So why is the denominator there?
+
+123
+00:05:26.800 --> 00:05:29.800
+In general, we could've gotten a spam message
+
+124
+00:05:29.800 --> 00:05:32.140
+with those particular words in question
+
+125
+00:05:32.140 --> 00:05:34.820
+or we could've gotten a legitimate message
+
+126
+00:05:34.820 --> 00:05:37.840
+or not spam given those same words.
+
+127
+00:05:37.840 --> 00:05:38.870
+Both could have happened
+
+128
+00:05:38.870 --> 00:05:41.560
+because we're considering these probabilities.
+
+129
+00:05:41.560 --> 00:05:45.430
+The denominator takes both cases into account.
+
+130
+00:05:45.430 --> 00:05:49.200
+The numerator is the same as the left-hand term here
+
+131
+00:05:49.200 --> 00:05:52.330
+on the denominator, because that's what we want to know.
+
+132
+00:05:52.330 --> 00:05:54.620
+Out of everything that could have happened,
+
+133
+00:05:54.620 --> 00:05:58.390
+what fraction of those things turned out to be spam?
+
+134
+00:05:58.390 --> 00:06:00.050
+If we wanted to know the probability
+
+135
+00:06:00.050 --> 00:06:03.000
+of a particular message being not spam,
+
+136
+00:06:03.000 --> 00:06:05.670
+then we would simply put this term over here
+
+137
+00:06:05.670 --> 00:06:07.220
+in the numerator instead.
+
+138
+00:06:07.220 --> 00:06:11.060
+But for our case, we want to know the probability of spam.
+
+139
+00:06:11.060 --> 00:06:13.730
+So we'll keep this term in the numerator.
+
+140
+00:06:13.730 --> 00:06:17.830
+Note that the equivalent of or in probability
+
+141
+00:06:17.830 --> 00:06:19.260
+is just addition.
+
+142
+00:06:19.260 --> 00:06:22.530
+We haven't looked at exactly how this works with an example,
+
+143
+00:06:22.530 --> 00:06:23.840
+so let's do that now.
+
+144
+00:06:23.840 --> 00:06:24.810
+To start off,
+
+145
+00:06:24.810 --> 00:06:28.050
+let's consider the one word message wallet.
+
+146
+00:06:28.050 --> 00:06:31.480
+Remember, that the goal is to get the probability
+
+147
+00:06:31.480 --> 00:06:34.183
+that a particular message is spam
+
+148
+00:06:34.183 --> 00:06:38.400
+given that that message contains particular words.
+
+149
+00:06:38.400 --> 00:06:41.327
+In our case, these words is just one word
+
+150
+00:06:41.327 --> 00:06:42.960
+and that word is wallet.
+
+151
+00:06:42.960 --> 00:06:45.540
+In order to calculate this, we have to know what each
+
+152
+00:06:45.540 --> 00:06:47.150
+of these terms are equal to.
+
+153
+00:06:47.150 --> 00:06:49.690
+Let's start with P of spam.
+
+154
+00:06:49.690 --> 00:06:52.610
+P of spam is just the probability
+
+155
+00:06:52.610 --> 00:06:55.490
+that a particular message is spam in general,
+
+156
+00:06:55.490 --> 00:06:57.930
+regardless of the words it contains.
+
+157
+00:06:57.930 --> 00:07:01.000
+This is why we don't see any term w in here.
+
+158
+00:07:01.000 --> 00:07:04.370
+Imagine if all of the messages that we've seen so far
+
+159
+00:07:04.370 --> 00:07:05.640
+have been spam.
+
+160
+00:07:05.640 --> 00:07:09.920
+Well, then the probability of spam would be 100%.
+
+161
+00:07:09.920 --> 00:07:12.910
+Likewise, if every message that we've seen so far
+
+162
+00:07:12.910 --> 00:07:17.500
+has not been spam, then the probability of spam would be 0%.
+
+163
+00:07:17.500 --> 00:07:18.850
+Let's say for our case
+
+164
+00:07:18.850 --> 00:07:22.690
+that we've seen two spam messages out of 10.
+
+165
+00:07:22.690 --> 00:07:27.100
+This means that our probability of spam is 20%.
+
+166
+00:07:27.100 --> 00:07:28.800
+Let's go ahead and plug that in.
+
+167
+00:07:28.800 --> 00:07:31.907
+Here was P of spam, here was P of spam
+
+168
+00:07:31.907 --> 00:07:34.400
+and here was P of not spam.
+
+169
+00:07:34.400 --> 00:07:37.360
+Well, since we know the P of spam is 20%
+
+170
+00:07:37.360 --> 00:07:40.810
+and every message is either going to be spam or not spam,
+
+171
+00:07:40.810 --> 00:07:42.950
+then to get the probability of not spam,
+
+172
+00:07:42.950 --> 00:07:47.220
+we just take one minus 20% which is 80%.
+
+173
+00:07:47.220 --> 00:07:52.220
+The next term, P of w, given spam represents in our case,
+
+174
+00:07:52.300 --> 00:07:56.490
+the probability that our one word message wallet,
+
+175
+00:07:56.490 --> 00:07:59.000
+appears in a spam message.
+
+176
+00:07:59.000 --> 00:08:02.540
+This means that wallet appeared in the message
+
+177
+00:08:02.540 --> 00:08:05.290
+and also not any other word.
+
+178
+00:08:05.290 --> 00:08:06.980
+This is the same way as saying,
+
+179
+00:08:06.980 --> 00:08:11.280
+we received a one word message with the word wallet in it.
+
+180
+00:08:11.280 --> 00:08:13.260
+But to actually calculate this,
+
+181
+00:08:13.260 --> 00:08:15.282
+we need to figure out how to represent
+
+182
+00:08:15.282 --> 00:08:19.410
+not any other word appearing in spam messages.
+
+183
+00:08:19.410 --> 00:08:22.260
+We can represent not any other word
+
+184
+00:08:22.260 --> 00:08:24.520
+by defining a vocabulary.
+
+185
+00:08:24.520 --> 00:08:26.500
+A vocabulary will be a list
+
+186
+00:08:26.500 --> 00:08:30.380
+of words that our model understands or recognizes.
+
+187
+00:08:30.380 --> 00:08:34.350
+Now we can define w, or our message wallet,
+
+188
+00:08:34.350 --> 00:08:36.480
+in terms of our vocabulary.
+
+189
+00:08:36.480 --> 00:08:41.390
+So here, let's say that the word wallet is the 47th word
+
+190
+00:08:41.390 --> 00:08:45.561
+in our vocabulary, and we can represent not any other word
+
+191
+00:08:45.561 --> 00:08:49.150
+as not the zero with word in our vocabulary.
+
+192
+00:08:49.150 --> 00:08:51.490
+Not all of these words in our vocabulary
+
+193
+00:08:51.490 --> 00:08:56.310
+and finally not the last or the 99th word in our vocabulary.
+
+194
+00:08:56.310 --> 00:08:59.370
+So all this is saying is that the only word
+
+195
+00:08:59.370 --> 00:09:03.710
+in our message is the 47th word in our vocabulary.
+
+196
+00:09:03.710 --> 00:09:04.880
+All of the other words
+
+197
+00:09:04.880 --> 00:09:08.260
+in our vocabulary are not in our message.
+
+198
+00:09:08.260 --> 00:09:11.310
+Okay, so how do we calculate this then?
+
+199
+00:09:11.310 --> 00:09:13.200
+Well, there's a formula we can use
+
+200
+00:09:13.200 --> 00:09:16.155
+based on the probability chain rule.
+
+201
+00:09:16.155 --> 00:09:19.090
+To start, we'd have to calculate the probability
+
+202
+00:09:19.090 --> 00:09:22.420
+of not seeing the last word in our vocabulary
+
+203
+00:09:22.420 --> 00:09:24.260
+given some spam message.
+
+204
+00:09:24.260 --> 00:09:25.650
+We then multiply that
+
+205
+00:09:25.650 --> 00:09:29.440
+by not seeing the second to last word in our vocabulary
+
+206
+00:09:29.440 --> 00:09:32.110
+given that we have already not seen the final word
+
+207
+00:09:32.110 --> 00:09:34.830
+in our vocabulary in a spam message.
+
+208
+00:09:34.830 --> 00:09:36.780
+And then we would continue this pattern on
+
+209
+00:09:36.780 --> 00:09:39.850
+with the third to the last word in our vocabulary.
+
+210
+00:09:39.850 --> 00:09:42.220
+And this would continue for all of the words
+
+211
+00:09:42.220 --> 00:09:45.550
+in our vocabulary until we reached the probability
+
+212
+00:09:45.550 --> 00:09:48.770
+of seeing the 47th word given
+
+213
+00:09:48.770 --> 00:09:50.840
+that we have not seen any other word
+
+214
+00:09:50.840 --> 00:09:53.850
+in our vocabulary in a spam message.
+
+215
+00:09:53.850 --> 00:09:56.070
+Now, this is a lot to calculate.
+
+216
+00:09:56.070 --> 00:09:59.640
+Imagine if our vocabulary had thousands of words in it.
+
+217
+00:09:59.640 --> 00:10:01.567
+There would be tons of terms here
+
+218
+00:10:01.567 --> 00:10:04.320
+and our model would likely become unusable
+
+219
+00:10:04.320 --> 00:10:07.600
+because of the degree of calculation we'd have to perform.
+
+220
+00:10:07.600 --> 00:10:10.045
+An assumption we can make is that the presence
+
+221
+00:10:10.045 --> 00:10:14.460
+or absence of a particular word does not depend
+
+222
+00:10:14.460 --> 00:10:18.900
+on the presence or absence of any other word.
+
+223
+00:10:18.900 --> 00:10:21.880
+What this means is that we can now cancel out
+
+224
+00:10:21.880 --> 00:10:25.500
+all of these terms within these calculations.
+
+225
+00:10:25.500 --> 00:10:29.170
+Now, even though this does help us in terms of calculation,
+
+226
+00:10:29.170 --> 00:10:31.770
+it does add bias to our model now.
+
+227
+00:10:31.770 --> 00:10:34.630
+This bias can hinder the model's ability
+
+228
+00:10:34.630 --> 00:10:37.610
+to understand nuances within messages.
+
+229
+00:10:37.610 --> 00:10:40.440
+For instance, the model will no longer account
+
+230
+00:10:40.440 --> 00:10:42.590
+for an increased probability
+
+231
+00:10:42.590 --> 00:10:47.250
+of seeing the word London upon seeing the word England.
+
+232
+00:10:47.250 --> 00:10:50.610
+Now, even though these words are likely to appear together,
+
+233
+00:10:50.610 --> 00:10:54.110
+the simplifying assumption enforces that the model
+
+234
+00:10:54.110 --> 00:10:57.140
+see these two words in isolation.
+
+235
+00:10:57.140 --> 00:11:01.170
+This trade-off buys us the ability to still use this model
+
+236
+00:11:01.170 --> 00:11:03.646
+given an extremely large vocabulary,
+
+237
+00:11:03.646 --> 00:11:06.890
+and even though we have this independence assumption,
+
+238
+00:11:06.890 --> 00:11:09.320
+it tends to work well in practice.
+
+239
+00:11:09.320 --> 00:11:11.520
+We said earlier that this model was based
+
+240
+00:11:11.520 --> 00:11:14.670
+on Bayes theorem or Bayes rule.
+
+241
+00:11:14.670 --> 00:11:17.470
+Now that we have this simplifying assumption here,
+
+242
+00:11:17.470 --> 00:11:21.490
+our model represents what's called a Naive Bayes Model.
+
+243
+00:11:21.490 --> 00:11:26.020
+So now this term is just equal to this.
+
+244
+00:11:26.020 --> 00:11:29.530
+What we're doing now is simply multiplying the probabilities
+
+245
+00:11:29.530 --> 00:11:32.600
+of seeing particular words in a spam message
+
+246
+00:11:32.600 --> 00:11:36.110
+by treating single word independently from one another
+
+247
+00:11:36.110 --> 00:11:39.050
+as if they're not even in the same message.
+
+248
+00:11:39.050 --> 00:11:41.310
+So now let's substitute this in
+
+249
+00:11:41.310 --> 00:11:43.870
+for this term here in our model.
+
+250
+00:11:43.870 --> 00:11:47.740
+We'll be replacing this term, this term, and this term.
+
+251
+00:11:47.740 --> 00:11:51.050
+One thing you may have noticed here is this little symbol.
+
+252
+00:11:51.050 --> 00:11:52.830
+All that means is not.
+
+253
+00:11:52.830 --> 00:11:54.827
+So here this means not spam
+
+254
+00:11:54.827 --> 00:11:58.820
+and this means not the last word in our vocabulary.
+
+255
+00:11:58.820 --> 00:12:03.820
+As a recap, all we've done is take this term and substitute
+
+256
+00:12:03.930 --> 00:12:08.840
+in this term based on our naive independence assumption.
+
+257
+00:12:08.840 --> 00:12:11.780
+So how do we actually calculate these terms?
+
+258
+00:12:11.780 --> 00:12:13.840
+Well, let's start with our first term here.
+
+259
+00:12:13.840 --> 00:12:16.290
+This term is just the probability
+
+260
+00:12:16.290 --> 00:12:19.940
+that the 47th word in our vocabulary, wallet,
+
+261
+00:12:19.940 --> 00:12:22.400
+appears in some spam message.
+
+262
+00:12:22.400 --> 00:12:23.690
+To calculate this,
+
+263
+00:12:23.690 --> 00:12:26.380
+we count the total number of spam messages
+
+264
+00:12:26.380 --> 00:12:28.030
+which contain the word wallet
+
+265
+00:12:28.030 --> 00:12:31.220
+and then divide by the total number of spam messages.
+
+266
+00:12:31.220 --> 00:12:32.500
+For instance, let's say
+
+267
+00:12:32.500 --> 00:12:35.660
+that this message does contain the word wallet.
+
+268
+00:12:35.660 --> 00:12:37.760
+That's indicated here with this check mark.
+
+269
+00:12:37.760 --> 00:12:39.800
+This message however, doesn't.
+
+270
+00:12:39.800 --> 00:12:44.800
+So, our probability would be one over two total messages.
+
+271
+00:12:44.950 --> 00:12:48.400
+If both of these spam messages contained the word wallet,
+
+272
+00:12:48.400 --> 00:12:51.410
+then the probability that the word wallet appears
+
+273
+00:12:51.410 --> 00:12:54.300
+in a spam message would be 100%.
+
+274
+00:12:54.300 --> 00:12:59.090
+For our particular example, the probability is actually 50%.
+
+275
+00:12:59.090 --> 00:13:00.210
+This is because half
+
+276
+00:13:00.210 --> 00:13:02.850
+of our spam messages contain the word wallet.
+
+277
+00:13:02.850 --> 00:13:05.950
+So let's plug in 50% for this term.
+
+278
+00:13:05.950 --> 00:13:08.940
+The next term we're going to calculate is the probability
+
+279
+00:13:08.940 --> 00:13:10.040
+that the final word
+
+280
+00:13:10.040 --> 00:13:14.380
+in our vocabulary does not appear in a spam message.
+
+281
+00:13:14.380 --> 00:13:16.280
+So let's calculate that now.
+
+282
+00:13:16.280 --> 00:13:20.000
+We have the probability that the 99th term
+
+283
+00:13:20.000 --> 00:13:25.000
+in our vocabulary, door, does not appear in a spam message.
+
+284
+00:13:25.670 --> 00:13:29.740
+All that we do is count the number of spam messages
+
+285
+00:13:29.740 --> 00:13:32.320
+which don't contain the word door.
+
+286
+00:13:32.320 --> 00:13:34.470
+Here, both spam messages
+
+287
+00:13:34.470 --> 00:13:36.190
+don't contain the word door
+
+288
+00:13:36.190 --> 00:13:39.890
+so we have a 100% chance of the word door
+
+289
+00:13:39.890 --> 00:13:42.390
+not appearing in a spam message.
+
+290
+00:13:42.390 --> 00:13:46.460
+So let's go ahead and plug in 100% for this term.
+
+291
+00:13:46.460 --> 00:13:48.190
+We'd continue that same process
+
+292
+00:13:48.190 --> 00:13:51.160
+for every other word in our vocabulary as well.
+
+293
+00:13:51.160 --> 00:13:53.270
+Here, since this term and this term
+
+294
+00:13:53.270 --> 00:13:54.980
+on the left are equivalent,
+
+295
+00:13:54.980 --> 00:13:58.290
+we've just gone ahead and put this down here.
+
+296
+00:13:58.290 --> 00:14:00.320
+On the right hand side of the addition,
+
+297
+00:14:00.320 --> 00:14:02.692
+we need to calculate this term next.
+
+298
+00:14:02.692 --> 00:14:06.140
+So now we'll be calculating the probability
+
+299
+00:14:06.140 --> 00:14:10.140
+that the word wallet appears in a non spam
+
+300
+00:14:10.140 --> 00:14:12.000
+or legitimate message.
+
+301
+00:14:12.000 --> 00:14:14.790
+We calculate this by just counting the number
+
+302
+00:14:14.790 --> 00:14:18.380
+of non spam messages which contain the word wallet.
+
+303
+00:14:18.380 --> 00:14:22.260
+We then divide by the total number of non spam messages.
+
+304
+00:14:22.260 --> 00:14:25.720
+Here, this would be 25% because two,
+
+305
+00:14:25.720 --> 00:14:28.960
+out of eight total messages contain the word wallet.
+
+306
+00:14:28.960 --> 00:14:32.100
+We can now plug in 25% for this term.
+
+307
+00:14:32.100 --> 00:14:34.310
+Now we would continue this process as well
+
+308
+00:14:34.310 --> 00:14:36.550
+for every other message in our vocabulary,
+
+309
+00:14:36.550 --> 00:14:39.280
+but together we'll solve this final term here.
+
+310
+00:14:39.280 --> 00:14:42.870
+So now we want the probability that the 99th word
+
+311
+00:14:42.870 --> 00:14:46.160
+in our vocabulary, door, does not appear
+
+312
+00:14:46.160 --> 00:14:48.150
+in a legitimate message.
+
+313
+00:14:48.150 --> 00:14:49.230
+To calculate this,
+
+314
+00:14:49.230 --> 00:14:52.340
+we simply count the number of legitimate messages
+
+315
+00:14:52.340 --> 00:14:55.900
+which do not contain the word door.
+
+316
+00:14:55.900 --> 00:14:58.200
+We then divide by the total number
+
+317
+00:14:58.200 --> 00:14:59.700
+of legitimate messages.
+
+318
+00:14:59.700 --> 00:15:03.990
+Here, since five out of eight total legitimate messages
+
+319
+00:15:03.990 --> 00:15:05.603
+don't contain the word door,
+
+320
+00:15:05.603 --> 00:15:09.350
+the probability is 62.5%.
+
+321
+00:15:09.350 --> 00:15:12.420
+Let's plug in 62.5 for this term now.
+
+322
+00:15:12.420 --> 00:15:14.810
+So now, assuming that we've repeated this process
+
+323
+00:15:14.810 --> 00:15:17.060
+for every other word in our vocabulary,
+
+324
+00:15:17.060 --> 00:15:19.620
+we can solve for this probability here.
+
+325
+00:15:19.620 --> 00:15:21.390
+It turns out that the probability
+
+326
+00:15:21.390 --> 00:15:26.020
+of spam given the exact message, wallet, is 47.7%.
+
+327
+00:15:27.270 --> 00:15:28.930
+I think it makes sense that we're kind of
+
+328
+00:15:28.930 --> 00:15:31.020
+in the middle between spam and not spam.
+
+329
+00:15:31.020 --> 00:15:32.650
+If this were very close to zero,
+
+330
+00:15:32.650 --> 00:15:35.080
+it would imply that there's a very low chance
+
+331
+00:15:35.080 --> 00:15:36.350
+that this word is spam.
+
+332
+00:15:36.350 --> 00:15:38.470
+If the probability was near 100,
+
+333
+00:15:38.470 --> 00:15:40.630
+it would imply a very strong possibility
+
+334
+00:15:40.630 --> 00:15:43.640
+that this one word message, wallet, is spam.
+
+335
+00:15:43.640 --> 00:15:45.620
+So let's bring up our model again.
+
+336
+00:15:45.620 --> 00:15:49.000
+And what happens if our message contains more
+
+337
+00:15:49.000 --> 00:15:50.540
+than just a single word?
+
+338
+00:15:50.540 --> 00:15:53.670
+So for instance, if our message now contains wallet
+
+339
+00:15:53.670 --> 00:15:56.830
+and door, everything stays the same
+
+340
+00:15:56.830 --> 00:16:00.787
+except this term here no longer has a not
+
+341
+00:16:00.787 --> 00:16:02.250
+and we would calculate it
+
+342
+00:16:02.250 --> 00:16:05.050
+in the similar way that we calculated this.
+
+343
+00:16:05.050 --> 00:16:06.490
+The little nots in front
+
+344
+00:16:06.490 --> 00:16:08.840
+of the terms can actually be reduced
+
+345
+00:16:08.840 --> 00:16:11.640
+down to a binary representation.
+
+346
+00:16:11.640 --> 00:16:13.400
+This is called vectorizing
+
+347
+00:16:13.400 --> 00:16:15.940
+and it's useful for when we're dealing
+
+348
+00:16:15.940 --> 00:16:18.380
+with these models in some form software.
+
+349
+00:16:18.380 --> 00:16:23.380
+So here, the 47th item in this 100 length array, is a one,
+
+350
+00:16:24.680 --> 00:16:28.350
+because our input message does contain the word wallet.
+
+351
+00:16:28.350 --> 00:16:30.740
+The same goes for the 99th term,
+
+352
+00:16:30.740 --> 00:16:34.100
+because our message is now wallet door.
+
+353
+00:16:34.100 --> 00:16:36.830
+Every other index in this array is zero
+
+354
+00:16:36.830 --> 00:16:39.860
+because no other word appears in our message.
+
+355
+00:16:39.860 --> 00:16:42.290
+So let's go over a problem we can run into
+
+356
+00:16:42.290 --> 00:16:43.880
+while using this model.
+
+357
+00:16:43.880 --> 00:16:44.930
+Let's say for instance
+
+358
+00:16:44.930 --> 00:16:49.074
+that this probability actually worked out to be 0%.
+
+359
+00:16:49.074 --> 00:16:51.500
+What that means is that zero
+
+360
+00:16:51.500 --> 00:16:54.910
+of our spam messages contain the word door.
+
+361
+00:16:54.910 --> 00:16:56.820
+Well, in that case, if we put
+
+362
+00:16:56.820 --> 00:17:00.110
+in the probability that the word door appears
+
+363
+00:17:00.110 --> 00:17:03.270
+in the spam message, it will actually be zero.
+
+364
+00:17:03.270 --> 00:17:04.250
+That's not good
+
+365
+00:17:04.250 --> 00:17:07.120
+because what that means is the entire numerator here
+
+366
+00:17:07.120 --> 00:17:10.640
+will be zero and no matter what other terms are here,
+
+367
+00:17:10.640 --> 00:17:12.840
+the probability will work out to be zero
+
+368
+00:17:12.840 --> 00:17:16.150
+since anything times zero is just zero.
+
+369
+00:17:16.150 --> 00:17:17.410
+How do we get around this?
+
+370
+00:17:17.410 --> 00:17:20.210
+Well, we can add something called Laplace smoothing.
+
+371
+00:17:20.210 --> 00:17:24.210
+So here, zero out of two spam messages,
+
+372
+00:17:24.210 --> 00:17:25.680
+contain the word door
+
+373
+00:17:25.680 --> 00:17:28.450
+and that's where 0% probability came from.
+
+374
+00:17:28.450 --> 00:17:31.480
+Laplace smoothing simply adds one to the numerator
+
+375
+00:17:31.480 --> 00:17:32.870
+and two to the denominator.
+
+376
+00:17:32.870 --> 00:17:36.090
+So here, the probability after Laplace smoothing,
+
+377
+00:17:36.090 --> 00:17:37.910
+is actually 25%.
+
+378
+00:17:37.910 --> 00:17:40.710
+Now Laplace smoothing is applied to every word
+
+379
+00:17:40.710 --> 00:17:41.970
+in the vocabulary,
+
+380
+00:17:41.970 --> 00:17:45.210
+not just the words that have zero probability.
+
+381
+00:17:45.210 --> 00:17:47.690
+This is very commonly used in these types
+
+382
+00:17:47.690 --> 00:17:51.270
+of models to avoid that zero numerator problem.
+
+383
+00:17:51.270 --> 00:17:53.040
+So now that we've gone over the model,
+
+384
+00:17:53.040 --> 00:17:55.270
+let's look at how we preprocess our data
+
+385
+00:17:55.270 --> 00:17:58.330
+before using it and applying it for our model.
+
+386
+00:17:58.330 --> 00:17:59.620
+Let's say that this is just one
+
+387
+00:17:59.620 --> 00:18:02.670
+of the many messages that we have that we're considering
+
+388
+00:18:02.670 --> 00:18:03.640
+in our model.
+
+389
+00:18:03.640 --> 00:18:06.230
+The first thing we would do is remove the white space
+
+390
+00:18:06.230 --> 00:18:09.040
+and the punctuation surrounding the words.
+
+391
+00:18:09.040 --> 00:18:12.660
+So here, tokenization takes in our raw message,
+
+392
+00:18:12.660 --> 00:18:16.775
+and produces a list or array of these separated words.
+
+393
+00:18:16.775 --> 00:18:18.910
+Second, let's take out the words
+
+394
+00:18:18.910 --> 00:18:20.740
+that don't add much information.
+
+395
+00:18:20.740 --> 00:18:24.550
+This could be words like this, is or a.
+
+396
+00:18:24.550 --> 00:18:27.840
+This is called stop word removal and it's quite common.
+
+397
+00:18:27.840 --> 00:18:30.650
+Third, let's remove any non alphabetic characters
+
+398
+00:18:30.650 --> 00:18:31.680
+from words.
+
+399
+00:18:31.680 --> 00:18:34.300
+Here, this was a non alphabetic character,
+
+400
+00:18:34.300 --> 00:18:36.920
+so we've just removed that entirely.
+
+401
+00:18:36.920 --> 00:18:39.080
+Finally, there's something called stemming,
+
+402
+00:18:39.080 --> 00:18:42.890
+which removes the ending like I-N-Gs or E-Ss
+
+403
+00:18:42.890 --> 00:18:46.400
+with the intent on preserving the stem or the root
+
+404
+00:18:46.400 --> 00:18:47.430
+of the word.
+
+405
+00:18:47.430 --> 00:18:50.260
+Besides stemming, there's something called lemmatization.
+
+406
+00:18:50.260 --> 00:18:52.190
+Stemming with a hard fast rule
+
+407
+00:18:52.190 --> 00:18:57.130
+of simply removing these endings to form different stems,
+
+408
+00:18:57.130 --> 00:18:59.890
+lemmatization takes a more nuanced approach
+
+409
+00:18:59.890 --> 00:19:04.140
+and would map these two words to the same root word.
+
+410
+00:19:04.140 --> 00:19:05.110
+The problem with this
+
+411
+00:19:05.110 --> 00:19:08.000
+is that lemmatization is often more expensive
+
+412
+00:19:08.000 --> 00:19:10.700
+than just stemming your raw messages.
+
+413
+00:19:10.700 --> 00:19:12.580
+So if you have large amounts of data,
+
+414
+00:19:12.580 --> 00:19:15.640
+you may want to go with stemming over lemmatization.
+
+415
+00:19:15.640 --> 00:19:17.670
+In our case, we're just gonna go with stemming.
+
+416
+00:19:17.670 --> 00:19:20.650
+As well, just be aware that if you do lowercase,
+
+417
+00:19:20.650 --> 00:19:24.450
+all of your raw messages, you could lose the understanding
+
+418
+00:19:24.450 --> 00:19:26.530
+of particular names or pronouns
+
+419
+00:19:26.530 --> 00:19:29.720
+and they could resolve down into the regular noun forms.
+
+420
+00:19:29.720 --> 00:19:31.880
+The entire process of going
+
+421
+00:19:31.880 --> 00:19:35.430
+from a raw message to something that we can use
+
+422
+00:19:35.430 --> 00:19:38.490
+in our naive based model, is called a featurizing.
+
+423
+00:19:38.490 --> 00:19:40.580
+This is because we now have features
+
+424
+00:19:40.580 --> 00:19:43.980
+for our model as opposed to the raw messages.
+
+425
+00:19:43.980 --> 00:19:45.500
+And as we talked about earlier,
+
+426
+00:19:45.500 --> 00:19:48.170
+we can take this featurized input
+
+427
+00:19:48.170 --> 00:19:51.410
+and we can represent it in terms of our vocabulary.
+
+428
+00:19:51.410 --> 00:19:53.020
+This is called vectorizing.
+
+429
+00:19:53.020 --> 00:19:56.140
+Now, this vectorization will always be binary
+
+430
+00:19:56.140 --> 00:19:58.170
+in the case of the model that we're using.
+
+431
+00:19:58.170 --> 00:20:01.970
+For some general terms of our model, we have the priors,
+
+432
+00:20:01.970 --> 00:20:04.970
+this is the prior of spam and the prior of not spam.
+
+433
+00:20:04.970 --> 00:20:07.601
+These are referenced as the likelihoods.
+
+434
+00:20:07.601 --> 00:20:09.880
+So this would be the spam likelihoods
+
+435
+00:20:09.880 --> 00:20:13.400
+and these would be the legitimate or non spam likelihoods.
+
+436
+00:20:13.400 --> 00:20:15.800
+Now we've chosen in our current model
+
+437
+00:20:15.800 --> 00:20:17.430
+to represent these likelihoods
+
+438
+00:20:17.430 --> 00:20:20.047
+as the presence or absence of words
+
+439
+00:20:20.047 --> 00:20:22.770
+and this is called the Bernoulli model.
+
+440
+00:20:22.770 --> 00:20:25.850
+We'll go over other types of models that we can use later.
+
+441
+00:20:25.850 --> 00:20:27.450
+Finally, if you get asked,
+
+442
+00:20:27.450 --> 00:20:30.930
+this is called the evidence and what you're solving for,
+
+443
+00:20:30.930 --> 00:20:34.500
+the result of this entire model is called the posterior.
+
+444
+00:20:34.500 --> 00:20:35.580
+All right, so let's go
+
+445
+00:20:35.580 --> 00:20:38.040
+over what a fully trained model would look like.
+
+446
+00:20:38.040 --> 00:20:39.857
+Well, we would need the prior of spam
+
+447
+00:20:39.857 --> 00:20:42.250
+and the prior of legitimate messages.
+
+448
+00:20:42.250 --> 00:20:44.570
+We would also need a spam likelihood map
+
+449
+00:20:44.570 --> 00:20:46.220
+and a legitimate likelihood map.
+
+450
+00:20:46.220 --> 00:20:47.200
+All this means is
+
+451
+00:20:47.200 --> 00:20:50.827
+that the key would be the particular word in our vocabulary
+
+452
+00:20:50.827 --> 00:20:52.090
+and the value would
+
+453
+00:20:52.090 --> 00:20:54.680
+either be these spam likelihood in this map
+
+454
+00:20:54.680 --> 00:20:57.080
+or the legitimate likelihood in this map.
+
+455
+00:20:57.080 --> 00:20:58.640
+But the way that we calculate these,
+
+456
+00:20:58.640 --> 00:21:01.010
+are the same ways that we've reviewed before.
+
+457
+00:21:01.010 --> 00:21:04.170
+Here, we would use the legitimate likelihood
+
+458
+00:21:04.170 --> 00:21:05.410
+and here we would just take
+
+459
+00:21:05.410 --> 00:21:07.960
+one minus the legitimate likelihood
+
+460
+00:21:07.960 --> 00:21:09.900
+since it does not appear.
+
+461
+00:21:09.900 --> 00:21:11.820
+All right, well that wraps up this video.
+
+462
+00:21:11.820 --> 00:21:12.690
+Thanks for joining,
+
+463
+00:21:12.690 --> 00:21:14.953
+join us in our next video as we continue.
+

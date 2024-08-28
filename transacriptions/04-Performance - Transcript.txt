@@ -1,0 +1,2178 @@
+WEBVTT
+
+1
+00:00:00.510 --> 00:00:01.620
+<v Instructor>Welcome back everybody.</v>
+
+2
+00:00:01.620 --> 00:00:04.920
+This is ML experts, Machine Learning Crash Course.
+
+3
+00:00:04.920 --> 00:00:06.370
+In this video we're going to be talking
+
+4
+00:00:06.370 --> 00:00:08.810
+about "Model Performance".
+
+5
+00:00:08.810 --> 00:00:12.210
+And our last session we designed our first model.
+
+6
+00:00:12.210 --> 00:00:15.150
+In this video, we're going to be going over how to decide
+
+7
+00:00:15.150 --> 00:00:18.470
+if the model we built is an improvement
+
+8
+00:00:18.470 --> 00:00:22.230
+on our filter rules or heuristic.
+
+9
+00:00:22.230 --> 00:00:23.360
+The point of this video,
+
+10
+00:00:23.360 --> 00:00:27.260
+is to figure out what this greater sign actually means.
+
+11
+00:00:27.260 --> 00:00:29.780
+But first let's solidify the decision points
+
+12
+00:00:29.780 --> 00:00:32.850
+for when we declare something as spam.
+
+13
+00:00:32.850 --> 00:00:35.030
+For the filter rules it was quite simple.
+
+14
+00:00:35.030 --> 00:00:36.790
+If any of these conditions were met,
+
+15
+00:00:36.790 --> 00:00:39.520
+then we would determine that the message was spam.
+
+16
+00:00:39.520 --> 00:00:40.460
+For the model though,
+
+17
+00:00:40.460 --> 00:00:43.150
+it would output a particular probability.
+
+18
+00:00:43.150 --> 00:00:47.250
+In this case 47% probability of being spam,
+
+19
+00:00:47.250 --> 00:00:48.670
+given some message.
+
+20
+00:00:48.670 --> 00:00:51.070
+Well, how do we relate that to actually deciding
+
+21
+00:00:51.070 --> 00:00:52.760
+if the message is spam or not?
+
+22
+00:00:52.760 --> 00:00:55.590
+Since the probability of spam is 47%,
+
+23
+00:00:55.590 --> 00:01:00.210
+that means the probability of it not being spam is 53%.
+
+24
+00:01:00.210 --> 00:01:02.080
+The common decision point is to select
+
+25
+00:01:02.080 --> 00:01:05.330
+the highest probability among the two possibilities.
+
+26
+00:01:05.330 --> 00:01:08.580
+So here, since the probability of the message not being spam
+
+27
+00:01:08.580 --> 00:01:12.510
+is greater than the probability of the message being spam,
+
+28
+00:01:12.510 --> 00:01:14.210
+we would deem the message legitimate.
+
+29
+00:01:14.210 --> 00:01:16.850
+So, we'll define our model's decision pool,
+
+30
+00:01:16.850 --> 00:01:19.280
+such that if the probability of spam
+
+31
+00:01:19.280 --> 00:01:21.700
+is greater than or equal to 50%,
+
+32
+00:01:21.700 --> 00:01:23.550
+then we will deem the message spam.
+
+33
+00:01:23.550 --> 00:01:25.290
+If it's less than 50%,
+
+34
+00:01:25.290 --> 00:01:27.750
+we'll declare the message as not spam.
+
+35
+00:01:27.750 --> 00:01:29.920
+Now that we have the decision points figured out,
+
+36
+00:01:29.920 --> 00:01:32.580
+let's start evaluating the performance
+
+37
+00:01:32.580 --> 00:01:34.890
+of the filter rules and the model,
+
+38
+00:01:34.890 --> 00:01:35.723
+by starting out
+
+39
+00:01:35.723 --> 00:01:38.900
+with a very easy calculation called accuracy.
+
+40
+00:01:38.900 --> 00:01:40.710
+For accuracy, all that we have to do
+
+41
+00:01:40.710 --> 00:01:43.870
+is count up the number of spam messages
+
+42
+00:01:43.870 --> 00:01:45.700
+that we guessed correctly.
+
+43
+00:01:45.700 --> 00:01:48.670
+And then we count up the number of legitimate messages
+
+44
+00:01:48.670 --> 00:01:50.190
+that we guessed correctly.
+
+45
+00:01:50.190 --> 00:01:54.160
+We add those up and divide by the total number of messages.
+
+46
+00:01:54.160 --> 00:01:57.530
+So in this case, the accuracy of the model
+
+47
+00:01:57.530 --> 00:02:01.270
+across all of our examples is 96%.
+
+48
+00:02:01.270 --> 00:02:04.260
+It's important to note here that these 100 messages
+
+49
+00:02:04.260 --> 00:02:07.430
+are different from the messages that we trained on.
+
+50
+00:02:07.430 --> 00:02:09.810
+So, these new 100 messages
+
+51
+00:02:09.810 --> 00:02:12.290
+have never been seen by the model before.
+
+52
+00:02:12.290 --> 00:02:16.230
+I think 96% accuracy is pretty good for our first model.
+
+53
+00:02:16.230 --> 00:02:18.380
+Let's see how well the filter rules do.
+
+54
+00:02:18.380 --> 00:02:20.240
+Here we'll repeat the same process.
+
+55
+00:02:20.240 --> 00:02:22.130
+We'll count the number of spam messages,
+
+56
+00:02:22.130 --> 00:02:25.470
+that the filter rules correctly filtered as spam.
+
+57
+00:02:25.470 --> 00:02:27.710
+We'll add that to the number of messages
+
+58
+00:02:27.710 --> 00:02:30.830
+that the filter correctly let through
+
+59
+00:02:30.830 --> 00:02:32.800
+as legitimate messages,
+
+60
+00:02:32.800 --> 00:02:36.360
+and then we'll divide by the total number of our messages.
+
+61
+00:02:36.360 --> 00:02:40.810
+Here, we get a 90 wait, the accuracy of the filter rules
+
+62
+00:02:40.810 --> 00:02:44.560
+and the accuracy of the model are the exact same.
+
+63
+00:02:44.560 --> 00:02:45.920
+We went through all that trouble
+
+64
+00:02:45.920 --> 00:02:48.640
+of probabilities and conditional probabilities,
+
+65
+00:02:48.640 --> 00:02:51.130
+just to end up with the same exact accuracy
+
+66
+00:02:51.130 --> 00:02:53.010
+as our very basic rules.
+
+67
+00:02:53.010 --> 00:02:54.920
+This is a really good question.
+
+68
+00:02:54.920 --> 00:02:58.780
+Let's look at why accuracy may not be such a great metric
+
+69
+00:02:59.858 --> 00:03:03.000
+to use in terms of measuring the performance of our model.
+
+70
+00:03:03.000 --> 00:03:04.860
+One glaring issue that I see,
+
+71
+00:03:04.860 --> 00:03:07.930
+is that we can abuse this accuracy metric,
+
+72
+00:03:07.930 --> 00:03:11.520
+simply from the fact that the probability of any message
+
+73
+00:03:11.520 --> 00:03:14.220
+being spam is just 7%.
+
+74
+00:03:14.220 --> 00:03:17.090
+All the other messages are legitimate.
+
+75
+00:03:17.090 --> 00:03:19.160
+This means that we could create a model
+
+76
+00:03:19.160 --> 00:03:21.710
+which just takes in particular words,
+
+77
+00:03:21.710 --> 00:03:24.540
+always guesses that the message is legitimate
+
+78
+00:03:24.540 --> 00:03:27.850
+and it would come out with a 93% accuracy.
+
+79
+00:03:27.850 --> 00:03:31.470
+Even though this hypothetical model avoids the entire point
+
+80
+00:03:31.470 --> 00:03:33.140
+of being a spam filter,
+
+81
+00:03:33.140 --> 00:03:36.560
+it looks like it does pretty well in terms of accuracy.
+
+82
+00:03:36.560 --> 00:03:39.410
+Later we'll talk about how imbalanced classes
+
+83
+00:03:39.410 --> 00:03:42.068
+can actually affect the way that we need
+
+84
+00:03:42.068 --> 00:03:43.110
+to train certain models.
+
+85
+00:03:43.110 --> 00:03:44.841
+But in this video,
+
+86
+00:03:44.841 --> 00:03:46.620
+we'll just go over the performance implications
+
+87
+00:03:46.620 --> 00:03:49.120
+when working with imbalanced classes.
+
+88
+00:03:49.120 --> 00:03:52.030
+One problem with accuracy is that it doesn't penalize
+
+89
+00:03:52.030 --> 00:03:55.190
+classifying non-spam as spam.
+
+90
+00:03:55.190 --> 00:03:59.980
+For instance, here w1 and w2 were legitimate messages
+
+91
+00:03:59.980 --> 00:04:02.660
+but they got guesed to be spam for the model.
+
+92
+00:04:02.660 --> 00:04:06.690
+Here the filter rules guesed three messages to be spam.
+
+93
+00:04:06.690 --> 00:04:08.990
+When in fact they were not spam.
+
+94
+00:04:08.990 --> 00:04:11.880
+This is technically called a false positive.
+
+95
+00:04:11.880 --> 00:04:14.270
+Now messages that are spam
+
+96
+00:04:14.270 --> 00:04:16.970
+but are classified to not be spam,
+
+97
+00:04:16.970 --> 00:04:19.450
+result in false negatives.
+
+98
+00:04:19.450 --> 00:04:22.510
+Now true positives are when we actually guess messages
+
+99
+00:04:22.510 --> 00:04:24.270
+to be spam when they are,
+
+100
+00:04:24.270 --> 00:04:26.610
+and true negatives are when we guess messages
+
+101
+00:04:26.610 --> 00:04:28.860
+to be legitimate when they actually are.
+
+102
+00:04:28.860 --> 00:04:30.960
+Accuracy only takes into account
+
+103
+00:04:30.960 --> 00:04:33.050
+true negatives and true positives.
+
+104
+00:04:33.050 --> 00:04:34.810
+All of these terms can be grouped
+
+105
+00:04:34.810 --> 00:04:36.760
+into what's called a confusion matrix.
+
+106
+00:04:36.760 --> 00:04:39.130
+So here, starting from the top left quadrant,
+
+107
+00:04:39.130 --> 00:04:40.990
+we have true positive.
+
+108
+00:04:40.990 --> 00:04:44.290
+That means that we predicted the message to be spam
+
+109
+00:04:44.290 --> 00:04:46.090
+when it actually was spam.
+
+110
+00:04:46.090 --> 00:04:49.530
+A false positive is when we predicted a message to be spam
+
+111
+00:04:49.530 --> 00:04:51.760
+when it was actually a legitimate message.
+
+112
+00:04:51.760 --> 00:04:52.750
+I think we get the idea.
+
+113
+00:04:52.750 --> 00:04:55.440
+So, let's apply this to our model and filter rules.
+
+114
+00:04:55.440 --> 00:04:58.110
+So, here we're going to solve for true positives first.
+
+115
+00:04:58.110 --> 00:04:59.860
+This means we're just going to count the number
+
+116
+00:04:59.860 --> 00:05:03.020
+of spam messages that were correctly categorized here,
+
+117
+00:05:03.020 --> 00:05:03.853
+that's five.
+
+118
+00:05:03.853 --> 00:05:06.450
+Then we'll move to the number of false positives here,
+
+119
+00:05:06.450 --> 00:05:07.300
+that's two.
+
+120
+00:05:07.300 --> 00:05:10.430
+Next up is false negatives here, that's two as well.
+
+121
+00:05:10.430 --> 00:05:13.140
+And finally our true negatives is 91.
+
+122
+00:05:13.140 --> 00:05:16.040
+So, this is the confusion in matrix for our model.
+
+123
+00:05:16.040 --> 00:05:19.420
+Let's repeat the same process before our filter rules.
+
+124
+00:05:19.420 --> 00:05:21.290
+Here we had six true positives.
+
+125
+00:05:21.290 --> 00:05:23.720
+We had 92 negatives.
+
+126
+00:05:23.720 --> 00:05:27.380
+We had three false positives and one false negative.
+
+127
+00:05:27.380 --> 00:05:30.210
+So, now we have two confusion matrices.
+
+128
+00:05:30.210 --> 00:05:32.900
+We have one for the model and one for the rules.
+
+129
+00:05:32.900 --> 00:05:34.900
+This should be all the information that we need
+
+130
+00:05:34.900 --> 00:05:37.270
+in determining the performance of each.
+
+131
+00:05:37.270 --> 00:05:40.190
+But I still feel like, I don't know which one is better.
+
+132
+00:05:40.190 --> 00:05:42.210
+If we had something like this, for instance,
+
+133
+00:05:42.210 --> 00:05:44.020
+the decision would be pretty clear.
+
+134
+00:05:44.020 --> 00:05:46.550
+Here the rules only correctly classified
+
+135
+00:05:46.550 --> 00:05:49.380
+61 out of the 100 messages.
+
+136
+00:05:49.380 --> 00:05:51.090
+Well here, the model
+
+137
+00:05:51.090 --> 00:05:54.110
+would have correctly classified 99 messages.
+
+138
+00:05:54.110 --> 00:05:56.800
+But in our case, we're not so lucky.
+
+139
+00:05:56.800 --> 00:05:59.010
+Both these models correctly classify
+
+140
+00:05:59.010 --> 00:06:01.340
+the same number of messages.
+
+141
+00:06:01.340 --> 00:06:04.730
+They also misclassify the same number of messages.
+
+142
+00:06:04.730 --> 00:06:06.360
+Luckily, there are different metrics
+
+143
+00:06:06.360 --> 00:06:08.080
+we can look at to help us out.
+
+144
+00:06:08.080 --> 00:06:10.160
+Let's make room and first go over
+
+145
+00:06:10.160 --> 00:06:11.830
+something called sensitivity.
+
+146
+00:06:11.830 --> 00:06:14.300
+Sensitivity is the true positives
+
+147
+00:06:14.300 --> 00:06:16.850
+over the true positives plus false negatives.
+
+148
+00:06:16.850 --> 00:06:18.500
+So, in each of these cases,
+
+149
+00:06:18.500 --> 00:06:23.500
+the sensitivity is 71% and 85% respectively.
+
+150
+00:06:24.330 --> 00:06:28.150
+Sensitivity for our case means the model's ability
+
+151
+00:06:28.150 --> 00:06:30.870
+to correctly classify spam messages.
+
+152
+00:06:30.870 --> 00:06:34.650
+Now it sounds bad because our model is actually worse
+
+153
+00:06:34.650 --> 00:06:38.670
+than the rules at correctly classifying spam messages.
+
+154
+00:06:38.670 --> 00:06:41.670
+It's not so bad because the specificity
+
+155
+00:06:41.670 --> 00:06:44.070
+which is the true negatives over the true negatives
+
+156
+00:06:44.070 --> 00:06:46.680
+plus false positives for the model case,
+
+157
+00:06:46.680 --> 00:06:49.470
+is actually higher than the rules.
+
+158
+00:06:49.470 --> 00:06:53.360
+Here specificity represents the classifier's ability
+
+159
+00:06:53.360 --> 00:06:56.590
+to correctly classify legitimate messages.
+
+160
+00:06:56.590 --> 00:07:00.160
+With a higher specificity, you'll have fewer false positives
+
+161
+00:07:00.160 --> 00:07:01.970
+and with a higher sensitivity,
+
+162
+00:07:01.970 --> 00:07:04.040
+you'll have fewer false negatives.
+
+163
+00:07:04.040 --> 00:07:06.100
+So, in the case of spam filter,
+
+164
+00:07:06.100 --> 00:07:08.770
+I would actually prefer a higher specificity,
+
+165
+00:07:08.770 --> 00:07:11.020
+such that an important message
+
+166
+00:07:11.020 --> 00:07:13.870
+wouldn't be falsely classified as spam
+
+167
+00:07:13.870 --> 00:07:15.400
+such that I may never see it.
+
+168
+00:07:15.400 --> 00:07:18.100
+However, if we are reclassifying cancerous cells,
+
+169
+00:07:18.100 --> 00:07:21.210
+I would want there to be as few false negatives as possible.
+
+170
+00:07:21.210 --> 00:07:24.253
+So, we would look generally for higher sensitivity.
+
+171
+00:07:25.221 --> 00:07:26.270
+This really depends on your application.
+
+172
+00:07:26.270 --> 00:07:28.800
+So, just use your judgment when it comes to selecting
+
+173
+00:07:28.800 --> 00:07:32.320
+between models with higher sensitivities or specificities.
+
+174
+00:07:32.320 --> 00:07:34.010
+Now the next metric
+
+175
+00:07:34.010 --> 00:07:35.420
+we're going to look at is called precision.
+
+176
+00:07:35.420 --> 00:07:38.000
+It's the true positives divided by the true positives
+
+177
+00:07:38.000 --> 00:07:39.510
+plus false positives.
+
+178
+00:07:39.510 --> 00:07:41.840
+They quite literally asks out of every time,
+
+179
+00:07:41.840 --> 00:07:43.980
+I've classified something as spam.
+
+180
+00:07:43.980 --> 00:07:46.080
+How many of them actually were spam.
+
+181
+00:07:46.080 --> 00:07:48.350
+Here we can see that our precision of our model
+
+182
+00:07:48.350 --> 00:07:50.750
+is far higher than the precision of our rules.
+
+183
+00:07:50.750 --> 00:07:52.890
+I think this is a really good sign for the model.
+
+184
+00:07:52.890 --> 00:07:55.440
+The final thing that we can look at is something
+
+185
+00:07:55.440 --> 00:07:56.273
+called an F1 score.
+
+186
+00:07:56.273 --> 00:07:59.620
+The formula is two times the sensitivity times the precision
+
+187
+00:07:59.620 --> 00:08:02.380
+divided by the sensitivity plus the precision.
+
+188
+00:08:02.380 --> 00:08:05.420
+For our model, since the sensitivity and the precision
+
+189
+00:08:05.420 --> 00:08:08.520
+are the same, the F1 score is just 71%.
+
+190
+00:08:08.520 --> 00:08:12.230
+However, the filter rules, F1 score is actually 74.
+
+191
+00:08:12.230 --> 00:08:14.337
+That's because the precision was 66
+
+192
+00:08:14.337 --> 00:08:16.890
+and the sensitivity was 85.
+
+193
+00:08:16.890 --> 00:08:19.870
+The F1 score is actually just the harmonic mean
+
+194
+00:08:19.870 --> 00:08:22.380
+of the sensitivity and the precision.
+
+195
+00:08:22.380 --> 00:08:26.230
+So, even though that this F1 score is a single number,
+
+196
+00:08:26.230 --> 00:08:28.280
+we actually lose a bit of information
+
+197
+00:08:28.280 --> 00:08:30.100
+when it comes to describing
+
+198
+00:08:30.100 --> 00:08:34.100
+why we would prefer our model over the filter rules.
+
+199
+00:08:34.100 --> 00:08:35.540
+Again, my main reason
+
+200
+00:08:35.540 --> 00:08:37.610
+would be that the number of false positives
+
+201
+00:08:37.610 --> 00:08:40.130
+is lower for the model than for the rules.
+
+202
+00:08:40.130 --> 00:08:43.570
+Personally, this means I'm willing for more spam messages
+
+203
+00:08:43.570 --> 00:08:46.580
+to be sent to me over me potentially missing
+
+204
+00:08:46.580 --> 00:08:48.700
+important legitimate messages.
+
+205
+00:08:48.700 --> 00:08:50.510
+So, now this begs the question,
+
+206
+00:08:50.510 --> 00:08:53.010
+can we control this trade-off
+
+207
+00:08:53.010 --> 00:08:55.650
+of specificity and sensitivity?
+
+208
+00:08:55.650 --> 00:08:58.530
+Remember a higher sensitivity generally means
+
+209
+00:08:58.530 --> 00:09:01.730
+less false negatives and a higher specificity
+
+210
+00:09:01.730 --> 00:09:04.270
+generally means less false positives.
+
+211
+00:09:04.270 --> 00:09:07.280
+We can trade them off by adjusting our decision point
+
+212
+00:09:07.280 --> 00:09:09.240
+or our decision threshold.
+
+213
+00:09:09.240 --> 00:09:12.840
+Remember the decision threshold for our model was point five
+
+214
+00:09:12.840 --> 00:09:14.410
+such that if the probability
+
+215
+00:09:14.410 --> 00:09:18.250
+predicted for a particular message was 50% or greater,
+
+216
+00:09:18.250 --> 00:09:19.810
+we'd classify it as spam
+
+217
+00:09:19.810 --> 00:09:22.300
+or else we would classify it as not spam.
+
+218
+00:09:22.300 --> 00:09:26.060
+Now, if we increase this threshold to 75%,
+
+219
+00:09:26.060 --> 00:09:28.080
+we can imagine that fewer messages
+
+220
+00:09:28.080 --> 00:09:30.380
+would be classified as spam.
+
+221
+00:09:30.380 --> 00:09:33.500
+Likewise, if we lowered the threshold to 25%,
+
+222
+00:09:33.500 --> 00:09:35.850
+we could imagine that more messages
+
+223
+00:09:35.850 --> 00:09:37.410
+would be classified as spam.
+
+224
+00:09:37.410 --> 00:09:39.680
+This is because the probability requirement
+
+225
+00:09:39.680 --> 00:09:42.710
+for a message to be deemed spam, is now less.
+
+226
+00:09:42.710 --> 00:09:44.490
+Let's go over this in more detail.
+
+227
+00:09:44.490 --> 00:09:45.920
+Here, we have two lists.
+
+228
+00:09:45.920 --> 00:09:48.630
+On the left list, we have all of these spam messages
+
+229
+00:09:48.630 --> 00:09:52.550
+and the predicted probability of that message being spam,
+
+230
+00:09:52.550 --> 00:09:53.740
+according to our model.
+
+231
+00:09:53.740 --> 00:09:57.760
+So, here message six, which has the label of spam,
+
+232
+00:09:57.760 --> 00:10:01.670
+receives a 99% probability of being spam from our model.
+
+233
+00:10:01.670 --> 00:10:05.110
+Likewise message nine which is also spam,
+
+234
+00:10:05.110 --> 00:10:09.570
+only gets a 46% chance of being spam according to our model.
+
+235
+00:10:09.570 --> 00:10:10.680
+On the right hand side,
+
+236
+00:10:10.680 --> 00:10:12.940
+we have all of the legitimate messages
+
+237
+00:10:12.940 --> 00:10:16.400
+and their respective probabilities of being spam
+
+238
+00:10:16.400 --> 00:10:17.540
+according to our model.
+
+239
+00:10:17.540 --> 00:10:19.100
+The interesting part happens
+
+240
+00:10:19.100 --> 00:10:21.430
+right where our decision threshold is.
+
+241
+00:10:21.430 --> 00:10:23.540
+With our 50% decision threshold,
+
+242
+00:10:23.540 --> 00:10:26.150
+we can see that some of these examples
+
+243
+00:10:26.150 --> 00:10:28.120
+are on the wrong side of the threshold.
+
+244
+00:10:28.120 --> 00:10:30.510
+For instance, these two spam messages
+
+245
+00:10:30.510 --> 00:10:32.870
+got classified as not spam
+
+246
+00:10:32.870 --> 00:10:35.680
+because of their probability of being spam,
+
+247
+00:10:35.680 --> 00:10:38.090
+was less than the decision threshold.
+
+248
+00:10:38.090 --> 00:10:40.130
+Likewise, these two messages here
+
+249
+00:10:40.130 --> 00:10:42.650
+which were not spam or legitimate,
+
+250
+00:10:42.650 --> 00:10:44.310
+they are classified as spam,
+
+251
+00:10:44.310 --> 00:10:46.760
+because the probability of them being spam,
+
+252
+00:10:46.760 --> 00:10:48.570
+according to our model with higher
+
+253
+00:10:48.570 --> 00:10:49.950
+than our decision threshold.
+
+254
+00:10:49.950 --> 00:10:53.220
+This directly reflects what we saw in our confusion matrix.
+
+255
+00:10:53.220 --> 00:10:55.660
+So, here are the true positives, the false negatives,
+
+256
+00:10:55.660 --> 00:10:58.300
+the false positives and the true negatives.
+
+257
+00:10:58.300 --> 00:11:01.000
+I mentioned earlier that for me personally,
+
+258
+00:11:01.000 --> 00:11:02.270
+I'd like a spam filter
+
+259
+00:11:02.270 --> 00:11:04.940
+that would potentially send me more spam,
+
+260
+00:11:04.940 --> 00:11:06.980
+as long as we decrease the chance,
+
+261
+00:11:06.980 --> 00:11:10.070
+that a legitimate message gets classified as spam.
+
+262
+00:11:10.070 --> 00:11:12.120
+And I end up never seeing it.
+
+263
+00:11:12.120 --> 00:11:14.780
+This means that I want a higher specificity.
+
+264
+00:11:14.780 --> 00:11:19.780
+So, if we raise this 50% decision threshold to 55%,
+
+265
+00:11:20.220 --> 00:11:23.170
+we actually correct this false positive
+
+266
+00:11:23.170 --> 00:11:26.320
+because now our decision threshold is higher
+
+267
+00:11:26.320 --> 00:11:28.360
+than the probability that this message
+
+268
+00:11:28.360 --> 00:11:30.450
+was predicted to be spam.
+
+269
+00:11:30.450 --> 00:11:34.050
+So, in addition to now correcting this particular message,
+
+270
+00:11:34.050 --> 00:11:37.167
+we also didn't affect any of the spam messages,
+
+271
+00:11:37.167 --> 00:11:38.700
+but the number of true positives
+
+272
+00:11:38.700 --> 00:11:40.360
+and false negatives are the same.
+
+273
+00:11:40.360 --> 00:11:42.670
+Let's see this affects our performance metrics
+
+274
+00:11:42.670 --> 00:11:43.890
+we talked about earlier.
+
+275
+00:11:43.890 --> 00:11:48.238
+Here, the sensitivity, specificity, precision and F1
+
+276
+00:11:48.238 --> 00:11:51.602
+are all listed from our 50% decision threshold.
+
+277
+00:11:51.602 --> 00:11:54.180
+With our new decision threshold of 55%,
+
+278
+00:11:54.180 --> 00:11:55.810
+our sensitivity didn't change,
+
+279
+00:11:55.810 --> 00:11:57.690
+because the number of true positives
+
+280
+00:11:57.690 --> 00:12:00.270
+and false negatives didn't change.
+
+281
+00:12:00.270 --> 00:12:01.830
+The specificity went up
+
+282
+00:12:01.830 --> 00:12:04.640
+because the number of true negatives went up
+
+283
+00:12:04.640 --> 00:12:07.080
+and the false positives went down.
+
+284
+00:12:07.080 --> 00:12:09.516
+Our increased precision means
+
+285
+00:12:09.516 --> 00:12:10.750
+that we have a higher predictive value
+
+286
+00:12:10.750 --> 00:12:13.240
+than we had before at our old threshold.
+
+287
+00:12:13.240 --> 00:12:15.240
+Finally, since our precision changed,
+
+288
+00:12:15.240 --> 00:12:17.650
+we got an updated F1 score.
+
+289
+00:12:17.650 --> 00:12:20.180
+For reference here are the metrics of our heuristic.
+
+290
+00:12:20.180 --> 00:12:23.270
+So, the sensitivity was 85, specificity was 96,
+
+291
+00:12:23.270 --> 00:12:26.900
+precision was 66 and our F1 score was 74.
+
+292
+00:12:26.900 --> 00:12:28.960
+Fortunately, it's a little more clear now
+
+293
+00:12:29.801 --> 00:12:31.070
+that our model at this new threshold
+
+294
+00:12:31.070 --> 00:12:33.930
+now bids are heuristic in several metrics.
+
+295
+00:12:33.930 --> 00:12:36.680
+Let's see what happens when we try to get greedy
+
+296
+00:12:36.680 --> 00:12:40.400
+and make this last message turn into a true negative.
+
+297
+00:12:40.400 --> 00:12:44.760
+This would require a threshold of anything greater than 67%.
+
+298
+00:12:44.760 --> 00:12:47.140
+And in our case, we're just gonna make it 70%.
+
+299
+00:12:47.140 --> 00:12:49.960
+What this means now is that the number of false negatives
+
+300
+00:12:49.960 --> 00:12:53.930
+has increased by one because w5 is now a member.
+
+301
+00:12:53.930 --> 00:12:56.240
+The false positives have decreased by one,
+
+302
+00:12:56.240 --> 00:12:59.010
+because message one is now correctly classified.
+
+303
+00:12:59.010 --> 00:13:00.770
+Let's see how this affects our metrics.
+
+304
+00:13:00.770 --> 00:13:02.620
+Our sensitivity plummeted,
+
+305
+00:13:02.620 --> 00:13:06.060
+our specificity and precision are 100%
+
+306
+00:13:06.060 --> 00:13:08.870
+because the number of false positives is zero.
+
+307
+00:13:08.870 --> 00:13:11.163
+And our F1 score decreased by a bit.
+
+308
+00:13:12.170 --> 00:13:15.210
+The decision point that I would settle on is 55%.
+
+309
+00:13:15.210 --> 00:13:18.120
+I would also now reasonably be confident to say
+
+310
+00:13:18.120 --> 00:13:20.660
+that this model beats the heuristic.
+
+311
+00:13:20.660 --> 00:13:23.090
+This is a couple more things that we'll cover.
+
+312
+00:13:23.090 --> 00:13:25.860
+Remember that the whole goal of supervised learning
+
+313
+00:13:25.860 --> 00:13:30.860
+is to take labeled examples here spam or not spam messages,
+
+314
+00:13:31.010 --> 00:13:34.370
+and use these to train a model and predict
+
+315
+00:13:34.370 --> 00:13:38.360
+unseen or unlabeled data that we haven't trained on.
+
+316
+00:13:38.360 --> 00:13:40.640
+To make the most out of these examples
+
+317
+00:13:40.640 --> 00:13:42.410
+that we do have labeled,
+
+318
+00:13:42.410 --> 00:13:44.090
+we need to split them up.
+
+319
+00:13:44.090 --> 00:13:48.350
+We'll have a training set, a validation set and a test set.
+
+320
+00:13:48.350 --> 00:13:49.410
+Earlier we mentioned
+
+321
+00:13:49.410 --> 00:13:51.610
+that the performance metrics we looked at,
+
+322
+00:13:51.610 --> 00:13:54.920
+were generated from 100 new examples
+
+323
+00:13:54.920 --> 00:13:57.790
+that we hadn't seen before or trained on.
+
+324
+00:13:57.790 --> 00:13:59.750
+This is important because it means
+
+325
+00:13:59.750 --> 00:14:02.220
+that we didn't use our training set
+
+326
+00:14:02.220 --> 00:14:04.530
+to evaluate our model performance.
+
+327
+00:14:04.530 --> 00:14:07.350
+Instead, we actually used a test set
+
+328
+00:14:07.350 --> 00:14:10.890
+which is more important in determining if our model
+
+329
+00:14:10.890 --> 00:14:12.900
+which was trained on these examples,
+
+330
+00:14:12.900 --> 00:14:16.310
+will generalize or perform similarly
+
+331
+00:14:16.310 --> 00:14:18.950
+to unseen or unlabeled examples.
+
+332
+00:14:18.950 --> 00:14:22.080
+So, we know about we need a training set to train on,
+
+333
+00:14:22.080 --> 00:14:23.780
+and we need to test that so we can get
+
+334
+00:14:23.780 --> 00:14:27.196
+some degree of confidence on whether or not our model
+
+335
+00:14:27.196 --> 00:14:29.950
+will generalize to unseen or unlabeled examples.
+
+336
+00:14:29.950 --> 00:14:32.310
+So, why is this validation set here?
+
+337
+00:14:32.310 --> 00:14:34.830
+The validation set gives us the opportunity
+
+338
+00:14:34.830 --> 00:14:39.050
+to tune our model without using the test set itself.
+
+339
+00:14:39.050 --> 00:14:41.680
+In this video, we actually tuned on the test set,
+
+340
+00:14:41.680 --> 00:14:43.660
+which means that the tuning that we did,
+
+341
+00:14:43.660 --> 00:14:47.340
+could have very easily not generalized to unseen examples
+
+342
+00:14:47.340 --> 00:14:50.420
+'cause we have no other labeled examples to run it against.
+
+343
+00:14:50.420 --> 00:14:52.660
+In practice, we would have had a validation set,
+
+344
+00:14:52.660 --> 00:14:54.490
+that we would have conducted our tuning on.
+
+345
+00:14:54.490 --> 00:14:56.740
+And then once we were done tuning our model
+
+346
+00:14:56.740 --> 00:14:58.770
+and by done I mean finished completely,
+
+347
+00:14:58.770 --> 00:15:01.580
+we would then use our tests a single time
+
+348
+00:15:01.580 --> 00:15:03.550
+to evaluate our model performance.
+
+349
+00:15:03.550 --> 00:15:05.710
+This would be a better way to get an estimate
+
+350
+00:15:05.710 --> 00:15:09.050
+of how our model will generalize to these unseen examples.
+
+351
+00:15:09.050 --> 00:15:12.053
+So, what can we actually tune with this validation set?
+
+352
+00:15:13.321 --> 00:15:14.154
+Well, really anything.
+
+353
+00:15:14.154 --> 00:15:16.300
+In our example, we would have tuned the validation set
+
+354
+00:15:16.300 --> 00:15:17.700
+on this decision point.
+
+355
+00:15:17.700 --> 00:15:20.660
+By the way, as we are tuning these different decision points
+
+356
+00:15:20.660 --> 00:15:22.320
+we can actually plot something
+
+357
+00:15:22.320 --> 00:15:25.550
+called a Receiver Operating Characteristic curve.
+
+358
+00:15:25.550 --> 00:15:27.620
+This ROC curve is plotted
+
+359
+00:15:27.620 --> 00:15:30.820
+along the sensitivity on the y-axis,
+
+360
+00:15:30.820 --> 00:15:33.910
+and the one minus specificity on the axis.
+
+361
+00:15:33.910 --> 00:15:36.061
+As we tune our model on the validation set,
+
+362
+00:15:36.061 --> 00:15:40.150
+we can actually plot the sensitivities and specificities
+
+363
+00:15:40.150 --> 00:15:42.980
+that each decision threshold produces.
+
+364
+00:15:42.980 --> 00:15:45.800
+In the top right the decision threshold of zero,
+
+365
+00:15:45.800 --> 00:15:49.010
+means that we classified every single example as spam.
+
+366
+00:15:49.010 --> 00:15:52.960
+This means the sensitivity is one or 100%.
+
+367
+00:15:52.960 --> 00:15:55.970
+However, this also means that our specificity is zero.
+
+368
+00:15:55.970 --> 00:15:58.970
+The here one minus zero is also one,
+
+369
+00:15:58.970 --> 00:16:00.827
+that gives us our point here
+
+370
+00:16:00.827 --> 00:16:03.020
+for our decision threshold of zero.
+
+371
+00:16:03.020 --> 00:16:04.530
+On the other end of the spectrum,
+
+372
+00:16:04.530 --> 00:16:07.260
+here at the decision threshold of 100%,
+
+373
+00:16:07.260 --> 00:16:10.890
+means that we classify every single example as legitimate.
+
+374
+00:16:10.890 --> 00:16:13.590
+This means our sensitivity is equal to zero.
+
+375
+00:16:13.590 --> 00:16:16.650
+Well, our specificity is equal to 100%.
+
+376
+00:16:16.650 --> 00:16:20.370
+So, here our point of 100% decision threshold
+
+377
+00:16:20.370 --> 00:16:22.210
+lies at zero, zero.
+
+378
+00:16:22.210 --> 00:16:24.890
+Now, every other threshold lends us somewhere
+
+379
+00:16:24.890 --> 00:16:26.960
+between those two extremes.
+
+380
+00:16:26.960 --> 00:16:31.270
+For reference this line is where sensitivity is equal
+
+381
+00:16:31.270 --> 00:16:33.210
+to one minus specificity.
+
+382
+00:16:33.210 --> 00:16:35.320
+This means, for every spam message
+
+383
+00:16:35.320 --> 00:16:37.220
+that we correctly classify,
+
+384
+00:16:37.220 --> 00:16:40.650
+we also incorrectly classify a legitimate message.
+
+385
+00:16:40.650 --> 00:16:43.840
+The goal for any model should be to always lie above
+
+386
+00:16:43.840 --> 00:16:46.230
+or be better than that line.
+
+387
+00:16:46.230 --> 00:16:48.820
+So, let's clean this up and remove those numbers.
+
+388
+00:16:48.820 --> 00:16:52.280
+And now we can plot a particular decision threshold.
+
+389
+00:16:52.280 --> 00:16:54.020
+To obtain a good balance
+
+390
+00:16:54.020 --> 00:16:56.760
+between specificity and sensitivity,
+
+391
+00:16:56.760 --> 00:17:00.220
+the idea is to pick a threshold which maximizes
+
+392
+00:17:00.220 --> 00:17:03.190
+the distance away from this line.
+
+393
+00:17:03.190 --> 00:17:05.040
+Now let's say we have another model
+
+394
+00:17:05.040 --> 00:17:07.050
+that we'd like to compare to ours.
+
+395
+00:17:07.050 --> 00:17:10.010
+This would be the other models ROC curve.
+
+396
+00:17:10.010 --> 00:17:12.490
+And instead of just eyeballing these two and saying,
+
+397
+00:17:12.490 --> 00:17:15.650
+well this one might be tallest, so I guess that's better.
+
+398
+00:17:15.650 --> 00:17:18.400
+A more exact approach is to take the area
+
+399
+00:17:18.400 --> 00:17:20.360
+under the curve of the first model.
+
+400
+00:17:20.360 --> 00:17:23.670
+So, here the area under the curve is 0.61.
+
+401
+00:17:23.670 --> 00:17:25.440
+And then we take the area under the curve
+
+402
+00:17:25.440 --> 00:17:27.000
+of the second model,
+
+403
+00:17:27.000 --> 00:17:31.570
+here this AUC or area under the curve is 0.74.
+
+404
+00:17:31.570 --> 00:17:33.570
+Then we compare the two values.
+
+405
+00:17:33.570 --> 00:17:36.070
+And whichever value here is higher
+
+406
+00:17:36.070 --> 00:17:38.640
+is the model that we could confidently say
+
+407
+00:17:38.640 --> 00:17:40.100
+is a better predictor.
+
+408
+00:17:40.100 --> 00:17:42.970
+This number here is technically the probability
+
+409
+00:17:42.970 --> 00:17:46.410
+that a randomly chosen spam example
+
+410
+00:17:46.410 --> 00:17:49.290
+we'll get a higher probability of being spam
+
+411
+00:17:49.290 --> 00:17:50.830
+according to our model.
+
+412
+00:17:50.830 --> 00:17:53.900
+Then a randomly chosen legitimate message.
+
+413
+00:17:53.900 --> 00:17:55.950
+It's a good way to compare two models
+
+414
+00:17:55.950 --> 00:17:57.360
+against all thresholds.
+
+415
+00:17:57.360 --> 00:17:59.150
+Finally, using our validation set,
+
+416
+00:17:59.150 --> 00:18:00.550
+we can tune hyperparameters.
+
+417
+00:18:01.638 --> 00:18:05.080
+Hyperparameters are parameters that go along with the model
+
+418
+00:18:05.080 --> 00:18:06.840
+that you don't necessarily train.
+
+419
+00:18:06.840 --> 00:18:09.090
+For instance, our naive base model,
+
+420
+00:18:09.090 --> 00:18:10.860
+only had one hyperparameter.
+
+421
+00:18:10.860 --> 00:18:13.330
+And that was the amount or the degree
+
+422
+00:18:13.330 --> 00:18:15.320
+to which we apply Laplace smoothing.
+
+423
+00:18:15.320 --> 00:18:18.930
+So, these values here can technically be any other value
+
+424
+00:18:18.930 --> 00:18:21.540
+and those would be hyperparameters to tune.
+
+425
+00:18:21.540 --> 00:18:23.616
+Later, we'll go over models
+
+426
+00:18:23.616 --> 00:18:25.243
+that have far more hyperparameters.
+
+427
+00:18:25.243 --> 00:18:27.200
+Finally, I wanna talk about particular ways
+
+428
+00:18:27.200 --> 00:18:28.620
+in which we can validate.
+
+429
+00:18:28.620 --> 00:18:30.180
+The one that we've talked about so far
+
+430
+00:18:30.180 --> 00:18:31.910
+is called holdout validation,
+
+431
+00:18:31.910 --> 00:18:35.160
+where we effectively assign a subset of the examples
+
+432
+00:18:35.160 --> 00:18:37.310
+to be our validation set.
+
+433
+00:18:37.310 --> 00:18:38.960
+Another way is to perform something
+
+434
+00:18:38.960 --> 00:18:41.390
+called K-fold cross validation.
+
+435
+00:18:41.390 --> 00:18:45.020
+All that means is instead of just taking the random subset
+
+436
+00:18:45.020 --> 00:18:47.570
+that we have here as our validation set,
+
+437
+00:18:47.570 --> 00:18:49.880
+we have our tests that still set aside,
+
+438
+00:18:49.880 --> 00:18:52.520
+but we train K different models
+
+439
+00:18:52.520 --> 00:18:55.620
+and use a different validation set each time.
+
+440
+00:18:55.620 --> 00:18:57.500
+So for instance, we would train a model
+
+441
+00:18:57.500 --> 00:18:59.000
+with this training set,
+
+442
+00:18:59.000 --> 00:19:02.410
+and use this validation set to gauge its performance.
+
+443
+00:19:02.410 --> 00:19:04.260
+Then we would train another model
+
+444
+00:19:04.260 --> 00:19:06.520
+on these examples and these examples,
+
+445
+00:19:06.520 --> 00:19:09.200
+while leaving these examples for the validation set.
+
+446
+00:19:09.200 --> 00:19:11.623
+And we would repeat this process
+
+447
+00:19:11.623 --> 00:19:14.230
+for every other subset or fold in the data.
+
+448
+00:19:14.230 --> 00:19:16.810
+So, here we had a five different folds
+
+449
+00:19:16.810 --> 00:19:20.300
+that we used for K-fold cross validation.
+
+450
+00:19:20.300 --> 00:19:23.430
+Every performance metric generated by a validation set,
+
+451
+00:19:23.430 --> 00:19:25.090
+will be averaged together
+
+452
+00:19:25.090 --> 00:19:27.570
+over the five different validation folds.
+
+453
+00:19:27.570 --> 00:19:30.960
+One problem with this is it will take five times longer
+
+454
+00:19:30.960 --> 00:19:33.610
+than our original holdout validation.
+
+455
+00:19:33.610 --> 00:19:35.360
+However, it reduces the chance
+
+456
+00:19:35.360 --> 00:19:37.750
+that we randomly chose a validation set
+
+457
+00:19:37.750 --> 00:19:41.290
+that produces better performance metrics by sheer luck.
+
+458
+00:19:41.290 --> 00:19:44.100
+Another strategy we can use is called leave-one-out.
+
+459
+00:19:44.100 --> 00:19:47.440
+All that means is that the K and K-fold validation
+
+460
+00:19:47.440 --> 00:19:51.370
+is equal to N the number of examples that we have.
+
+461
+00:19:51.370 --> 00:19:53.370
+This is generally reserved for cases
+
+462
+00:19:53.370 --> 00:19:55.760
+where we have a very small amount of data.
+
+463
+00:19:55.760 --> 00:19:57.240
+For the remainder of the crash course,
+
+464
+00:19:57.240 --> 00:19:59.200
+when I've referenced cross validation,
+
+465
+00:19:59.200 --> 00:20:01.800
+I'm generally referring to holdout validation
+
+466
+00:20:01.800 --> 00:20:03.230
+because we will generally deal
+
+467
+00:20:03.230 --> 00:20:05.500
+with a large enough amount of data.
+
+468
+00:20:05.500 --> 00:20:07.860
+So far, in the supervised learning series,
+
+469
+00:20:07.860 --> 00:20:09.880
+we've started with a problem.
+
+470
+00:20:09.880 --> 00:20:12.450
+In our case, we were needlessly interrupted
+
+471
+00:20:12.450 --> 00:20:13.660
+by spam messages.
+
+472
+00:20:13.660 --> 00:20:15.740
+Two we created a hypothesis.
+
+473
+00:20:15.740 --> 00:20:17.670
+The hypothesis was that if we created
+
+474
+00:20:17.670 --> 00:20:19.340
+some sort of filter rules,
+
+475
+00:20:19.340 --> 00:20:22.250
+then it would reduce the degree of our problem.
+
+476
+00:20:22.250 --> 00:20:24.900
+Three, we did create a simple heuristic
+
+477
+00:20:24.900 --> 00:20:26.470
+which was our filter rules.
+
+478
+00:20:26.470 --> 00:20:29.290
+Four, we measured a positive impact
+
+479
+00:20:29.290 --> 00:20:33.060
+that the heuristic had on our initial problem.
+
+480
+00:20:33.060 --> 00:20:35.620
+This means we validated our hypothesis.
+
+481
+00:20:35.620 --> 00:20:39.290
+Five, we decided to invest in a more complex technique.
+
+482
+00:20:39.290 --> 00:20:41.970
+In our case, it was a naive based model.
+
+483
+00:20:41.970 --> 00:20:44.750
+We then measure the impact difference
+
+484
+00:20:44.750 --> 00:20:48.570
+between the naive based model or the more complex technique
+
+485
+00:20:48.570 --> 00:20:51.380
+versus the simple heuristic filter rules.
+
+486
+00:20:51.380 --> 00:20:53.680
+Upon measuring these impact differences,
+
+487
+00:20:53.680 --> 00:20:55.550
+we found that there wasn't shortcomings.
+
+488
+00:20:55.550 --> 00:20:57.730
+So, we had to tune our model.
+
+489
+00:20:57.730 --> 00:21:00.280
+In our case, this was the decision threshold.
+
+490
+00:21:00.280 --> 00:21:02.610
+And finally, after tuning our model
+
+491
+00:21:02.610 --> 00:21:05.630
+was good enough to replace the existing technique
+
+492
+00:21:05.630 --> 00:21:07.310
+of the simple heuristic.
+
+493
+00:21:07.310 --> 00:21:08.860
+This is a very common process
+
+494
+00:21:08.860 --> 00:21:11.400
+to go through in practical machine learning.
+
+495
+00:21:11.400 --> 00:21:13.550
+If I was interviewing someone and they said,
+
+496
+00:21:13.550 --> 00:21:15.170
+well we had a spam problem.
+
+497
+00:21:15.170 --> 00:21:16.987
+So, we use naive based and it fixed it.
+
+498
+00:21:16.987 --> 00:21:19.210
+I would be somewhat skeptical,
+
+499
+00:21:19.210 --> 00:21:20.870
+because I've personally never seen
+
+500
+00:21:20.870 --> 00:21:22.750
+something go that smoothly.
+
+501
+00:21:22.750 --> 00:21:24.810
+Often interviewers will want to hear
+
+502
+00:21:24.810 --> 00:21:27.290
+the details of this process in the iterations
+
+503
+00:21:27.290 --> 00:21:28.610
+that you had to go through.
+
+504
+00:21:28.610 --> 00:21:30.860
+Now, some general tips about this process.
+
+505
+00:21:30.860 --> 00:21:32.650
+If you're stuck on step four,
+
+506
+00:21:32.650 --> 00:21:34.610
+I would revisit your hypothesis.
+
+507
+00:21:34.610 --> 00:21:37.170
+And potentially I would even revisit the problem
+
+508
+00:21:37.170 --> 00:21:38.900
+to check if I was missing anything.
+
+509
+00:21:38.900 --> 00:21:41.820
+If you get to step seven and you can't beat the heuristic,
+
+510
+00:21:41.820 --> 00:21:43.990
+you may need to either one invest
+
+511
+00:21:43.990 --> 00:21:45.720
+in a more complex technique,
+
+512
+00:21:45.720 --> 00:21:47.830
+or two revisit what features
+
+513
+00:21:47.830 --> 00:21:49.720
+you're looking at in terms of your model.
+
+514
+00:21:49.720 --> 00:21:51.620
+Finally, when do you get to step eight,
+
+515
+00:21:51.620 --> 00:21:53.030
+be sure to tie it back
+
+516
+00:21:53.030 --> 00:21:55.280
+to some meaningful business objective.
+
+517
+00:21:55.280 --> 00:21:56.900
+I think about our spam use case.
+
+518
+00:21:56.900 --> 00:21:58.320
+Not only does it help me
+
+519
+00:21:58.320 --> 00:22:00.560
+from being needlessly interrupted,
+
+520
+00:22:00.560 --> 00:22:03.340
+as well, it helps Instagram because it ensures
+
+521
+00:22:03.340 --> 00:22:07.100
+that I don't get drawn away from their ad revenue machine.
+
+522
+00:22:07.100 --> 00:22:09.580
+So, even though we're optimizing specificity
+
+523
+00:22:09.580 --> 00:22:11.150
+and comparing F1 scores,
+
+524
+00:22:11.150 --> 00:22:14.680
+my manager or my manager's manager only really cares
+
+525
+00:22:14.680 --> 00:22:18.110
+about how much additional ad revenue Instagram will get,
+
+526
+00:22:18.110 --> 00:22:21.070
+by having users less distracted by spam messages.
+
+527
+00:22:21.070 --> 00:22:24.170
+We'll talk more about how to measure business impacts later.
+
+528
+00:22:24.170 --> 00:22:26.130
+Finally, keep in mind that this process
+
+529
+00:22:26.130 --> 00:22:28.800
+happens at different rates for different companies.
+
+530
+00:22:28.800 --> 00:22:31.890
+The companies that are faster to iterate on this process
+
+531
+00:22:31.890 --> 00:22:35.240
+are typically ones where experiments are cheap to run,
+
+532
+00:22:35.240 --> 00:22:37.880
+and where failed experiments don't ruin lives.
+
+533
+00:22:37.880 --> 00:22:39.580
+This process will go far more slowly
+
+534
+00:22:39.580 --> 00:22:42.250
+for companies where experiments are expensive to run
+
+535
+00:22:42.250 --> 00:22:44.660
+in either terms of money or time,
+
+536
+00:22:44.660 --> 00:22:46.300
+and where failed experiments
+
+537
+00:22:46.300 --> 00:22:48.580
+can directly affect people's health.
+
+538
+00:22:48.580 --> 00:22:49.920
+But the remainder of the crash course,
+
+539
+00:22:49.920 --> 00:22:53.010
+we're gonna deviate from this spam detection problem
+
+540
+00:22:53.010 --> 00:22:55.750
+to cover the intricacies and different use cases
+
+541
+00:22:55.750 --> 00:22:57.730
+of various machine learning models.
+
+542
+00:22:57.730 --> 00:23:00.430
+Well, that's it for this video, thanks so much for joining.
+
+543
+00:23:00.430 --> 00:23:01.650
+Join us next video
+
+544
+00:23:01.650 --> 00:23:04.313
+as we continue our machine learning journey.
+

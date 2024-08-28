@@ -1,0 +1,2914 @@
+WEBVTT
+
+1
+00:00:00.540 --> 00:00:02.470
+<v Instructor>Welcome back to ML Experts,</v>
+
+2
+00:00:02.470 --> 00:00:04.330
+Machine Learning crash course.
+
+3
+00:00:04.330 --> 00:00:07.640
+In the previous video, we talked about linear regression
+
+4
+00:00:07.640 --> 00:00:09.610
+and we used it to predict the power demand
+
+5
+00:00:09.610 --> 00:00:11.330
+for the California ISO.
+
+6
+00:00:11.330 --> 00:00:14.040
+In this video we'll be going over logistic regression,
+
+7
+00:00:14.040 --> 00:00:16.300
+which is what we'll use for classification.
+
+8
+00:00:16.300 --> 00:00:19.430
+Let's say that our manager at California ISO asked us
+
+9
+00:00:19.430 --> 00:00:22.790
+to classify whether or not there will be a power outage
+
+10
+00:00:22.790 --> 00:00:24.010
+the following day.
+
+11
+00:00:24.010 --> 00:00:26.400
+This happens when the power supply
+
+12
+00:00:26.400 --> 00:00:29.910
+to the region falls below the power demand.
+
+13
+00:00:29.910 --> 00:00:31.520
+If we can predict which regions
+
+14
+00:00:31.520 --> 00:00:33.610
+will fall into a power outage,
+
+15
+00:00:33.610 --> 00:00:35.870
+we can ramp up even more power sources
+
+16
+00:00:35.870 --> 00:00:37.700
+and power routing infrastructure.
+
+17
+00:00:37.700 --> 00:00:40.240
+We can ensure that that region is protected.
+
+18
+00:00:40.240 --> 00:00:42.460
+For features, we can continue to use
+
+19
+00:00:42.460 --> 00:00:46.010
+the temperature provided by the national weather service
+
+20
+00:00:46.010 --> 00:00:47.320
+for us per region.
+
+21
+00:00:47.320 --> 00:00:49.520
+The labels will be binary.
+
+22
+00:00:49.520 --> 00:00:53.520
+It will be either zero if there were no power outages
+
+23
+00:00:53.520 --> 00:00:55.780
+that day for that temperature for that region.
+
+24
+00:00:55.780 --> 00:00:57.313
+And it will be one otherwise.
+
+25
+00:00:57.313 --> 00:00:59.340
+Now that we have our features and labels,
+
+26
+00:00:59.340 --> 00:01:00.800
+we can go ahead and plot them.
+
+27
+00:01:00.800 --> 00:01:03.490
+Right now we only have temperature representing our features
+
+28
+00:01:03.490 --> 00:01:06.190
+and that is just one dimension of data.
+
+29
+00:01:06.190 --> 00:01:09.400
+The labels however, we'll color code this data.
+
+30
+00:01:09.400 --> 00:01:12.890
+So for green, we will have no power outages.
+
+31
+00:01:12.890 --> 00:01:15.650
+And red means for that particular day,
+
+32
+00:01:15.650 --> 00:01:19.670
+region and temperature, there were power outages.
+
+33
+00:01:19.670 --> 00:01:24.100
+The idea is that this line separates the examples by class.
+
+34
+00:01:24.100 --> 00:01:28.240
+So on the left we will have no power outages for those data.
+
+35
+00:01:28.240 --> 00:01:31.060
+And on the right we will have only power outages
+
+36
+00:01:31.060 --> 00:01:32.290
+for that data.
+
+37
+00:01:32.290 --> 00:01:35.950
+You can see here that it's not doing its job completely
+
+38
+00:01:35.950 --> 00:01:38.260
+because there are different examples
+
+39
+00:01:38.260 --> 00:01:39.700
+on the other side of the line.
+
+40
+00:01:39.700 --> 00:01:41.980
+But the idea is to find the best line
+
+41
+00:01:41.980 --> 00:01:43.840
+that can separate this data out.
+
+42
+00:01:43.840 --> 00:01:45.230
+All right, if we want something a little bit
+
+43
+00:01:45.230 --> 00:01:47.260
+more visually similar to what we encountered
+
+44
+00:01:47.260 --> 00:01:48.840
+in the linear regression case.
+
+45
+00:01:48.840 --> 00:01:52.540
+We can add a dimension of megawatt power demand
+
+46
+00:01:52.540 --> 00:01:54.300
+for that particular temperature.
+
+47
+00:01:54.300 --> 00:01:56.740
+And once we plot that out, we get a similar curve
+
+48
+00:01:56.740 --> 00:01:58.480
+as we got in linear regression,
+
+49
+00:01:58.480 --> 00:02:01.210
+but now we have them color coded by label
+
+50
+00:02:01.210 --> 00:02:02.890
+of whether there was a power outage
+
+51
+00:02:02.890 --> 00:02:05.930
+or there were not a power outage for that particular region.
+
+52
+00:02:05.930 --> 00:02:07.130
+Logistic regression is based
+
+53
+00:02:07.130 --> 00:02:09.100
+on the same idea as linear regression,
+
+54
+00:02:09.100 --> 00:02:12.620
+in the way that we still use a line to designate our model.
+
+55
+00:02:12.620 --> 00:02:15.730
+The only difference is that we now want Y
+
+56
+00:02:15.730 --> 00:02:18.410
+or the output of our model to be a probability.
+
+57
+00:02:18.410 --> 00:02:21.050
+This probability will represent the chance
+
+58
+00:02:21.050 --> 00:02:23.940
+of a power outage occurring the following day.
+
+59
+00:02:23.940 --> 00:02:27.040
+So we have our linear regression line model.
+
+60
+00:02:27.040 --> 00:02:29.560
+For logistic regression all we're going to do
+
+61
+00:02:29.560 --> 00:02:31.410
+is take this linear regression model
+
+62
+00:02:31.410 --> 00:02:34.220
+and put it in the exponent in this formula.
+
+63
+00:02:34.220 --> 00:02:35.700
+This will do a couple things for us.
+
+64
+00:02:35.700 --> 00:02:38.650
+One, it'll ensure that we get an output
+
+65
+00:02:38.650 --> 00:02:40.090
+between zero and one.
+
+66
+00:02:40.090 --> 00:02:42.390
+This function here is called the sigmoid function
+
+67
+00:02:42.390 --> 00:02:44.610
+or sometimes called the logistic function
+
+68
+00:02:44.610 --> 00:02:47.380
+which is where logistic regression will get its name.
+
+69
+00:02:47.380 --> 00:02:51.880
+The idea is to be able to plug in some temperature here
+
+70
+00:02:51.880 --> 00:02:54.100
+and have some coefficients solved for,
+
+71
+00:02:54.100 --> 00:02:56.740
+let's assume that we can solve for the coefficients
+
+72
+00:02:56.740 --> 00:02:59.330
+and to output some probability.
+
+73
+00:02:59.330 --> 00:03:01.470
+In the linear regression example,
+
+74
+00:03:01.470 --> 00:03:04.360
+we had the opportunity to use formulas called
+
+75
+00:03:04.360 --> 00:03:07.880
+a closed form solution to solve for the coefficients
+
+76
+00:03:07.880 --> 00:03:09.510
+and the bias itself.
+
+77
+00:03:09.510 --> 00:03:12.780
+Unfortunately, that doesn't work for logistic regression.
+
+78
+00:03:12.780 --> 00:03:14.870
+There is no closed form solution.
+
+79
+00:03:14.870 --> 00:03:17.870
+We have to use an iterative process to zero in
+
+80
+00:03:17.870 --> 00:03:19.890
+on what these values should be.
+
+81
+00:03:19.890 --> 00:03:21.800
+One way we could do it is just
+
+82
+00:03:21.800 --> 00:03:24.710
+by randomly plugging in numbers.
+
+83
+00:03:24.710 --> 00:03:27.320
+We could just plug in three and four
+
+84
+00:03:27.320 --> 00:03:30.010
+and then just check what does our probability say?
+
+85
+00:03:30.010 --> 00:03:31.830
+And what is that difference compared
+
+86
+00:03:31.830 --> 00:03:34.160
+to the actual value that we have?
+
+87
+00:03:34.160 --> 00:03:37.120
+For instance, if we output 91.1%,
+
+88
+00:03:37.120 --> 00:03:39.550
+and for this particular temperature input
+
+89
+00:03:39.550 --> 00:03:42.340
+there was no power outage that particular day.
+
+90
+00:03:42.340 --> 00:03:45.580
+Well, then the probability should actually be zero.
+
+91
+00:03:45.580 --> 00:03:48.090
+So what we could do is just plug in random numbers
+
+92
+00:03:48.090 --> 00:03:51.170
+for these coefficients and just see how much
+
+93
+00:03:51.170 --> 00:03:53.980
+we progress toward getting the actual value
+
+94
+00:03:53.980 --> 00:03:56.430
+based on these coefficients.
+
+95
+00:03:56.430 --> 00:03:58.820
+It'd be extremely inefficient though.
+
+96
+00:03:58.820 --> 00:04:01.810
+As an alternative, we can use a better iterative approach
+
+97
+00:04:01.810 --> 00:04:04.030
+which will tell us how to update
+
+98
+00:04:04.030 --> 00:04:06.110
+the coefficient and the bias.
+
+99
+00:04:06.110 --> 00:04:08.150
+Let's see how we can do that.
+
+100
+00:04:08.150 --> 00:04:11.030
+First we need to designate something called a loss.
+
+101
+00:04:11.030 --> 00:04:14.470
+A loss is going to be the difference in Y hat,
+
+102
+00:04:14.470 --> 00:04:16.950
+what our model predicted and Y,
+
+103
+00:04:16.950 --> 00:04:19.910
+what the actual label for that example was.
+
+104
+00:04:19.910 --> 00:04:22.660
+The loss function for logistic regression
+
+105
+00:04:22.660 --> 00:04:25.000
+is going to be the log loss.
+
+106
+00:04:25.000 --> 00:04:28.390
+So here we have the Y values,
+
+107
+00:04:28.390 --> 00:04:32.120
+which are the actual labels of the examples.
+
+108
+00:04:32.120 --> 00:04:36.120
+That's either going to be zero or one depending on
+
+109
+00:04:36.120 --> 00:04:40.150
+if there was a resulting power outage from that example.
+
+110
+00:04:40.150 --> 00:04:44.180
+Or zero if a resulting power outage didn't happen.
+
+111
+00:04:44.180 --> 00:04:46.960
+The Y hats will represent the predictions
+
+112
+00:04:46.960 --> 00:04:48.870
+that our model have output.
+
+113
+00:04:48.870 --> 00:04:52.600
+So for our case, the prediction was 91.1%.
+
+114
+00:04:52.600 --> 00:04:57.290
+And the actual value that Y took on was 0%.
+
+115
+00:04:57.290 --> 00:04:58.450
+If we plug in our numbers,
+
+116
+00:04:58.450 --> 00:05:01.280
+we'll see that this side of the equation zeros out
+
+117
+00:05:01.280 --> 00:05:03.250
+because zero times anything is zero.
+
+118
+00:05:03.250 --> 00:05:05.170
+And we actually only need to focus on this
+
+119
+00:05:05.170 --> 00:05:07.130
+for when the label is zero.
+
+120
+00:05:07.130 --> 00:05:08.310
+If the label were one,
+
+121
+00:05:08.310 --> 00:05:10.120
+we wouldn't use this side of the equation.
+
+122
+00:05:10.120 --> 00:05:11.750
+We would only use this side.
+
+123
+00:05:11.750 --> 00:05:14.970
+So after we plug in our numbers, we get a zero over here.
+
+124
+00:05:14.970 --> 00:05:16.960
+This turns into a one here.
+
+125
+00:05:16.960 --> 00:05:21.160
+And our prediction is one minus 91.1%.
+
+126
+00:05:21.160 --> 00:05:22.477
+We take the log of that.
+
+127
+00:05:22.477 --> 00:05:25.750
+And the result is negative 1.05.
+
+128
+00:05:25.750 --> 00:05:29.920
+The loss represents how far off the model's prediction was
+
+129
+00:05:29.920 --> 00:05:32.630
+from the true label of that example.
+
+130
+00:05:32.630 --> 00:05:37.630
+Now, if we had guessed or predicted with our model 21.1%,
+
+131
+00:05:37.760 --> 00:05:39.290
+then we would still use this side
+
+132
+00:05:39.290 --> 00:05:41.150
+because the true label is zero.
+
+133
+00:05:41.150 --> 00:05:44.910
+But we would see that our loss actually gets closer to zero.
+
+134
+00:05:44.910 --> 00:05:47.487
+All right, now what if our model had predicted zero
+
+135
+00:05:47.487 --> 00:05:49.130
+and the true label was zero?
+
+136
+00:05:49.130 --> 00:05:51.610
+Well, this half of the equation gets zeroed out.
+
+137
+00:05:51.610 --> 00:05:53.440
+We use this side of the equation
+
+138
+00:05:53.440 --> 00:05:56.000
+and interestingly one minus zero,
+
+139
+00:05:56.000 --> 00:05:58.000
+so the log of one is zero in itself.
+
+140
+00:05:58.000 --> 00:05:59.670
+So our loss is zero.
+
+141
+00:05:59.670 --> 00:06:03.650
+So when we make the correct prediction, we incur no loss.
+
+142
+00:06:03.650 --> 00:06:05.560
+Now, what you may have noticed is that
+
+143
+00:06:05.560 --> 00:06:09.530
+as the predictions got closer to the actual value
+
+144
+00:06:09.530 --> 00:06:11.540
+or the label of the example,
+
+145
+00:06:11.540 --> 00:06:14.640
+the loss function got closer and closer to zero
+
+146
+00:06:14.640 --> 00:06:18.460
+but all of the values were still in the negative domain.
+
+147
+00:06:18.460 --> 00:06:21.350
+So really what we want is the negative of this.
+
+148
+00:06:21.350 --> 00:06:25.080
+And then we can speak about minimizing the loss function.
+
+149
+00:06:25.080 --> 00:06:27.780
+Here once we add this negative sign
+
+150
+00:06:27.780 --> 00:06:30.730
+we actually get the cross-entropy loss.
+
+151
+00:06:30.730 --> 00:06:34.030
+It's sometimes called the negative log loss.
+
+152
+00:06:34.030 --> 00:06:36.880
+So how can we use the cross-entropy loss
+
+153
+00:06:36.880 --> 00:06:39.150
+as a way to minimize the difference
+
+154
+00:06:39.150 --> 00:06:44.090
+between what we actually predicted with our coefficients
+
+155
+00:06:44.090 --> 00:06:47.113
+and what the true labels of the examples were?
+
+156
+00:06:47.970 --> 00:06:49.380
+Well, first we have to understand
+
+157
+00:06:49.380 --> 00:06:52.250
+how well our model is doing in general.
+
+158
+00:06:52.250 --> 00:06:55.170
+We can do that by taking the average loss
+
+159
+00:06:55.170 --> 00:06:58.760
+over every single example that we have in our training set.
+
+160
+00:06:58.760 --> 00:07:00.427
+So if we had 10 examples,
+
+161
+00:07:00.427 --> 00:07:03.600
+the summation would expand out to 10 terms
+
+162
+00:07:03.600 --> 00:07:06.420
+and we would simply run for every single example,
+
+163
+00:07:06.420 --> 00:07:09.800
+find the loss of it and average the losses together.
+
+164
+00:07:09.800 --> 00:07:12.450
+So how does the average loss across all
+
+165
+00:07:12.450 --> 00:07:16.910
+of our training examples relate to our coefficients
+
+166
+00:07:16.910 --> 00:07:20.040
+that we have for our logistic regression model.
+
+167
+00:07:20.040 --> 00:07:23.740
+And even better, can we use this loss in a way
+
+168
+00:07:23.740 --> 00:07:27.050
+to cleverly update our model coefficients
+
+169
+00:07:27.050 --> 00:07:29.660
+in order to produce better predictions
+
+170
+00:07:29.660 --> 00:07:32.470
+that are closer to the true label.
+
+171
+00:07:32.470 --> 00:07:35.660
+By the way, you may hear me call these parameters,
+
+172
+00:07:35.660 --> 00:07:38.380
+coefficients, and later we'll speak about them
+
+173
+00:07:38.380 --> 00:07:40.220
+in terms of weights.
+
+174
+00:07:40.220 --> 00:07:42.830
+So let's see how these relate.
+
+175
+00:07:42.830 --> 00:07:43.950
+Over here in the bottom right
+
+176
+00:07:43.950 --> 00:07:47.320
+we have our logistic regression model.
+
+177
+00:07:47.320 --> 00:07:50.750
+Plotted on this axis we have our B one
+
+178
+00:07:50.750 --> 00:07:52.920
+or beta one coefficient.
+
+179
+00:07:52.920 --> 00:07:55.180
+And on this axis over here,
+
+180
+00:07:55.180 --> 00:07:58.310
+we have our average loss which is the same equation
+
+181
+00:07:58.310 --> 00:08:00.500
+that we saw earlier,
+
+182
+00:08:00.500 --> 00:08:04.650
+which is the loss averaged across all training examples.
+
+183
+00:08:04.650 --> 00:08:07.000
+Okay, what if we plotted this?
+
+184
+00:08:07.000 --> 00:08:10.230
+So what this is saying is that based on the value of B,
+
+185
+00:08:10.230 --> 00:08:12.320
+whether it's low or high,
+
+186
+00:08:12.320 --> 00:08:14.970
+we get a particular average loss
+
+187
+00:08:14.970 --> 00:08:17.330
+across all of our training examples.
+
+188
+00:08:17.330 --> 00:08:19.760
+So for instance, let's say this year represents
+
+189
+00:08:19.760 --> 00:08:22.970
+that we're using all training examples from one to N,
+
+190
+00:08:22.970 --> 00:08:25.360
+N being how many training examples we have.
+
+191
+00:08:25.360 --> 00:08:29.730
+Let's say these trainings examples produced a loss of this
+
+192
+00:08:29.730 --> 00:08:33.850
+when our beta one took on this value.
+
+193
+00:08:33.850 --> 00:08:37.670
+So intuitively to me, we can take our beta one,
+
+194
+00:08:37.670 --> 00:08:41.770
+and if we just increase the value from here to say here,
+
+195
+00:08:41.770 --> 00:08:46.060
+we will be closer to the minimum loss.
+
+196
+00:08:46.060 --> 00:08:48.440
+The question is, how do we do this mathematically?
+
+197
+00:08:48.440 --> 00:08:50.853
+Well, we can use something called the slope.
+
+198
+00:08:52.100 --> 00:08:55.020
+So the slope at any given point on a curve
+
+199
+00:08:55.020 --> 00:08:58.290
+will tell us what change in this variable
+
+200
+00:08:58.290 --> 00:09:02.950
+is needed to affect a particular change in this variable.
+
+201
+00:09:02.950 --> 00:09:05.880
+So a slope in the negative direction tells us
+
+202
+00:09:05.880 --> 00:09:08.220
+that we need to go to the right.
+
+203
+00:09:08.220 --> 00:09:11.470
+So if we want to bring this loss function
+
+204
+00:09:11.470 --> 00:09:14.610
+in the negative direction, we have to go to the right.
+
+205
+00:09:14.610 --> 00:09:18.290
+Let's say that our randomly initialized beta one parameter
+
+206
+00:09:18.290 --> 00:09:22.300
+or coefficient made our average loss across all
+
+207
+00:09:22.300 --> 00:09:25.110
+of our training examples be this value.
+
+208
+00:09:25.110 --> 00:09:27.367
+So we started with this beta one
+
+209
+00:09:27.367 --> 00:09:30.450
+and that landed us with this loss value here.
+
+210
+00:09:30.450 --> 00:09:33.460
+If we take the slope, the slope is now positive.
+
+211
+00:09:33.460 --> 00:09:35.980
+What that means is that we have to work left,
+
+212
+00:09:35.980 --> 00:09:39.170
+such that we update beta one to be smaller
+
+213
+00:09:39.170 --> 00:09:40.530
+than it currently is,
+
+214
+00:09:40.530 --> 00:09:43.320
+such that we can minimize the loss.
+
+215
+00:09:43.320 --> 00:09:46.270
+The question now is how much are we supposed to move
+
+216
+00:09:46.270 --> 00:09:48.460
+to the left or to the right?
+
+217
+00:09:48.460 --> 00:09:50.850
+Well, when you take the slope of a curve,
+
+218
+00:09:50.850 --> 00:09:54.040
+you actually get a value out that indicates
+
+219
+00:09:54.040 --> 00:09:57.730
+for every unit B that I moved to the right,
+
+220
+00:09:57.730 --> 00:10:00.590
+I increased the loss by three.
+
+221
+00:10:00.590 --> 00:10:02.520
+So if I go one here to the right,
+
+222
+00:10:02.520 --> 00:10:04.790
+then the loss will increase by three.
+
+223
+00:10:04.790 --> 00:10:09.620
+That is the slope of this curve at this point.
+
+224
+00:10:09.620 --> 00:10:12.960
+So using this information, how do we update B?
+
+225
+00:10:12.960 --> 00:10:16.140
+Well, we can just update it by the negative slope.
+
+226
+00:10:16.140 --> 00:10:17.740
+So here, if the slope is three,
+
+227
+00:10:17.740 --> 00:10:20.830
+we can simply subtract three from beta.
+
+228
+00:10:20.830 --> 00:10:23.770
+Mathematically it's guaranteed to move us closer
+
+229
+00:10:23.770 --> 00:10:24.603
+to the minimum.
+
+230
+00:10:24.603 --> 00:10:27.290
+Over here, we had a negative slope,
+
+231
+00:10:27.290 --> 00:10:30.010
+and the value of this slope was negative two.
+
+232
+00:10:30.010 --> 00:10:33.410
+What that means is for every value that we go to the right,
+
+233
+00:10:33.410 --> 00:10:36.940
+so for every unit one increase that we apply
+
+234
+00:10:36.940 --> 00:10:38.770
+to this coefficient,
+
+235
+00:10:38.770 --> 00:10:41.840
+the loss will decrease by two.
+
+236
+00:10:41.840 --> 00:10:45.790
+So in this instance, we would increment beta one by two
+
+237
+00:10:45.790 --> 00:10:49.910
+in order to get closer to the minimum value of the loss.
+
+238
+00:10:49.910 --> 00:10:52.640
+So let's increment beta one by two.
+
+239
+00:10:52.640 --> 00:10:54.750
+Now we've landed here.
+
+240
+00:10:54.750 --> 00:10:56.890
+And now the slope is negative 1.5.
+
+241
+00:10:56.890 --> 00:11:00.560
+The hill, as you could call it is a little bit less steep.
+
+242
+00:11:00.560 --> 00:11:04.210
+So now we're only going to move in this direction by 1.5.
+
+243
+00:11:04.210 --> 00:11:06.010
+Now, as we can tenure this process,
+
+244
+00:11:06.010 --> 00:11:08.220
+we could approach the minimum.
+
+245
+00:11:08.220 --> 00:11:09.700
+And once we're at the minimum,
+
+246
+00:11:09.700 --> 00:11:12.460
+the slope of this minimum is zero.
+
+247
+00:11:12.460 --> 00:11:15.770
+So our update will be zero in that direction
+
+248
+00:11:15.770 --> 00:11:16.840
+and zero in that direction.
+
+249
+00:11:16.840 --> 00:11:18.180
+And at this point we say that
+
+250
+00:11:18.180 --> 00:11:21.140
+our loss function has converged.
+
+251
+00:11:21.140 --> 00:11:24.730
+So we have selected a value of beta one
+
+252
+00:11:24.730 --> 00:11:26.970
+such that the loss function is minimized
+
+253
+00:11:26.970 --> 00:11:29.350
+and thus it has converged.
+
+254
+00:11:29.350 --> 00:11:30.330
+So what's missing?
+
+255
+00:11:30.330 --> 00:11:32.580
+Well, we haven't actually gone over
+
+256
+00:11:32.580 --> 00:11:35.480
+how to find the slope of this loss function
+
+257
+00:11:35.480 --> 00:11:38.260
+at a particular point of beta one.
+
+258
+00:11:38.260 --> 00:11:39.850
+We can find the slope of this line
+
+259
+00:11:39.850 --> 00:11:41.840
+by using something called the derivatives.
+
+260
+00:11:41.840 --> 00:11:44.040
+So if we take the derivative of the loss function,
+
+261
+00:11:44.040 --> 00:11:46.210
+this will give us the derivative of the loss
+
+262
+00:11:46.210 --> 00:11:48.950
+with respect to our parameter that we're interested in,
+
+263
+00:11:48.950 --> 00:11:50.790
+which is beta one here.
+
+264
+00:11:50.790 --> 00:11:53.860
+This is doing the exact same thing that we did earlier
+
+265
+00:11:53.860 --> 00:11:57.250
+where we just found the slope of this curve
+
+266
+00:11:57.250 --> 00:11:59.760
+at a particular value of beta one.
+
+267
+00:11:59.760 --> 00:12:01.900
+Where now, instead of graphically,
+
+268
+00:12:01.900 --> 00:12:03.680
+we are doing it mathematically.
+
+269
+00:12:03.680 --> 00:12:06.020
+Now the thing is we have more than just one beta.
+
+270
+00:12:06.020 --> 00:12:07.610
+We had the bias term as well
+
+271
+00:12:07.610 --> 00:12:10.670
+so we had beta zero and we have beta one.
+
+272
+00:12:10.670 --> 00:12:12.770
+So the derivative will only get us so far
+
+273
+00:12:12.770 --> 00:12:14.930
+as to get us beta one.
+
+274
+00:12:14.930 --> 00:12:17.400
+However, let's plot the same exact thing
+
+275
+00:12:17.400 --> 00:12:18.860
+that we plotted earlier,
+
+276
+00:12:18.860 --> 00:12:22.050
+but this time we're going to plot in reference to beta zero.
+
+277
+00:12:22.050 --> 00:12:24.740
+So beta zero can have a very different dynamic
+
+278
+00:12:24.740 --> 00:12:28.150
+in terms of the average loss created from its value
+
+279
+00:12:28.150 --> 00:12:29.380
+than beta one.
+
+280
+00:12:29.380 --> 00:12:32.940
+For instance, this is beta zero's minimum,
+
+281
+00:12:32.940 --> 00:12:35.790
+which is very different from the other minimum for beta one.
+
+282
+00:12:35.790 --> 00:12:39.520
+So here we can apply the derivative to this loss function
+
+283
+00:12:39.520 --> 00:12:42.250
+with respect to our beta zero parameter.
+
+284
+00:12:42.250 --> 00:12:43.870
+And once we take that derivative,
+
+285
+00:12:43.870 --> 00:12:45.950
+this is the equation that we get.
+
+286
+00:12:45.950 --> 00:12:47.470
+So now what do we have?
+
+287
+00:12:47.470 --> 00:12:50.750
+Well, we've taken the derivative of the loss function
+
+288
+00:12:50.750 --> 00:12:53.000
+in order to figure out what direction
+
+289
+00:12:53.000 --> 00:12:56.250
+we should update the parameters or the coefficients.
+
+290
+00:12:56.250 --> 00:12:58.660
+And when we took the derivative of the loss function
+
+291
+00:12:58.660 --> 00:13:01.070
+with respect to beta one,
+
+292
+00:13:01.070 --> 00:13:03.310
+the derivative was this.
+
+293
+00:13:03.310 --> 00:13:05.590
+And when we took the derivative of the loss function
+
+294
+00:13:05.590 --> 00:13:09.090
+with respect to beta zero, we got this as a result.
+
+295
+00:13:09.090 --> 00:13:13.680
+When we combine these into a vector or a list basically,
+
+296
+00:13:13.680 --> 00:13:15.430
+what we get is the gradient.
+
+297
+00:13:15.430 --> 00:13:20.160
+So what does this get us besides updating these symbols
+
+298
+00:13:20.160 --> 00:13:22.890
+and getting us this little upside down triangle
+
+299
+00:13:22.890 --> 00:13:24.610
+with respect to the betas?
+
+300
+00:13:24.610 --> 00:13:27.870
+Well, it just gets us a concise way to represent
+
+301
+00:13:27.870 --> 00:13:31.240
+which way we should adjust each parameter
+
+302
+00:13:31.240 --> 00:13:34.460
+or each coefficient in the model according to
+
+303
+00:13:34.460 --> 00:13:35.960
+the loss function.
+
+304
+00:13:35.960 --> 00:13:38.660
+So how do we actually use our gradients
+
+305
+00:13:38.660 --> 00:13:41.110
+or the derivatives at each parameter
+
+306
+00:13:41.110 --> 00:13:43.250
+to update our model weights?
+
+307
+00:13:43.250 --> 00:13:45.330
+Well, it's a simple subtraction.
+
+308
+00:13:45.330 --> 00:13:47.960
+So we take whatever the value of the weight
+
+309
+00:13:47.960 --> 00:13:50.530
+is now say beta one,
+
+310
+00:13:50.530 --> 00:13:53.980
+and we subtract the gradient at beta one.
+
+311
+00:13:53.980 --> 00:13:58.980
+Let's assume that the gradient at beta zero was four.
+
+312
+00:13:59.640 --> 00:14:01.720
+And let's assume that the value
+
+313
+00:14:01.720 --> 00:14:05.620
+which was randomly initialized for beta zero was 0.92.
+
+314
+00:14:05.620 --> 00:14:07.660
+Let's go ahead and do a couple of iterations
+
+315
+00:14:07.660 --> 00:14:08.570
+of gradient descent.
+
+316
+00:14:08.570 --> 00:14:11.320
+So we'll expand out this equation.
+
+317
+00:14:11.320 --> 00:14:13.240
+Now, we're instead of representing Is,
+
+318
+00:14:13.240 --> 00:14:15.350
+we're representing zero and one,
+
+319
+00:14:15.350 --> 00:14:17.630
+which is beta zero and beta one here.
+
+320
+00:14:17.630 --> 00:14:21.520
+What we do to get beta zero at the next time step
+
+321
+00:14:21.520 --> 00:14:24.720
+or an updated value of beta zero,
+
+322
+00:14:24.720 --> 00:14:27.340
+we simply subtract the value of the gradient
+
+323
+00:14:27.340 --> 00:14:29.910
+from the current value of beta zero.
+
+324
+00:14:29.910 --> 00:14:32.250
+We do the same thing with beta one.
+
+325
+00:14:32.250 --> 00:14:37.120
+So for instance, here we'd have negative 3.08 and 3.04
+
+326
+00:14:37.120 --> 00:14:40.920
+for our next values of beta zero and beta one.
+
+327
+00:14:40.920 --> 00:14:43.760
+We can plug those in here just for reference.
+
+328
+00:14:43.760 --> 00:14:47.390
+Now, we can run a gradient descent again on this equation.
+
+329
+00:14:47.390 --> 00:14:51.080
+Now, our new updated gradients are 0.98 and 0.04.
+
+330
+00:14:51.080 --> 00:14:53.070
+Let's plug those into our equations.
+
+331
+00:14:53.070 --> 00:14:56.590
+So beta one at the current timestamp is 3.04,
+
+332
+00:14:56.590 --> 00:14:58.500
+the gradient is 0.04.
+
+333
+00:14:58.500 --> 00:15:01.130
+So we subtract that from the current value
+
+334
+00:15:01.130 --> 00:15:04.480
+to get the updated value of beta one.
+
+335
+00:15:04.480 --> 00:15:06.560
+We do the same thing for beta zero.
+
+336
+00:15:06.560 --> 00:15:08.210
+We can plug those results in,
+
+337
+00:15:08.210 --> 00:15:10.930
+and then we can run gradient descent again.
+
+338
+00:15:10.930 --> 00:15:14.440
+You'll notice here that the gradient of beta one is zero,
+
+339
+00:15:14.440 --> 00:15:16.780
+which means that beta one has converged.
+
+340
+00:15:16.780 --> 00:15:19.930
+Beta zero hasn't yet converged so we should continue.
+
+341
+00:15:19.930 --> 00:15:21.310
+After one more iteration,
+
+342
+00:15:21.310 --> 00:15:25.057
+we see that four is the final value for beta zero,
+
+343
+00:15:25.057 --> 00:15:28.440
+and three is the final value for beta one.
+
+344
+00:15:28.440 --> 00:15:32.480
+So any further iteration wouldn't change our parameters.
+
+345
+00:15:32.480 --> 00:15:34.890
+This is called convergence.
+
+346
+00:15:34.890 --> 00:15:37.890
+Well, that means that we've hit this point here
+
+347
+00:15:37.890 --> 00:15:42.280
+on our loss function graph such that both of the parameters
+
+348
+00:15:42.280 --> 00:15:45.010
+have converged to the minimum.
+
+349
+00:15:45.010 --> 00:15:48.150
+So that means we don't need to continue iterating.
+
+350
+00:15:48.150 --> 00:15:50.960
+All right, so typically our update functions
+
+351
+00:15:50.960 --> 00:15:51.860
+will look like this,
+
+352
+00:15:51.860 --> 00:15:54.110
+but there will also be an r in front
+
+353
+00:15:54.110 --> 00:15:56.520
+which indicates a learning rate.
+
+354
+00:15:56.520 --> 00:15:58.670
+Now this learning rate will typically lie
+
+355
+00:15:58.670 --> 00:16:02.183
+between 10 to the negative six and 0.1.
+
+356
+00:16:03.550 --> 00:16:06.810
+The idea of a learning rate is to multiply it
+
+357
+00:16:06.810 --> 00:16:08.630
+times the gradient update
+
+358
+00:16:08.630 --> 00:16:12.470
+such that we try not to overshoot the minimum.
+
+359
+00:16:12.470 --> 00:16:13.970
+So let's say that we were here,
+
+360
+00:16:13.970 --> 00:16:16.330
+we took the gradient to get our update
+
+361
+00:16:16.330 --> 00:16:18.850
+for the parameter B of zero.
+
+362
+00:16:18.850 --> 00:16:21.070
+And all of a sudden our learning rate was so high
+
+363
+00:16:21.070 --> 00:16:22.550
+that we ended up over here.
+
+364
+00:16:22.550 --> 00:16:25.310
+We updated our perimeter too much.
+
+365
+00:16:25.310 --> 00:16:27.500
+And then let's say learning rate was high again
+
+366
+00:16:27.500 --> 00:16:28.333
+and the update was high.
+
+367
+00:16:28.333 --> 00:16:30.990
+So we would just possibly back and forth like this.
+
+368
+00:16:30.990 --> 00:16:34.350
+So the idea is to choose a reasonable learning rate,
+
+369
+00:16:34.350 --> 00:16:38.110
+such that you converge quickly and effectively,
+
+370
+00:16:38.110 --> 00:16:40.420
+but not so fast that you bypass
+
+371
+00:16:40.420 --> 00:16:43.530
+the minimum potentially indefinitely.
+
+372
+00:16:43.530 --> 00:16:45.930
+Later, we're gonna talk more about these learning rates.
+
+373
+00:16:45.930 --> 00:16:47.620
+So don't worry about it too much right now
+
+374
+00:16:47.620 --> 00:16:49.190
+but that is the general idea.
+
+375
+00:16:49.190 --> 00:16:52.250
+Now, we've trained our model because we've approached
+
+376
+00:16:52.250 --> 00:16:55.700
+a gradient step of zero for each of these parameters.
+
+377
+00:16:55.700 --> 00:16:56.860
+So let's plug that in.
+
+378
+00:16:56.860 --> 00:17:01.170
+We got three for beta one and negative four for beta zero.
+
+379
+00:17:01.170 --> 00:17:02.370
+What does this do for us?
+
+380
+00:17:02.370 --> 00:17:05.170
+Well, now we can plug in values.
+
+381
+00:17:05.170 --> 00:17:08.600
+So we can say the probability of one which is here,
+
+382
+00:17:08.600 --> 00:17:11.740
+we'll call one a power outage will occur.
+
+383
+00:17:11.740 --> 00:17:13.620
+So here we're looking for the probability
+
+384
+00:17:13.620 --> 00:17:15.750
+that a power outage will occur
+
+385
+00:17:15.750 --> 00:17:19.770
+given that our data is 30 degrees.
+
+386
+00:17:19.770 --> 00:17:21.970
+So now we can plug in 30 here
+
+387
+00:17:21.970 --> 00:17:26.370
+and just crunch the numbers and we get 99.9% chance
+
+388
+00:17:26.370 --> 00:17:29.760
+that a power outage will occur given
+
+389
+00:17:29.760 --> 00:17:32.750
+an input temperature of 30 degrees.
+
+390
+00:17:32.750 --> 00:17:35.780
+So remember earlier we mentioned a threshold.
+
+391
+00:17:35.780 --> 00:17:39.210
+This was a similar concept to what we did in naive Bayes,
+
+392
+00:17:39.210 --> 00:17:42.150
+such that if the probability was greater than 50%
+
+393
+00:17:42.150 --> 00:17:45.080
+we would declare that it was a positive case.
+
+394
+00:17:45.080 --> 00:17:48.340
+For instance for spam, we declared the input as spam
+
+395
+00:17:48.340 --> 00:17:50.550
+if the probability from the naive Bayes model
+
+396
+00:17:50.550 --> 00:17:52.570
+was greater than or equal to 50%.
+
+397
+00:17:52.570 --> 00:17:54.830
+Here, we can apply the same principle.
+
+398
+00:17:54.830 --> 00:17:57.850
+And if this value is greater than 50%,
+
+399
+00:17:57.850 --> 00:18:01.540
+we can declare that an outage will happen the following day.
+
+400
+00:18:01.540 --> 00:18:03.850
+You wanna follow up with cross validation here
+
+401
+00:18:03.850 --> 00:18:06.210
+to make sure that you're picking the optimal threshold.
+
+402
+00:18:06.210 --> 00:18:08.080
+So now that we have a trained model,
+
+403
+00:18:08.080 --> 00:18:11.670
+what we can do is visualize the decision boundary
+
+404
+00:18:11.670 --> 00:18:13.790
+of the logistic regression model.
+
+405
+00:18:13.790 --> 00:18:16.500
+So how do we figure out the value for this line?
+
+406
+00:18:16.500 --> 00:18:20.780
+Well, we simply take the ratio of beta zero over beta one
+
+407
+00:18:20.780 --> 00:18:22.370
+and take the negative of it.
+
+408
+00:18:22.370 --> 00:18:25.420
+If we are in two dimensions and we want this line here,
+
+409
+00:18:25.420 --> 00:18:28.150
+which is our decision boundary for X one
+
+410
+00:18:28.150 --> 00:18:29.040
+being the temperature
+
+411
+00:18:29.040 --> 00:18:32.180
+and X two being the megawatt power demand,
+
+412
+00:18:32.180 --> 00:18:34.280
+then we simply use this equation.
+
+413
+00:18:34.280 --> 00:18:37.270
+Earlier we mentioned the decision threshold of 50%
+
+414
+00:18:37.270 --> 00:18:39.110
+and how cross validation can be used
+
+415
+00:18:39.110 --> 00:18:40.600
+to pick the optimal one.
+
+416
+00:18:40.600 --> 00:18:43.940
+So here, if we change the decision threshold to 75,
+
+417
+00:18:43.940 --> 00:18:46.230
+our decision boundary actually moves up.
+
+418
+00:18:46.230 --> 00:18:49.590
+Likewise, if we bring our decision threshold down to 25,
+
+419
+00:18:49.590 --> 00:18:53.192
+then we've actually included now more negative examples
+
+420
+00:18:53.192 --> 00:18:56.073
+to the right of the decision boundary.
+
+421
+00:18:57.500 --> 00:19:00.240
+So now that we've gone over these multiple features,
+
+422
+00:19:00.240 --> 00:19:02.660
+let's see how we would actually represent this in our model.
+
+423
+00:19:02.660 --> 00:19:04.960
+So this model had a single feature
+
+424
+00:19:04.960 --> 00:19:08.530
+of temperature and a bias term.
+
+425
+00:19:08.530 --> 00:19:12.550
+Let's say that we wanted to incorporate another term.
+
+426
+00:19:12.550 --> 00:19:15.380
+This separate term could be another independent variable
+
+427
+00:19:15.380 --> 00:19:17.790
+or it could be a feature interaction term,
+
+428
+00:19:17.790 --> 00:19:20.290
+which we talked about in the linear regression video.
+
+429
+00:19:20.290 --> 00:19:23.930
+The only thing that would change here is that our gradient
+
+430
+00:19:23.930 --> 00:19:26.220
+would include these additional terms.
+
+431
+00:19:26.220 --> 00:19:29.520
+So we'd have one for beta zero, one for beta one,
+
+432
+00:19:29.520 --> 00:19:31.577
+and now a term for beta two
+
+433
+00:19:31.577 --> 00:19:33.810
+and which we need to find the loss for.
+
+434
+00:19:33.810 --> 00:19:36.390
+For linear regression we were able to see the effects
+
+435
+00:19:36.390 --> 00:19:38.840
+that the coefficients would have on the output.
+
+436
+00:19:38.840 --> 00:19:41.030
+This time it's a bit more complicated.
+
+437
+00:19:41.030 --> 00:19:43.800
+We'll have to take e to the coefficient
+
+438
+00:19:43.800 --> 00:19:46.570
+to get something called the odds ratio.
+
+439
+00:19:46.570 --> 00:19:49.200
+And then if we take one minus the odds ratio,
+
+440
+00:19:49.200 --> 00:19:52.390
+we get the percent change in the odds.
+
+441
+00:19:52.390 --> 00:19:56.020
+So let's say that the coefficient for temperature is 0.28.
+
+442
+00:19:56.020 --> 00:19:59.350
+So we would take 0.28 and plug it into this formula.
+
+443
+00:19:59.350 --> 00:20:00.610
+And what that would mean is that
+
+444
+00:20:00.610 --> 00:20:03.850
+for every degree increase in temperature,
+
+445
+00:20:03.850 --> 00:20:07.750
+we're 32% more likely we'll have higher odds
+
+446
+00:20:07.750 --> 00:20:09.700
+to experience a power outage.
+
+447
+00:20:09.700 --> 00:20:12.020
+Now it's important to realize that this doesn't mean
+
+448
+00:20:12.020 --> 00:20:16.100
+that there's 32% more and total probability.
+
+449
+00:20:16.100 --> 00:20:19.580
+It's just whatever probability that we were at currently,
+
+450
+00:20:19.580 --> 00:20:22.740
+adding that one degree temperature resulted in us
+
+451
+00:20:22.740 --> 00:20:27.330
+having a 32% higher likelihood of having an outage.
+
+452
+00:20:27.330 --> 00:20:30.580
+If our coefficient beta one was negative,
+
+453
+00:20:30.580 --> 00:20:32.230
+the same thing would hold except
+
+454
+00:20:32.230 --> 00:20:34.331
+there would be lower odds.
+
+455
+00:20:34.331 --> 00:20:36.610
+Note, that if the coefficient is zero,
+
+456
+00:20:36.610 --> 00:20:39.190
+then that means there is going to be no change
+
+457
+00:20:39.190 --> 00:20:42.880
+with respect to that variable in terms of the output.
+
+458
+00:20:42.880 --> 00:20:46.700
+So just as we talked about in the linear regression video,
+
+459
+00:20:46.700 --> 00:20:48.270
+if the confidence interval
+
+460
+00:20:48.270 --> 00:20:52.000
+for your coefficient contains zero,
+
+461
+00:20:52.000 --> 00:20:53.790
+that means that the coefficient itself
+
+462
+00:20:53.790 --> 00:20:55.570
+is not statistically significant
+
+463
+00:20:55.570 --> 00:20:57.130
+and it shouldn't be considered.
+
+464
+00:20:57.130 --> 00:20:58.530
+If you need to brush up on what
+
+465
+00:20:58.530 --> 00:21:00.450
+we went over in linear regression,
+
+466
+00:21:00.450 --> 00:21:02.680
+feel free to watch that video again.
+
+467
+00:21:02.680 --> 00:21:04.820
+What if we wanted to predict more
+
+468
+00:21:04.820 --> 00:21:07.490
+than just will a power outage occur or not?
+
+469
+00:21:07.490 --> 00:21:10.270
+What if we wanted to predict whether the outage
+
+470
+00:21:10.270 --> 00:21:13.570
+would happen in the morning, afternoon, or evening.
+
+471
+00:21:13.570 --> 00:21:15.997
+Generally power outages will happen
+
+472
+00:21:15.997 --> 00:21:18.270
+when people get home from work
+
+473
+00:21:18.270 --> 00:21:20.530
+and turn on all their devices and electronics.
+
+474
+00:21:20.530 --> 00:21:22.650
+Let's just say that we did want to predict
+
+475
+00:21:22.650 --> 00:21:26.680
+when during the day the power outage will occur.
+
+476
+00:21:26.680 --> 00:21:27.513
+So we'll have to use
+
+477
+00:21:27.513 --> 00:21:29.790
+something called multinomial regression,
+
+478
+00:21:29.790 --> 00:21:31.510
+which is what we need if we wanna predict
+
+479
+00:21:31.510 --> 00:21:33.560
+between more than two classes.
+
+480
+00:21:33.560 --> 00:21:34.610
+Instead of a sigmoid,
+
+481
+00:21:34.610 --> 00:21:36.560
+we're actually going to use something called
+
+482
+00:21:36.560 --> 00:21:38.728
+a softmax function.
+
+483
+00:21:38.728 --> 00:21:41.540
+A softmax function is a generalized sigmoid
+
+484
+00:21:41.540 --> 00:21:44.910
+such that it produces the probability amongst K classes.
+
+485
+00:21:44.910 --> 00:21:47.640
+So here it would produce a probability for morning,
+
+486
+00:21:47.640 --> 00:21:51.090
+a probability for afternoon, and a probability for evening.
+
+487
+00:21:51.090 --> 00:21:54.120
+The softmax function ensures that all of these probabilities
+
+488
+00:21:54.120 --> 00:21:56.910
+across the classes sum to 100%.
+
+489
+00:21:56.910 --> 00:21:59.600
+Just like our sigmoid function did for two classes.
+
+490
+00:21:59.600 --> 00:22:02.100
+The predicted class would be the maximum value
+
+491
+00:22:02.100 --> 00:22:05.350
+that the softmax function produces for a particular class.
+
+492
+00:22:05.350 --> 00:22:08.020
+So now our updated model will look like this
+
+493
+00:22:08.020 --> 00:22:10.440
+to incorporate the softmax function.
+
+494
+00:22:10.440 --> 00:22:12.750
+So here, if we wanted to know the probability
+
+495
+00:22:12.750 --> 00:22:17.070
+of a particular class here two, given some features,
+
+496
+00:22:17.070 --> 00:22:19.440
+we would now have to have individual parameters
+
+497
+00:22:19.440 --> 00:22:22.340
+or coefficients for each class.
+
+498
+00:22:22.340 --> 00:22:25.270
+So if we wanted to predict the class equaling two,
+
+499
+00:22:25.270 --> 00:22:28.580
+we would use the weights assigned for that particular class.
+
+500
+00:22:28.580 --> 00:22:30.250
+And then in the denominator,
+
+501
+00:22:30.250 --> 00:22:33.220
+we would just iterate through every single class
+
+502
+00:22:33.220 --> 00:22:35.635
+that we have using their parameters.
+
+503
+00:22:35.635 --> 00:22:38.600
+So our loss function will also have to be updated.
+
+504
+00:22:38.600 --> 00:22:40.140
+So here we can see that we're iterating
+
+505
+00:22:40.140 --> 00:22:41.343
+through each class now.
+
+506
+00:22:43.020 --> 00:22:45.420
+Since Yi will only take on a value
+
+507
+00:22:45.420 --> 00:22:48.090
+of a particular class at any one time,
+
+508
+00:22:48.090 --> 00:22:49.833
+that means that this value in here
+
+509
+00:22:49.833 --> 00:22:52.320
+will only be evaluated for a single class.
+
+510
+00:22:52.320 --> 00:22:55.540
+So this summation, even though we're summing through.
+
+511
+00:22:55.540 --> 00:22:58.843
+In this case, two out of three terms will equate to zero.
+
+512
+00:23:00.320 --> 00:23:01.910
+Finally, with this loss function
+
+513
+00:23:01.910 --> 00:23:04.540
+we'll also obtain a new gradient.
+
+514
+00:23:04.540 --> 00:23:06.380
+So this is the updated gradient.
+
+515
+00:23:06.380 --> 00:23:08.020
+If you notice this is extremely similar
+
+516
+00:23:08.020 --> 00:23:09.390
+to the previous gradient,
+
+517
+00:23:09.390 --> 00:23:12.020
+we're now just having the incorporation here
+
+518
+00:23:12.020 --> 00:23:14.590
+of what particular class it is.
+
+519
+00:23:14.590 --> 00:23:15.840
+When we discuss training,
+
+520
+00:23:15.840 --> 00:23:18.750
+I mentioned that we calculate the loss function
+
+521
+00:23:18.750 --> 00:23:21.380
+with respect to every single training example.
+
+522
+00:23:21.380 --> 00:23:23.490
+And then we just average those results together.
+
+523
+00:23:23.490 --> 00:23:25.887
+We then take the results of that loss
+
+524
+00:23:25.887 --> 00:23:28.290
+and we calculate the gradients
+
+525
+00:23:28.290 --> 00:23:30.020
+and then we update our parameters
+
+526
+00:23:30.020 --> 00:23:31.730
+based on that gradient obtained
+
+527
+00:23:31.730 --> 00:23:34.880
+from every single example that we have.
+
+528
+00:23:34.880 --> 00:23:36.780
+This is called batch gradient descent,
+
+529
+00:23:36.780 --> 00:23:38.560
+because we're taking the loss
+
+530
+00:23:38.560 --> 00:23:41.020
+with respect to all of the training examples,
+
+531
+00:23:41.020 --> 00:23:42.970
+finding the gradient,
+
+532
+00:23:42.970 --> 00:23:46.510
+and then updating the parameters based
+
+533
+00:23:46.510 --> 00:23:50.070
+on the gradient obtained from every single training example.
+
+534
+00:23:50.070 --> 00:23:51.440
+It's called gradient descent
+
+535
+00:23:51.440 --> 00:23:53.090
+because we're taking the gradient
+
+536
+00:23:53.090 --> 00:23:56.740
+and we're descending down that curve to the minimum.
+
+537
+00:23:56.740 --> 00:23:58.270
+There's another way that we can do this,
+
+538
+00:23:58.270 --> 00:24:00.350
+it's called stochastic gradient descent.
+
+539
+00:24:00.350 --> 00:24:03.870
+Where you effectively pick out a random example
+
+540
+00:24:03.870 --> 00:24:05.290
+from your training examples,
+
+541
+00:24:05.290 --> 00:24:08.950
+you find it's gradient with respect to the loss function,
+
+542
+00:24:08.950 --> 00:24:11.070
+then you update the parameters according to
+
+543
+00:24:11.070 --> 00:24:13.540
+that single example's gradient.
+
+544
+00:24:13.540 --> 00:24:15.750
+This type of gradient descent can be used
+
+545
+00:24:15.750 --> 00:24:17.490
+as an online training method,
+
+546
+00:24:17.490 --> 00:24:20.470
+but it's often too slow to converge in practice.
+
+547
+00:24:20.470 --> 00:24:22.470
+There's a happy medium between the two
+
+548
+00:24:22.470 --> 00:24:25.110
+where we take a mini-batch of size m
+
+549
+00:24:25.110 --> 00:24:28.560
+where m is typically a lot smaller than n,
+
+550
+00:24:28.560 --> 00:24:31.470
+and we find the gradient with respect to this mini-batch.
+
+551
+00:24:31.470 --> 00:24:34.180
+And then we have that same exact update process
+
+552
+00:24:34.180 --> 00:24:35.820
+with the gradient.
+
+553
+00:24:35.820 --> 00:24:38.330
+So what this does, it allows for less noisy updates
+
+554
+00:24:38.330 --> 00:24:41.280
+to the parameters as opposed to stochastic gradient descent,
+
+555
+00:24:41.280 --> 00:24:43.210
+since there's typically averaging introduced
+
+556
+00:24:43.210 --> 00:24:45.120
+by the mini-batch.
+
+557
+00:24:45.120 --> 00:24:46.750
+But as well, you don't have to pull all
+
+558
+00:24:46.750 --> 00:24:49.900
+of your data into memory to get a gradient update
+
+559
+00:24:49.900 --> 00:24:52.640
+as you would with batch gradient descent.
+
+560
+00:24:52.640 --> 00:24:55.100
+As well these mini-batches can be parallelized
+
+561
+00:24:55.100 --> 00:24:58.230
+and their updates to the parameters be aggregated.
+
+562
+00:24:58.230 --> 00:25:01.140
+Now, imagine we're doing mini-batch gradient descent
+
+563
+00:25:01.140 --> 00:25:03.530
+with our blackout examples.
+
+564
+00:25:03.530 --> 00:25:06.760
+So we'll have a majority of the time
+
+565
+00:25:06.760 --> 00:25:09.750
+we're going to not have a blackout or a power outage,
+
+566
+00:25:09.750 --> 00:25:12.100
+and sprinkled throughout our examples
+
+567
+00:25:12.100 --> 00:25:15.459
+we're sometimes going to find an example that is
+
+568
+00:25:15.459 --> 00:25:19.440
+of the label blackout or an outage did occur.
+
+569
+00:25:19.440 --> 00:25:21.400
+We select a mini-batches at random
+
+570
+00:25:21.400 --> 00:25:23.310
+without replacing the examples,
+
+571
+00:25:23.310 --> 00:25:27.290
+until every single element in the data has been trained on,
+
+572
+00:25:27.290 --> 00:25:29.530
+and we call that one epoch.
+
+573
+00:25:29.530 --> 00:25:31.330
+Since these blackout days compared
+
+574
+00:25:31.330 --> 00:25:33.740
+to the non-blackout days are so rare.
+
+575
+00:25:33.740 --> 00:25:37.410
+It could be that we get an entire mini-batch full of data
+
+576
+00:25:37.410 --> 00:25:40.000
+that doesn't contain a single negative example.
+
+577
+00:25:40.000 --> 00:25:43.160
+This isn't very good because that means our model
+
+578
+00:25:43.160 --> 00:25:44.890
+will have a tough time learning
+
+579
+00:25:44.890 --> 00:25:47.050
+from only positive examples.
+
+580
+00:25:47.050 --> 00:25:48.950
+This implies that it could take a long time
+
+581
+00:25:48.950 --> 00:25:50.833
+for a loss function to converge.
+
+582
+00:25:51.720 --> 00:25:54.630
+A common approach is to down sample the majority class,
+
+583
+00:25:54.630 --> 00:25:58.500
+so here we'll only consider maybe 10%
+
+584
+00:25:58.500 --> 00:26:03.020
+of the no blackout days or no power outage days.
+
+585
+00:26:03.020 --> 00:26:05.550
+And we'll hold on to all of the blackout days
+
+586
+00:26:05.550 --> 00:26:07.350
+or power outage days.
+
+587
+00:26:07.350 --> 00:26:09.170
+This means that we're far more likely
+
+588
+00:26:09.170 --> 00:26:11.900
+to encounter a negative example
+
+589
+00:26:11.900 --> 00:26:15.830
+or several negative examples per mini-batch that we select.
+
+590
+00:26:15.830 --> 00:26:18.870
+However, we've now changed the distribution of our examples
+
+591
+00:26:18.870 --> 00:26:22.610
+since non-blackout days seem far less likely
+
+592
+00:26:22.610 --> 00:26:24.880
+than they actually are in reality.
+
+593
+00:26:24.880 --> 00:26:26.850
+We now have to proportionally compensate
+
+594
+00:26:26.850 --> 00:26:31.410
+for this discrepancy by upweighting the non-blackout days.
+
+595
+00:26:31.410 --> 00:26:33.490
+By down sampling and then upweighting,
+
+596
+00:26:33.490 --> 00:26:36.640
+we can effectively train with roughly a 10th of the data
+
+597
+00:26:36.640 --> 00:26:38.860
+which in turn can allow our loss function
+
+598
+00:26:38.860 --> 00:26:40.780
+to converge a lot faster.
+
+599
+00:26:40.780 --> 00:26:43.100
+As well, we don't have to use as much compute
+
+600
+00:26:43.100 --> 00:26:45.180
+or memory resources.
+
+601
+00:26:45.180 --> 00:26:47.710
+So how do we actually perform this upweighting?
+
+602
+00:26:47.710 --> 00:26:49.350
+So here's our loss function,
+
+603
+00:26:49.350 --> 00:26:52.960
+and how we apply upweighting is we apply a weight
+
+604
+00:26:52.960 --> 00:26:54.580
+to every single example.
+
+605
+00:26:54.580 --> 00:26:57.670
+So here Wi would equal to 10
+
+606
+00:26:57.670 --> 00:27:01.490
+for every single non-black out day example.
+
+607
+00:27:01.490 --> 00:27:05.200
+And Wi would be equal to one for every example
+
+608
+00:27:05.200 --> 00:27:06.820
+in which a blackout did occur.
+
+609
+00:27:06.820 --> 00:27:10.930
+That is how we can upweight the majority class
+
+610
+00:27:10.930 --> 00:27:12.463
+after down sampling it.
+
+611
+00:27:13.590 --> 00:27:17.180
+By the way it's usually best to perform down sampling
+
+612
+00:27:17.180 --> 00:27:19.440
+and upweighting and then compare your results
+
+613
+00:27:19.440 --> 00:27:22.030
+to not doing down sampling and upweighting
+
+614
+00:27:22.030 --> 00:27:25.080
+to see how your performance is overall affected.
+
+615
+00:27:25.080 --> 00:27:28.670
+So now we can effectively minimize our loss function,
+
+616
+00:27:28.670 --> 00:27:31.380
+which means we can fit our model parameters
+
+617
+00:27:31.380 --> 00:27:33.360
+here these coefficients,
+
+618
+00:27:33.360 --> 00:27:36.330
+which minimizes the difference between the predictions
+
+619
+00:27:36.330 --> 00:27:40.060
+and the actual values for our labels.
+
+620
+00:27:40.060 --> 00:27:42.270
+Now, we can encounter the same problem
+
+621
+00:27:42.270 --> 00:27:44.670
+that we had when we talked about trees
+
+622
+00:27:44.670 --> 00:27:46.700
+which is overfitting.
+
+623
+00:27:46.700 --> 00:27:48.900
+Overfitting will happen when a weight parameter
+
+624
+00:27:48.900 --> 00:27:51.110
+for a feature becomes too large,
+
+625
+00:27:51.110 --> 00:27:52.870
+which means the model is placing a lot
+
+626
+00:27:52.870 --> 00:27:55.260
+of importance on a single feature.
+
+627
+00:27:55.260 --> 00:27:56.690
+This can indicate that the model
+
+628
+00:27:56.690 --> 00:27:59.030
+is too closely matching the training examples
+
+629
+00:27:59.030 --> 00:28:00.660
+and is overfitting.
+
+630
+00:28:00.660 --> 00:28:03.550
+So we need to be able to control the size
+
+631
+00:28:03.550 --> 00:28:06.050
+of these parameters or coefficients,
+
+632
+00:28:06.050 --> 00:28:09.840
+and one tool we can use to do that is called regularization.
+
+633
+00:28:09.840 --> 00:28:14.800
+Regularization involves adding a term to the loss function
+
+634
+00:28:14.800 --> 00:28:18.480
+which just sums up the absolute value of our weights
+
+635
+00:28:18.480 --> 00:28:20.080
+for every single weight.
+
+636
+00:28:20.080 --> 00:28:23.020
+So if we have model parameters like these
+
+637
+00:28:23.020 --> 00:28:25.550
+which fit the training examples quite well,
+
+638
+00:28:25.550 --> 00:28:27.380
+then the loss function will end up choosing
+
+639
+00:28:27.380 --> 00:28:30.510
+a model configuration that has smaller weights
+
+640
+00:28:30.510 --> 00:28:33.490
+even though it may sacrifice the original loss function
+
+641
+00:28:33.490 --> 00:28:34.870
+that we talked about.
+
+642
+00:28:34.870 --> 00:28:37.330
+So this right here is called L one,
+
+643
+00:28:37.330 --> 00:28:39.720
+or lasso or Laplace regression,
+
+644
+00:28:39.720 --> 00:28:41.600
+where we're just taking the absolute value
+
+645
+00:28:41.600 --> 00:28:43.560
+of each weight and summing them through.
+
+646
+00:28:43.560 --> 00:28:48.010
+Now there's also L two or ridge or Gaussian regularization,
+
+647
+00:28:48.010 --> 00:28:49.810
+which squares the weight terms
+
+648
+00:28:49.810 --> 00:28:52.260
+instead of just taking the absolute value.
+
+649
+00:28:52.260 --> 00:28:55.440
+Now, L one regularization typically results
+
+650
+00:28:55.440 --> 00:28:58.280
+in more zero valued coefficients,
+
+651
+00:28:58.280 --> 00:29:00.410
+which means fewer features being used.
+
+652
+00:29:00.410 --> 00:29:04.580
+While L two regularization usually result in small weights
+
+653
+00:29:04.580 --> 00:29:05.980
+for many of the features that
+
+654
+00:29:05.980 --> 00:29:09.770
+would have been zeroed out by L one regularization.
+
+655
+00:29:09.770 --> 00:29:12.500
+The L one L two regularization terms
+
+656
+00:29:12.500 --> 00:29:15.400
+usually have a coefficient out front,
+
+657
+00:29:15.400 --> 00:29:19.560
+which allows us to control the degree of regularization.
+
+658
+00:29:19.560 --> 00:29:22.990
+Too high of this value can result in under fitting,
+
+659
+00:29:22.990 --> 00:29:26.210
+and too low of the value can result in overfitting.
+
+660
+00:29:26.210 --> 00:29:29.033
+This parameter is best tuned through cross validation.
+
+661
+00:29:30.170 --> 00:29:33.020
+A final technique that we can use to reduce overfitting
+
+662
+00:29:33.020 --> 00:29:34.410
+is called early stopping.
+
+663
+00:29:34.410 --> 00:29:37.280
+Simply put, if we're here and we're navigating
+
+664
+00:29:37.280 --> 00:29:39.210
+our way down this curve,
+
+665
+00:29:39.210 --> 00:29:42.100
+we can stop here instead of at the absolute minimum
+
+666
+00:29:42.100 --> 00:29:45.060
+to avoid overfitting the training examples.
+
+667
+00:29:45.060 --> 00:29:47.810
+Since we're now regularizing based on the value
+
+668
+00:29:47.810 --> 00:29:48.970
+of our parameters.
+
+669
+00:29:48.970 --> 00:29:50.940
+One thing to note here is that features
+
+670
+00:29:50.940 --> 00:29:54.330
+on really small scales usually have larger weights
+
+671
+00:29:54.330 --> 00:29:57.680
+to make the overall term relevant to the other features
+
+672
+00:29:57.680 --> 00:29:59.626
+which are on larger scales.
+
+673
+00:29:59.626 --> 00:30:02.380
+For instance, if we had hours of work per week
+
+674
+00:30:02.380 --> 00:30:05.970
+on feature one which is between 20 and 120,
+
+675
+00:30:05.970 --> 00:30:09.380
+and then we had a weight attached to feature number two,
+
+676
+00:30:09.380 --> 00:30:11.750
+which was steps taken per day which ranged
+
+677
+00:30:11.750 --> 00:30:14.380
+between 1000 and 10,000,
+
+678
+00:30:14.380 --> 00:30:16.860
+this parameter here would force to be larger
+
+679
+00:30:16.860 --> 00:30:18.740
+so that it could have some influence
+
+680
+00:30:18.740 --> 00:30:20.930
+on the overall output of your model.
+
+681
+00:30:20.930 --> 00:30:24.327
+This means that this term would be far larger than this,
+
+682
+00:30:24.327 --> 00:30:28.533
+and this term would be penalized more in terms of loss.
+
+683
+00:30:28.533 --> 00:30:30.210
+In order to mitigate this,
+
+684
+00:30:30.210 --> 00:30:34.060
+we can scale our input features by using this formula.
+
+685
+00:30:34.060 --> 00:30:35.950
+This is called min-max scaling,
+
+686
+00:30:35.950 --> 00:30:39.300
+and it places all of your features between zero and one.
+
+687
+00:30:39.300 --> 00:30:41.620
+As well when you scale your input features,
+
+688
+00:30:41.620 --> 00:30:44.010
+there's a high chance that the loss function
+
+689
+00:30:44.010 --> 00:30:45.960
+will converge faster.
+
+690
+00:30:45.960 --> 00:30:47.410
+One of the core differences
+
+691
+00:30:47.410 --> 00:30:49.720
+between analyzing logistic regression models
+
+692
+00:30:49.720 --> 00:30:51.580
+compared to linear regression models
+
+693
+00:30:51.580 --> 00:30:54.290
+is that we can't use the same R squared value
+
+694
+00:30:54.290 --> 00:30:56.370
+that we did in linear regression.
+
+695
+00:30:56.370 --> 00:30:57.550
+A metric typically used
+
+696
+00:30:57.550 --> 00:30:59.950
+is called McFadden's pseudo R squared,
+
+697
+00:30:59.950 --> 00:31:02.800
+which lies between zero and one just like R squared,
+
+698
+00:31:02.800 --> 00:31:05.610
+but it's usually smaller than R squared itself.
+
+699
+00:31:05.610 --> 00:31:07.520
+In McFadden's own words,
+
+700
+00:31:07.520 --> 00:31:09.990
+a pseudo R squared between 0.2 and 0.4
+
+701
+00:31:11.790 --> 00:31:14.890
+usually indicates an excellent fitting model.
+
+702
+00:31:14.890 --> 00:31:17.090
+As well, we can use the same tactics we used
+
+703
+00:31:17.090 --> 00:31:18.900
+on the features in the linear regression
+
+704
+00:31:18.900 --> 00:31:21.970
+such as feature interactions and using functions
+
+705
+00:31:21.970 --> 00:31:24.970
+with the features to fit parabolas or different polynomials.
+
+706
+00:31:26.110 --> 00:31:27.790
+Keep in mind that adding these terms
+
+707
+00:31:27.790 --> 00:31:30.843
+does increase the chance of over-fitting the data however.
+
+708
+00:31:31.920 --> 00:31:33.560
+As a side note, in case you get asked,
+
+709
+00:31:33.560 --> 00:31:35.340
+recall from the naive Bayes model
+
+710
+00:31:35.340 --> 00:31:37.820
+how we wanted to solve for this.
+
+711
+00:31:37.820 --> 00:31:40.070
+But we didn't directly calculate this,
+
+712
+00:31:40.070 --> 00:31:42.330
+instead we kinda flipped the question around
+
+713
+00:31:42.330 --> 00:31:44.170
+and then multiplied it by the priors.
+
+714
+00:31:44.170 --> 00:31:46.870
+Here in our logistic regression example,
+
+715
+00:31:46.870 --> 00:31:49.220
+we're directly solving for this probability.
+
+716
+00:31:49.220 --> 00:31:51.270
+This is called a generative model,
+
+717
+00:31:51.270 --> 00:31:53.630
+and this is called a discriminative model.
+
+718
+00:31:53.630 --> 00:31:57.000
+If you recall, during the naive Bayes optimization video,
+
+719
+00:31:57.000 --> 00:31:59.550
+we talked about how the naive Bayes
+
+720
+00:31:59.550 --> 00:32:03.210
+is actually a poor estimator but a great classifier.
+
+721
+00:32:03.210 --> 00:32:06.440
+Since this logistic regression model directly solves this,
+
+722
+00:32:06.440 --> 00:32:09.190
+it's generally a better estimator.
+
+723
+00:32:09.190 --> 00:32:12.220
+So these probabilities can generally be trusted more
+
+724
+00:32:12.220 --> 00:32:15.670
+than the probabilities generated by a naive Bayes model.
+
+725
+00:32:15.670 --> 00:32:17.340
+All right, well that wraps it up for this video.
+
+726
+00:32:17.340 --> 00:32:18.540
+Thanks for joining.
+
+727
+00:32:18.540 --> 00:32:19.930
+Join us on the next video,
+
+728
+00:32:19.930 --> 00:32:22.573
+where we continue our machine learning journey.
+

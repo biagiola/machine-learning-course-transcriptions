@@ -1,0 +1,566 @@
+WEBVTT
+
+1
+00:00:00.400 --> 00:00:01.570
+<v ->Hello everybody.</v>
+
+2
+00:00:01.570 --> 00:00:04.900
+This is the Machine Learning Crash Course - Introduction.
+
+3
+00:00:04.900 --> 00:00:06.950
+In the crash course, we'll be going over
+
+4
+00:00:06.950 --> 00:00:08.950
+supervised learning, deep learning,
+
+5
+00:00:08.950 --> 00:00:11.700
+unsupervised learning, recommendations,
+
+6
+00:00:11.700 --> 00:00:13.200
+and finally ranking.
+
+7
+00:00:13.200 --> 00:00:15.010
+Now, generally for supervised learning,
+
+8
+00:00:15.010 --> 00:00:16.700
+we're going to require two things.
+
+9
+00:00:16.700 --> 00:00:19.970
+One the data and two the labels.
+
+10
+00:00:19.970 --> 00:00:22.380
+An example of the data that we could look at
+
+11
+00:00:22.380 --> 00:00:26.210 line:15% 
+could be the bitcoin price here across time.
+
+12
+00:00:26.210 --> 00:00:30.640 line:15% 
+So, for instance, the first day of January of 2021.
+
+13
+00:00:30.640 --> 00:00:34.230 line:15% 
+The price of bitcoin was 29,300.
+
+14
+00:00:34.230 --> 00:00:37.070 line:15% 
+The following month, it was 33,500.
+
+15
+00:00:37.070 --> 00:00:41.740 line:15% 
+And then in April we saw it hit $58,700.
+
+16
+00:00:41.740 --> 00:00:45.280 line:15% 
+Now, a label that could be associated with this data here
+
+17
+00:00:45.280 --> 00:00:48.370 line:15% 
+could be an indicator either up or down,
+
+18
+00:00:48.370 --> 00:00:52.860
+based on how the price moved after the last date
+
+19
+00:00:52.860 --> 00:00:54.970
+that we have in our data.
+
+20
+00:00:54.970 --> 00:00:59.010 line:15% 
+So, here in April, we have that the price was 58,000.
+
+21
+00:00:59.010 --> 00:01:02.511
+And the following month, the first day of May of 21,
+
+22
+00:01:02.511 --> 00:01:07.330
+the price was lower than the price reported in April.
+
+23
+00:01:07.330 --> 00:01:08.930
+So, what would we do with this?
+
+24
+00:01:08.930 --> 00:01:12.400
+Well, this generally alone may not be very helpful
+
+25
+00:01:12.400 --> 00:01:14.862 line:15% 
+but what we can do is get many of these
+
+26
+00:01:14.862 --> 00:01:18.090 line:15% 
+and associate many labels with them.
+
+27
+00:01:18.090 --> 00:01:20.900 line:15% 
+And for instance here, we looked at our original data
+
+28
+00:01:20.900 --> 00:01:24.670 line:15% 
+where we just had January through April of 2021.
+
+29
+00:01:24.670 --> 00:01:27.920 line:15% 
+And of course the label associated with that data.
+
+30
+00:01:27.920 --> 00:01:30.230 line:15% 
+And here we have another example that starts off
+
+31
+00:01:30.230 --> 00:01:32.730 line:15% 
+in September and ends in December.
+
+32
+00:01:32.730 --> 00:01:35.380 line:15% 
+Here, the label which is the following month
+
+33
+00:01:35.380 --> 00:01:37.610 line:15% 
+after the last reported price state,
+
+34
+00:01:37.610 --> 00:01:39.840 line:15% 
+the price of bitcoin actually went up.
+
+35
+00:01:39.840 --> 00:01:43.750 line:15% 
+The same thing happened here for September in 2020
+
+36
+00:01:43.750 --> 00:01:47.790 line:15% 
+which is the label preceding the last date recorded
+
+37
+00:01:47.790 --> 00:01:51.330 line:15% 
+from the range of May to August of 2020.
+
+38
+00:01:51.330 --> 00:01:53.080 line:15% 
+So, now that we have more instances
+
+39
+00:01:54.101 --> 00:01:55.820 line:15% 
+of our data and label pairs,
+
+40
+00:01:55.820 --> 00:01:57.580 line:15% 
+what can we actually do with this?
+
+41
+00:01:57.580 --> 00:02:01.230 line:15% 
+What we can do is build a supervised learning model.
+
+42
+00:02:01.230 --> 00:02:03.370
+So, in this case, we would take our first data
+
+43
+00:02:03.370 --> 00:02:06.620 line:15% 
+and label pair, and we would build a part of the model.
+
+44
+00:02:06.620 --> 00:02:10.072 line:15% 
+Then the next pair of data and labels would be brought in
+
+45
+00:02:10.072 --> 00:02:13.340 line:15% 
+to build on top of that model a little bit more.
+
+46
+00:02:13.340 --> 00:02:15.300 line:15% 
+The same pattern would follow with all
+
+47
+00:02:15.300 --> 00:02:17.860 line:15% 
+of the other data that we have available.
+
+48
+00:02:17.860 --> 00:02:20.380 line:15% 
+Eventually once this model is built
+
+49
+00:02:20.380 --> 00:02:22.270 line:15% 
+and we've iterated through our data,
+
+50
+00:02:22.270 --> 00:02:24.190 line:15% 
+then we can put in some data
+
+51
+00:02:24.190 --> 00:02:26.840 line:15% 
+that we haven't trained this model on.
+
+52
+00:02:26.840 --> 00:02:28.480 line:15% 
+And we can get a prediction
+
+53
+00:02:28.480 --> 00:02:32.210 line:15% 
+for what the model thinks will happen, given this data.
+
+54
+00:02:32.210 --> 00:02:34.800 line:15% 
+So here, the prediction is that the price of bitcoin
+
+55
+00:02:34.800 --> 00:02:38.460 line:15% 
+on the first day of June will be lower than the price
+
+56
+00:02:38.460 --> 00:02:40.883 line:15% 
+of bitcoin on the first day of May.
+
+57
+00:02:40.883 --> 00:02:44.320 line:15% 
+So, what if we don't have neatly structured data
+
+58
+00:02:44.320 --> 00:02:46.440 line:15% 
+like we do in this example?
+
+59
+00:02:46.440 --> 00:02:49.190
+Well, then we can use something called deep learning.
+
+60
+00:02:49.190 --> 00:02:52.160
+Now, the supervised learning version of deep learning
+
+61
+00:02:52.160 --> 00:02:54.530
+would still have data and labels.
+
+62
+00:02:54.530 --> 00:02:57.310 line:15% 
+But in this case, the data could be images,
+
+63
+00:02:57.310 --> 00:02:59.750 line:15% 
+which wouldn't be that neatly organized data
+
+64
+00:02:59.750 --> 00:03:01.050 line:15% 
+that we had before.
+
+65
+00:03:01.050 --> 00:03:03.110 line:15% 
+However, the labels would be very similar.
+
+66
+00:03:03.110 --> 00:03:06.030
+So, in this case, this image has no truck.
+
+67
+00:03:06.030 --> 00:03:07.320
+This image has a truck.
+
+68
+00:03:07.320 --> 00:03:08.470
+This image has a truck.
+
+69
+00:03:08.470 --> 00:03:10.800 line:15% 
+And this image has no truck.
+
+70
+00:03:10.800 --> 00:03:13.690
+So, our goal now would be to take an image.
+
+71
+00:03:13.690 --> 00:03:16.570
+Feed this image into a deep learning model.
+
+72
+00:03:16.570 --> 00:03:19.060
+And then the model would make a prediction
+
+73
+00:03:19.060 --> 00:03:22.090
+based on what it thought the image contained,
+
+74
+00:03:22.090 --> 00:03:23.650
+either a truck or not.
+
+75
+00:03:23.650 --> 00:03:26.340
+Well in this case, the model got it wrong.
+
+76
+00:03:26.340 --> 00:03:28.510
+This is okay because we're still training
+
+77
+00:03:28.510 --> 00:03:29.860
+this deep learning model.
+
+78
+00:03:29.860 --> 00:03:32.300
+But we have to give feedback to the model
+
+79
+00:03:32.300 --> 00:03:34.290
+and let it know that it guessed wrong.
+
+80
+00:03:34.290 --> 00:03:36.480
+In that case, the model would update itself
+
+81
+00:03:36.480 --> 00:03:38.330
+in order to better guess next time.
+
+82
+00:03:38.330 --> 00:03:40.380
+So, we would give it another image.
+
+83
+00:03:40.380 --> 00:03:42.040
+This time, this image contains a truck
+
+84
+00:03:42.040 --> 00:03:44.250
+and the model did predict truck.
+
+85
+00:03:44.250 --> 00:03:45.350
+We would then let the model know
+
+86
+00:03:45.350 --> 00:03:47.150
+that it was correct this time.
+
+87
+00:03:47.150 --> 00:03:49.890
+We would then repeat this process for other images,
+
+88
+00:03:49.890 --> 00:03:52.710
+letting it know whether it was wrong or right
+
+89
+00:03:52.710 --> 00:03:53.860
+and its prediction.
+
+90
+00:03:53.860 --> 00:03:55.770
+After we've done this several times,
+
+91
+00:03:55.770 --> 00:03:59.230
+we could present a new image to this deep learning model
+
+92
+00:03:59.230 --> 00:04:00.990
+that it hasn't seen in training.
+
+93
+00:04:00.990 --> 00:04:03.620
+And it will make a prediction for that image.
+
+94
+00:04:03.620 --> 00:04:06.080
+In this case, the model did correctly guess
+
+95
+00:04:06.080 --> 00:04:08.440
+that the image did not contain a truck.
+
+96
+00:04:08.440 --> 00:04:11.370
+So now, what if we don't have any labels?
+
+97
+00:04:11.370 --> 00:04:14.630
+Well, in that case, we can use unsupervised learning.
+
+98
+00:04:14.630 --> 00:04:16.970
+So, let's say that we were given a bunch of tweets
+
+99
+00:04:16.970 --> 00:04:20.210
+and we were tasked with grouping the tweets together
+
+100
+00:04:20.210 --> 00:04:21.900
+based on their content.
+
+101
+00:04:21.900 --> 00:04:24.000
+So, in this case, we don't have any labels
+
+102
+00:04:24.000 --> 00:04:26.120
+but we do have the data.
+
+103
+00:04:26.120 --> 00:04:29.430
+What we can do is use an unsupervised learning algorithm
+
+104
+00:04:29.430 --> 00:04:32.100
+to group like tweets together.
+
+105
+00:04:32.100 --> 00:04:35.704
+Then we could go into one of the clusters of tweets,
+
+106
+00:04:35.704 --> 00:04:39.230
+look and read that tweet that's in a cluster.
+
+107
+00:04:39.230 --> 00:04:41.376
+And we would be able to see the topics.
+
+108
+00:04:41.376 --> 00:04:45.160 line:15% 
+This could be sports, politics, and other categories.
+
+109
+00:04:45.160 --> 00:04:47.380
+This would really save us a lot of time as opposed
+
+110
+00:04:47.380 --> 00:04:50.220
+to going through each and every one of the tweets.
+
+111
+00:04:50.220 --> 00:04:51.053
+All right.
+
+112
+00:04:51.053 --> 00:04:52.880
+Next up, we're going to talk about recommendations.
+
+113
+00:04:52.880 --> 00:04:54.670
+So, let's say that we're browsing YouTube
+
+114
+00:04:54.670 --> 00:04:58.040
+and there just happens to be potentially hundreds of videos
+
+115
+00:04:58.040 --> 00:05:00.330 line:15% 
+that the service would like to recommend
+
+116
+00:05:00.330 --> 00:05:02.440 line:15% 
+to you to watch next.
+
+117
+00:05:02.440 --> 00:05:05.560 line:15% 
+Well, YouTube is job now is to take all of these
+
+118
+00:05:05.560 --> 00:05:08.010 line:15% 
+potentially hundreds of videos that are related
+
+119
+00:05:08.010 --> 00:05:09.660
+or what they think you'll like compared
+
+120
+00:05:09.660 --> 00:05:13.076
+to what you're watching now and select just a single video
+
+121
+00:05:13.076 --> 00:05:17.920
+with some recommendations model to automatically play next.
+
+122
+00:05:17.920 --> 00:05:21.350
+This is the core idea behind recommendations.
+
+123
+00:05:21.350 --> 00:05:23.650
+This leads into our final topic of ranking.
+
+124
+00:05:23.650 --> 00:05:26.590
+So, let's say that we want to open up the TikTok app.
+
+125
+00:05:26.590 --> 00:05:28.550
+Well, there's literally millions,
+
+126
+00:05:28.550 --> 00:05:31.310
+if not billions of TikToks out there.
+
+127
+00:05:31.310 --> 00:05:33.660
+So, how does TikTok know which TikTok
+
+128
+00:05:33.660 --> 00:05:36.480
+to put in your feed when you open the app?
+
+129
+00:05:36.480 --> 00:05:38.208
+Well, first they should narrow down
+
+130
+00:05:38.208 --> 00:05:40.740
+to let's say a hundred or so,
+
+131
+00:05:40.740 --> 00:05:43.667
+and then they can use a ranking model
+
+132
+00:05:43.667 --> 00:05:47.740 line:15% 
+to select the first, second and third TikTok
+
+133
+00:05:47.740 --> 00:05:51.530 line:15% 
+that you will be viewing as you scroll through your feed.
+
+134
+00:05:51.530 --> 00:05:53.840
+The goal here would be to keep you scrolling
+
+135
+00:05:53.840 --> 00:05:55.210
+for as long as possible.
+
+136
+00:05:55.210 --> 00:05:57.890
+So, the idea is to appropriately rank these TikToks
+
+137
+00:05:57.890 --> 00:05:59.930
+to keep you on the platform.
+
+138
+00:05:59.930 --> 00:06:00.763
+All right.
+
+139
+00:06:00.763 --> 00:06:01.740
+So, those are going to be the topics
+
+140
+00:06:01.740 --> 00:06:02.810
+that we'll be covering.
+
+141
+00:06:02.810 --> 00:06:03.803
+Let's get started.
+

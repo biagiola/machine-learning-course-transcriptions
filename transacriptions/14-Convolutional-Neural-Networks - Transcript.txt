@@ -1,0 +1,3646 @@
+WEBVTT
+
+1
+00:00:00.740 --> 00:00:01.940
+<v Instructor>Welcome back, everybody.</v>
+
+2
+00:00:01.940 --> 00:00:05.470
+This is MLExpert's machine learning crash course.
+
+3
+00:00:05.470 --> 00:00:08.020
+In this episode, we're going to be talking about
+
+4
+00:00:08.020 --> 00:00:10.890
+convolutional neural networks.
+
+5
+00:00:10.890 --> 00:00:15.010
+Let's say that we wanted to classify an image,
+
+6
+00:00:15.010 --> 00:00:19.840
+based on whether it had mountains or not mountains,
+
+7
+00:00:19.840 --> 00:00:21.073
+in the image itself.
+
+8
+00:00:22.070 --> 00:00:22.970
+One idea could be
+
+9
+00:00:22.970 --> 00:00:27.030
+to apply our fully connected neural network model
+
+10
+00:00:27.030 --> 00:00:29.010
+to these images.
+
+11
+00:00:29.010 --> 00:00:31.200
+So if we zoom in on this little box here,
+
+12
+00:00:31.200 --> 00:00:32.380
+basically, what we get,
+
+13
+00:00:32.380 --> 00:00:33.670
+is we get pixels.
+
+14
+00:00:33.670 --> 00:00:37.680
+Now, each pixel will actually get a red, green,
+
+15
+00:00:37.680 --> 00:00:39.280
+and blue value.
+
+16
+00:00:39.280 --> 00:00:43.620
+Now, each of these red, green, blue values will get a value
+
+17
+00:00:43.620 --> 00:00:47.020
+between zero and 255.
+
+18
+00:00:47.020 --> 00:00:52.010
+So let's say our image is actually 200 by 200 total pixels.
+
+19
+00:00:52.010 --> 00:00:55.040
+That little box we looked at was just three by three.
+
+20
+00:00:55.040 --> 00:00:58.920
+What that means is that our 200 by 200 image will have
+
+21
+00:00:58.920 --> 00:01:00.970
+40,000 pixels,
+
+22
+00:01:00.970 --> 00:01:03.010
+200 times 200,
+
+23
+00:01:03.010 --> 00:01:07.240
+and each pixel will have a red, green, and blue value.
+
+24
+00:01:07.240 --> 00:01:11.807
+This makes the input to our neural network have
+
+25
+00:01:11.807 --> 00:01:14.940
+120,000 nodes.
+
+26
+00:01:14.940 --> 00:01:17.170
+So here's what the input layer would look like
+
+27
+00:01:17.170 --> 00:01:18.610
+for our image,
+
+28
+00:01:18.610 --> 00:01:20.980
+into a fully connected neural network.
+
+29
+00:01:20.980 --> 00:01:23.820
+Here would be the red value
+
+30
+00:01:23.820 --> 00:01:26.030
+of the first pixel on the top left
+
+31
+00:01:26.030 --> 00:01:27.180
+of the image.
+
+32
+00:01:27.180 --> 00:01:29.800
+Here would be the final green value
+
+33
+00:01:29.800 --> 00:01:32.760
+for the bottom-right page of our image.
+
+34
+00:01:32.760 --> 00:01:35.550
+Let's go ahead and use the same strategy we talked about
+
+35
+00:01:35.550 --> 00:01:38.620
+in the fully connected neural network video.
+
+36
+00:01:38.620 --> 00:01:42.800
+That strategy was that if we have 120,000 inputs
+
+37
+00:01:42.800 --> 00:01:44.400
+and we have one output, here,
+
+38
+00:01:44.400 --> 00:01:47.690
+because we're just going to be doing binary classification,
+
+39
+00:01:47.690 --> 00:01:50.010
+based on whether the input image does
+
+40
+00:01:50.010 --> 00:01:52.270
+or does not have mountains in it,
+
+41
+00:01:52.270 --> 00:01:54.790
+that means our middle layer will be the average
+
+42
+00:01:54.790 --> 00:01:55.690
+of these two.
+
+43
+00:01:55.690 --> 00:01:59.220
+So this one will have about 60,000 neurons
+
+44
+00:01:59.220 --> 00:02:00.770
+in the hidden layer.
+
+45
+00:02:00.770 --> 00:02:03.320
+So let's go ahead and connect these neurons up.
+
+46
+00:02:03.320 --> 00:02:05.890
+And we have our output here and our input there,
+
+47
+00:02:05.890 --> 00:02:08.950
+and these are fully connected layers.
+
+48
+00:02:08.950 --> 00:02:11.140
+So the problem with this is that there will be
+
+49
+00:02:11.140 --> 00:02:14.420
+over 7 billion weights to learn.
+
+50
+00:02:14.420 --> 00:02:17.790
+Additionally, we'll have some odd 61,000 biases
+
+51
+00:02:17.790 --> 00:02:19.010
+to learn as well,
+
+52
+00:02:19.010 --> 00:02:22.840
+but we still have 7 billion weights.
+
+53
+00:02:22.840 --> 00:02:25.840
+This is largely too many parameters to learn
+
+54
+00:02:25.840 --> 00:02:27.840
+for a simple classification
+
+55
+00:02:27.840 --> 00:02:30.920
+of whether an image contains mountains or not.
+
+56
+00:02:30.920 --> 00:02:34.080
+Additionally, what if we took our input image like this
+
+57
+00:02:34.080 --> 00:02:36.430
+and we just flipped it around?
+
+58
+00:02:36.430 --> 00:02:39.740
+Well, what this means is that if we take our same little box
+
+59
+00:02:39.740 --> 00:02:42.260
+that we examined, our little three by three, here,
+
+60
+00:02:42.260 --> 00:02:45.080
+that box would actually be red in this region
+
+61
+00:02:45.080 --> 00:02:47.810
+of the input of our input layer.
+
+62
+00:02:47.810 --> 00:02:50.280
+Now, our original image did have mountains
+
+63
+00:02:50.280 --> 00:02:52.240
+in this space, right here,
+
+64
+00:02:52.240 --> 00:02:53.100
+but all of a sudden,
+
+65
+00:02:53.100 --> 00:02:54.600
+now that we flipped the image,
+
+66
+00:02:54.600 --> 00:02:56.130
+the mountains aren't there.
+
+67
+00:02:56.130 --> 00:02:57.720
+So there's no mountains there.
+
+68
+00:02:57.720 --> 00:03:00.560
+And it could potentially output a zero, here,
+
+69
+00:03:00.560 --> 00:03:03.390
+just because we simply flipped the image.
+
+70
+00:03:03.390 --> 00:03:06.430
+This isn't a desirable property of a network
+
+71
+00:03:06.430 --> 00:03:09.530
+that will tell us if mountains exist in an image or not.
+
+72
+00:03:09.530 --> 00:03:12.000
+So the problem with this is that the network is sensitive
+
+73
+00:03:12.000 --> 00:03:15.060
+to the object's location within the image.
+
+74
+00:03:15.060 --> 00:03:16.950
+So we need a better solution.
+
+75
+00:03:16.950 --> 00:03:20.590
+And we can borrow something from image processing,
+
+76
+00:03:20.590 --> 00:03:21.850
+called filtering.
+
+77
+00:03:21.850 --> 00:03:24.170
+Filtering involves using kernels,
+
+78
+00:03:24.170 --> 00:03:26.390
+which are just in array of values
+
+79
+00:03:26.390 --> 00:03:27.820
+to alter an image.
+
+80
+00:03:27.820 --> 00:03:30.740
+For instance, here, we can have our original image.
+
+81
+00:03:30.740 --> 00:03:33.750
+We can apply a blur kernel to this image
+
+82
+00:03:33.750 --> 00:03:36.200
+and we will get a blurry image out.
+
+83
+00:03:36.200 --> 00:03:39.360
+Now, this kernel called the outline kernel,
+
+84
+00:03:39.360 --> 00:03:41.130
+when given an input image,
+
+85
+00:03:41.130 --> 00:03:42.740
+will produce it an outline
+
+86
+00:03:42.740 --> 00:03:45.090
+of the edges within the image.
+
+87
+00:03:45.090 --> 00:03:47.680
+So what does it mean to apply these kernels
+
+88
+00:03:47.680 --> 00:03:49.020
+to an image?
+
+89
+00:03:49.020 --> 00:03:50.870
+Let's go back to a little section
+
+90
+00:03:50.870 --> 00:03:52.360
+of our image, here,
+
+91
+00:03:52.360 --> 00:03:56.560
+with these zero to 255 red, green, blue values.
+
+92
+00:03:56.560 --> 00:03:59.040
+And what we're going to do is grayscale them.
+
+93
+00:03:59.040 --> 00:04:00.760
+So what that means is we will average
+
+94
+00:04:00.760 --> 00:04:03.310
+all of the RGBs per pixel
+
+95
+00:04:03.310 --> 00:04:07.230
+into a single value between zero and 255.
+
+96
+00:04:07.230 --> 00:04:08.290
+Here, that's what we've done.
+
+97
+00:04:08.290 --> 00:04:11.050
+So we've taken our image which was RGB
+
+98
+00:04:11.050 --> 00:04:12.910
+to now, just grayscale.
+
+99
+00:04:12.910 --> 00:04:14.510
+So here's our grayscale image
+
+100
+00:04:14.510 --> 00:04:17.260
+and here's our outline kernel that we talked about
+
+101
+00:04:17.260 --> 00:04:20.900
+which defines edges from an input image.
+
+102
+00:04:20.900 --> 00:04:23.430
+So let's go over how to apply this kernel
+
+103
+00:04:23.430 --> 00:04:24.550
+to this image.
+
+104
+00:04:24.550 --> 00:04:29.550
+What we do is just overlay the kernel in the image.
+
+105
+00:04:29.640 --> 00:04:33.860
+Then what we do is we multiply every entry in the kernel
+
+106
+00:04:33.860 --> 00:04:35.870
+with every entry in the image
+
+107
+00:04:35.870 --> 00:04:37.910
+of which the kernel is overlaid.
+
+108
+00:04:37.910 --> 00:04:40.800
+So here, even though these values have nothing
+
+109
+00:04:40.800 --> 00:04:42.710
+to multiply themselves with,
+
+110
+00:04:42.710 --> 00:04:44.980
+we're just going to assume zero padding.
+
+111
+00:04:44.980 --> 00:04:46.600
+So each of these elements in the kernel
+
+112
+00:04:46.600 --> 00:04:48.920
+would just be multiplied by zero.
+
+113
+00:04:48.920 --> 00:04:50.900
+So let's get this value, here.
+
+114
+00:04:50.900 --> 00:04:55.050
+So all we have to do is multiply eight times 132.
+
+115
+00:04:55.050 --> 00:04:56.000
+We have to add that
+
+116
+00:04:56.000 --> 00:04:59.110
+to negative one times four.
+
+117
+00:04:59.110 --> 00:05:02.477
+We have to add that to negative one times 143.
+
+118
+00:05:02.477 --> 00:05:05.293
+And then we add that to negative one time six.
+
+119
+00:05:06.210 --> 00:05:08.200
+All of these terms zeroed out
+
+120
+00:05:08.200 --> 00:05:09.440
+because of the zero padding,
+
+121
+00:05:09.440 --> 00:05:11.640
+so that's why you don't see them here.
+
+122
+00:05:11.640 --> 00:05:14.250
+The result of this is the value
+
+123
+00:05:14.250 --> 00:05:17.860
+that goes in our new image at this pixel location.
+
+124
+00:05:17.860 --> 00:05:19.300
+So let's put that in, now.
+
+125
+00:05:19.300 --> 00:05:21.780
+Next, what we do is we slide our kernel,
+
+126
+00:05:21.780 --> 00:05:23.663
+just one element to the right.
+
+127
+00:05:24.576 --> 00:05:26.920
+And we repeat the same process in terms
+
+128
+00:05:26.920 --> 00:05:30.750
+of multiplying each element together in the kernel
+
+129
+00:05:30.750 --> 00:05:32.040
+with the image,
+
+130
+00:05:32.040 --> 00:05:35.160
+and then we sum that result to get this.
+
+131
+00:05:35.160 --> 00:05:38.550
+So here, we would multiply eight times four.
+
+132
+00:05:38.550 --> 00:05:41.670
+We'd multiply negative one times 132.
+
+133
+00:05:41.670 --> 00:05:43.050
+We'd go through every element,
+
+134
+00:05:43.050 --> 00:05:48.050
+anything on negative one times 47, in the image.
+
+135
+00:05:48.970 --> 00:05:50.490
+We'd sum all of those up
+
+136
+00:05:50.490 --> 00:05:53.930
+and we'd come out with negative 312.
+
+137
+00:05:53.930 --> 00:05:56.300
+Remember since we're using zero padding, here,
+
+138
+00:05:56.300 --> 00:05:58.840
+these elements negative one times zero,
+
+139
+00:05:58.840 --> 00:06:01.150
+which is why they're not appearing over here.
+
+140
+00:06:01.150 --> 00:06:02.420
+We continue this process
+
+141
+00:06:02.420 --> 00:06:03.980
+by moving one more to the right,
+
+142
+00:06:03.980 --> 00:06:06.230
+and we have performed the same calculation, here,
+
+143
+00:06:06.230 --> 00:06:07.780
+to get this pixel value.
+
+144
+00:06:07.780 --> 00:06:09.190
+We would then do that again
+
+145
+00:06:09.190 --> 00:06:10.550
+and move to the right again
+
+146
+00:06:10.550 --> 00:06:12.450
+to get this pixel value.
+
+147
+00:06:12.450 --> 00:06:13.500
+And then when we get here,
+
+148
+00:06:13.500 --> 00:06:15.510
+we just go one row down.
+
+149
+00:06:15.510 --> 00:06:17.460
+And this process continues all the way
+
+150
+00:06:17.460 --> 00:06:21.740
+until we get to the bottom-right of this image.
+
+151
+00:06:21.740 --> 00:06:24.020
+In this bottom-right pixel, here,
+
+152
+00:06:24.020 --> 00:06:26.750
+after the calculation with the kernel,
+
+153
+00:06:26.750 --> 00:06:28.730
+would be assigned to this value, here.
+
+154
+00:06:28.730 --> 00:06:33.730
+So here are the results from the kernel applied to the image
+
+155
+00:06:33.810 --> 00:06:34.770
+that we have.
+
+156
+00:06:34.770 --> 00:06:37.450
+And you can see that these values are no longer between zero
+
+157
+00:06:37.450 --> 00:06:38.780
+and 255.
+
+158
+00:06:38.780 --> 00:06:41.600
+So what we can do is we can just scale the image
+
+159
+00:06:41.600 --> 00:06:44.710
+to make sure that it's between zero and 255.
+
+160
+00:06:44.710 --> 00:06:46.150
+This is the equation we'll use.
+
+161
+00:06:46.150 --> 00:06:47.897
+It involves taking the maximum value
+
+162
+00:06:47.897 --> 00:06:51.540
+and the minimum value of this new image,
+
+163
+00:06:51.540 --> 00:06:54.380
+and the maximum and the minimum value
+
+164
+00:06:54.380 --> 00:06:56.960
+of what we want the image to exist in.
+
+165
+00:06:56.960 --> 00:06:58.950
+Then we will get our new image.
+
+166
+00:06:58.950 --> 00:07:00.370
+And again, this new image,
+
+167
+00:07:00.370 --> 00:07:02.640
+since we applied the outline kernel to it,
+
+168
+00:07:02.640 --> 00:07:06.510
+we'll find the outlines in the input image.
+
+169
+00:07:06.510 --> 00:07:09.270
+Since this filter can extract edges,
+
+170
+00:07:09.270 --> 00:07:13.170
+it would be interesting if we could use this in some way,
+
+171
+00:07:13.170 --> 00:07:14.350
+in our neural networks,
+
+172
+00:07:14.350 --> 00:07:16.880
+so that we could detect the edges of the mountains.
+
+173
+00:07:16.880 --> 00:07:17.950
+Now, these kernels,
+
+174
+00:07:17.950 --> 00:07:19.420
+they look pretty arbitrary.
+
+175
+00:07:19.420 --> 00:07:20.840
+Here, we just have an eight
+
+176
+00:07:20.840 --> 00:07:22.980
+and all the rest are negative one.
+
+177
+00:07:22.980 --> 00:07:26.290
+What if instead of using this kernel
+
+178
+00:07:26.290 --> 00:07:27.700
+or another kernel on the image
+
+179
+00:07:27.700 --> 00:07:29.110
+to get its edges,
+
+180
+00:07:29.110 --> 00:07:31.130
+what if we could use a neural network
+
+181
+00:07:31.130 --> 00:07:34.130
+to decide what these values should be?
+
+182
+00:07:34.130 --> 00:07:37.190
+Let's write how we apply this filter down, mathematically.
+
+183
+00:07:37.190 --> 00:07:39.000
+So it's the same thing that we did earlier.
+
+184
+00:07:39.000 --> 00:07:42.430
+So it would be negative one times the first pixel value
+
+185
+00:07:42.430 --> 00:07:44.310
+in whichever image we're considering.
+
+186
+00:07:44.310 --> 00:07:46.080
+That would sum all the way through
+
+187
+00:07:46.080 --> 00:07:48.820
+until the ninth pixel of the image.
+
+188
+00:07:48.820 --> 00:07:52.580
+Now, what if instead of using these fixed values, here,
+
+189
+00:07:52.580 --> 00:07:54.390
+what if we could assign weights
+
+190
+00:07:54.390 --> 00:07:55.620
+to each of these?
+
+191
+00:07:55.620 --> 00:07:57.350
+Well, this looks extremely similar
+
+192
+00:07:57.350 --> 00:08:00.100
+to what our neural network already does.
+
+193
+00:08:00.100 --> 00:08:02.500
+Here, we have W transpose X.
+
+194
+00:08:02.500 --> 00:08:06.900
+The benefit here is that we can now learn these W's
+
+195
+00:08:06.900 --> 00:08:09.060
+according to some loss function.
+
+196
+00:08:09.060 --> 00:08:12.630
+This loss function could be the negative log loss
+
+197
+00:08:12.630 --> 00:08:15.940
+of identifying whether there's mountains or not,
+
+198
+00:08:15.940 --> 00:08:17.000
+in an image.
+
+199
+00:08:17.000 --> 00:08:18.070
+So let's go over
+
+200
+00:08:18.070 --> 00:08:21.190
+how to actually apply this custom kernel, here,
+
+201
+00:08:21.190 --> 00:08:22.400
+with weights,
+
+202
+00:08:22.400 --> 00:08:24.770
+in an actual neural network.
+
+203
+00:08:24.770 --> 00:08:27.570
+So here, we have a very basic, small image.
+
+204
+00:08:27.570 --> 00:08:28.810
+And what we're going to do is we're going
+
+205
+00:08:28.810 --> 00:08:31.070
+to build a neural network
+
+206
+00:08:31.070 --> 00:08:33.590
+that represents the same technique we use
+
+207
+00:08:33.590 --> 00:08:36.070
+to apply a kernel to an image.
+
+208
+00:08:36.070 --> 00:08:39.300
+So first, we overlay the kernel on top of the image,
+
+209
+00:08:39.300 --> 00:08:41.640
+starting with the top left pixel, here.
+
+210
+00:08:41.640 --> 00:08:43.210
+So how would we represent this
+
+211
+00:08:43.210 --> 00:08:44.550
+with our neural network?
+
+212
+00:08:44.550 --> 00:08:48.580
+X1 is going to be multiplied by W5.
+
+213
+00:08:48.580 --> 00:08:51.670
+And that will be added to a particular summation.
+
+214
+00:08:51.670 --> 00:08:56.670
+W6 or weight six will be multiplied X2, here,
+
+215
+00:08:56.920 --> 00:08:58.870
+and that will be added to the summation.
+
+216
+00:08:58.870 --> 00:09:02.360
+W8 will be multiplied by X5,
+
+217
+00:09:02.360 --> 00:09:03.950
+which is somewhere in here.
+
+218
+00:09:03.950 --> 00:09:06.200
+And then, finally, the ninth weight
+
+219
+00:09:06.200 --> 00:09:07.900
+for the last week, here, in our kernel,
+
+220
+00:09:07.900 --> 00:09:10.410
+will be multiplied by X6,
+
+221
+00:09:10.410 --> 00:09:12.040
+which is also in here.
+
+222
+00:09:12.040 --> 00:09:15.210
+These all will be summed together.
+
+223
+00:09:15.210 --> 00:09:17.310
+This is exactly what we were doing before.
+
+224
+00:09:17.310 --> 00:09:19.570
+We're now just representing it in terms
+
+225
+00:09:19.570 --> 00:09:20.850
+of our neural network.
+
+226
+00:09:20.850 --> 00:09:22.540
+So now, let's slide this kernel over,
+
+227
+00:09:22.540 --> 00:09:24.620
+just like we did before.
+
+228
+00:09:24.620 --> 00:09:28.460
+And we see here that we have W4 times X1.
+
+229
+00:09:28.460 --> 00:09:31.280
+We have W5 times X2.
+
+230
+00:09:31.280 --> 00:09:33.820
+We have W6 times X3.
+
+231
+00:09:33.820 --> 00:09:35.490
+W7 times X5,
+
+232
+00:09:35.490 --> 00:09:37.020
+which is somewhere in here.
+
+233
+00:09:37.020 --> 00:09:38.230
+And then we just continue on
+
+234
+00:09:38.230 --> 00:09:39.330
+through the rest of the kernel,
+
+235
+00:09:39.330 --> 00:09:42.470
+here and here, for W8 and W9.
+
+236
+00:09:42.470 --> 00:09:44.090
+And all of those values, again,
+
+237
+00:09:44.090 --> 00:09:45.530
+are just going to be summed.
+
+238
+00:09:45.530 --> 00:09:47.750
+Remember since we have zero padding, here,
+
+239
+00:09:47.750 --> 00:09:50.400
+these weights will be multiplied by zero.
+
+240
+00:09:50.400 --> 00:09:53.550
+So they don't appear as connections over here.
+
+241
+00:09:53.550 --> 00:09:55.790
+Now, let's continue by just sliding over one more.
+
+242
+00:09:55.790 --> 00:09:58.710
+And we can see that we're simply following the same process.
+
+243
+00:09:58.710 --> 00:10:03.680
+So here, W4 is a weight which is multiplied by X2,
+
+244
+00:10:03.680 --> 00:10:07.190
+and that is summed with X3 times W5
+
+245
+00:10:08.217 --> 00:10:10.160
+and X4 times W6,
+
+246
+00:10:10.160 --> 00:10:12.670
+and so on throughout the rest of the kernel,
+
+247
+00:10:12.670 --> 00:10:15.470
+all the way to W9 and X8,
+
+248
+00:10:15.470 --> 00:10:16.550
+which is somewhere in there.
+
+249
+00:10:16.550 --> 00:10:19.430
+Now, we would just continue to the next row.
+
+250
+00:10:19.430 --> 00:10:21.590
+We'd continue until we hit
+
+251
+00:10:21.590 --> 00:10:24.300
+the very bottom-right pixel, here,
+
+252
+00:10:24.300 --> 00:10:25.150
+of our image.
+
+253
+00:10:25.150 --> 00:10:27.490
+That would complete our application
+
+254
+00:10:27.490 --> 00:10:29.280
+of this kernel, here,
+
+255
+00:10:29.280 --> 00:10:31.100
+to our image.
+
+256
+00:10:31.100 --> 00:10:34.370
+The only difference this time is that we're using weights
+
+257
+00:10:34.370 --> 00:10:36.700
+instead of some predefined kernel
+
+258
+00:10:36.700 --> 00:10:39.200
+that we borrowed from image processing.
+
+259
+00:10:39.200 --> 00:10:42.520
+Now, we're actually treating these values in the kernel
+
+260
+00:10:42.520 --> 00:10:46.380
+as weights themselves in our neural network.
+
+261
+00:10:46.380 --> 00:10:50.120
+This layer here is called a convolutional layer.
+
+262
+00:10:50.120 --> 00:10:51.160
+And I should mention
+
+263
+00:10:51.160 --> 00:10:54.350
+that each of these neurons still have biases.
+
+264
+00:10:54.350 --> 00:10:55.920
+And with the convolutional layer,
+
+265
+00:10:55.920 --> 00:10:59.500
+comes a new concept called the receptive field.
+
+266
+00:10:59.500 --> 00:11:02.880
+All the receptive field means that per every neuron,
+
+267
+00:11:02.880 --> 00:11:05.530
+we have only a subset of the nodes
+
+268
+00:11:05.530 --> 00:11:08.390
+in which the neuron has knowledge of.
+
+269
+00:11:08.390 --> 00:11:09.470
+Now, this is different
+
+270
+00:11:09.470 --> 00:11:12.110
+from our fully connected neural network, here,
+
+271
+00:11:12.110 --> 00:11:14.130
+which we learned in the previous video
+
+272
+00:11:14.130 --> 00:11:15.810
+of the deep learning section,
+
+273
+00:11:15.810 --> 00:11:17.550
+where the receptive field
+
+274
+00:11:17.550 --> 00:11:20.160
+of every single neuron or node, here,
+
+275
+00:11:20.160 --> 00:11:22.610
+is all of the inputs themselves.
+
+276
+00:11:22.610 --> 00:11:26.200
+By the way, all of these weights take on different values.
+
+277
+00:11:26.200 --> 00:11:28.770
+Now, this is different from our convolutional layer
+
+278
+00:11:28.770 --> 00:11:32.610
+because we actually only train nine weight, here.
+
+279
+00:11:32.610 --> 00:11:34.210
+So what does this do for us?
+
+280
+00:11:34.210 --> 00:11:39.080
+So one, it reduces our parameters or weights from 256,
+
+281
+00:11:39.080 --> 00:11:40.690
+which is what we would have had
+
+282
+00:11:40.690 --> 00:11:43.110
+if we used a fully connected layer, here.
+
+283
+00:11:43.110 --> 00:11:45.630
+So we do get a reduction in parameters.
+
+284
+00:11:45.630 --> 00:11:48.290
+Two, what we also get is weight sharing
+
+285
+00:11:48.290 --> 00:11:50.150
+across the layer itself.
+
+286
+00:11:50.150 --> 00:11:54.660
+What this means is that if our kernel of nine weights learns
+
+287
+00:11:54.660 --> 00:11:58.610
+to identify mountains in one portion of an image,
+
+288
+00:11:58.610 --> 00:12:00.530
+those same weights can be used
+
+289
+00:12:00.530 --> 00:12:03.500
+to identify mountains in different portions
+
+290
+00:12:03.500 --> 00:12:04.990
+of the image as well.
+
+291
+00:12:04.990 --> 00:12:07.770
+Kernels will typically be between three
+
+292
+00:12:07.770 --> 00:12:10.410
+and seven by seven in dimension.
+
+293
+00:12:10.410 --> 00:12:13.040
+Now, you'll notice that these are odd dimensions.
+
+294
+00:12:13.040 --> 00:12:15.750
+That's because using that odd dimension allows us
+
+295
+00:12:15.750 --> 00:12:18.600
+to center the pixel within the kernel.
+
+296
+00:12:18.600 --> 00:12:20.180
+If you use an even dimension,
+
+297
+00:12:20.180 --> 00:12:22.210
+you'll have to offset it in some ways.
+
+298
+00:12:22.210 --> 00:12:23.670
+So you typically won't see that.
+
+299
+00:12:23.670 --> 00:12:25.260
+Now, let's go over padding.
+
+300
+00:12:25.260 --> 00:12:27.170
+We mentioned zero padding earlier,
+
+301
+00:12:27.170 --> 00:12:28.340
+but you don't have to use it.
+
+302
+00:12:28.340 --> 00:12:29.880
+Let's see what that looks like in terms
+
+303
+00:12:29.880 --> 00:12:31.130
+of using it versus not.
+
+304
+00:12:31.130 --> 00:12:33.270
+So here we have a three by three kernel
+
+305
+00:12:33.270 --> 00:12:35.610
+and we have our four by four image.
+
+306
+00:12:35.610 --> 00:12:38.040
+If we apply this three by three kernel
+
+307
+00:12:38.040 --> 00:12:40.160
+by this four by four image,
+
+308
+00:12:40.160 --> 00:12:44.040
+we will get the same exact size image out, four by four,
+
+309
+00:12:44.040 --> 00:12:45.900
+if we choose to use padding.
+
+310
+00:12:45.900 --> 00:12:47.680
+If we don't want to use padding,
+
+311
+00:12:47.680 --> 00:12:50.370
+then we'll actually overlay the kernel like this
+
+312
+00:12:50.370 --> 00:12:52.370
+and we'll only get four values.
+
+313
+00:12:52.370 --> 00:12:57.370
+One from here, from centering on X7, X10, and X11.
+
+314
+00:12:57.640 --> 00:12:58.580
+Now, this will come out
+
+315
+00:12:58.580 --> 00:13:00.630
+to be a two by two image.
+
+316
+00:13:00.630 --> 00:13:03.270
+The third concept that we should cover is stride.
+
+317
+00:13:03.270 --> 00:13:05.350
+So we were using a stride of one
+
+318
+00:13:05.350 --> 00:13:08.160
+when we were showcasing these kernels applied
+
+319
+00:13:08.160 --> 00:13:09.500
+to some image.
+
+320
+00:13:09.500 --> 00:13:10.800
+So here, a stride one means
+
+321
+00:13:10.800 --> 00:13:12.700
+that you're going to work one to the right,
+
+322
+00:13:12.700 --> 00:13:13.533
+one to the right,
+
+323
+00:13:13.533 --> 00:13:14.950
+and then one down when you get
+
+324
+00:13:14.950 --> 00:13:16.700
+to the next row of the image.
+
+325
+00:13:16.700 --> 00:13:18.650
+However, stride two would mean
+
+326
+00:13:18.650 --> 00:13:20.810
+that we would go from X1 to X three,
+
+327
+00:13:20.810 --> 00:13:22.670
+and skip X2.
+
+328
+00:13:22.670 --> 00:13:23.920
+And then when it came time
+
+329
+00:13:23.920 --> 00:13:25.750
+to go to the next row,
+
+330
+00:13:25.750 --> 00:13:27.890
+we would actually skip X5
+
+331
+00:13:27.890 --> 00:13:29.850
+and go directly to X9.
+
+332
+00:13:29.850 --> 00:13:32.800
+So here, what this does is it reduces our dimension
+
+333
+00:13:32.800 --> 00:13:34.630
+of our image by half.
+
+334
+00:13:34.630 --> 00:13:37.930
+Kind of like when we elected for no padding,
+
+335
+00:13:37.930 --> 00:13:38.763
+but this time,
+
+336
+00:13:38.763 --> 00:13:41.670
+the dimensionality reduction comes from stride,
+
+337
+00:13:41.670 --> 00:13:43.530
+instead of no padding.
+
+338
+00:13:43.530 --> 00:13:45.840
+So after stride, another concept is the number
+
+339
+00:13:45.840 --> 00:13:47.590
+of kernels to learn
+
+340
+00:13:47.590 --> 00:13:49.560
+for a particular layer.
+
+341
+00:13:49.560 --> 00:13:52.740
+What this means is that per convolutional layer,
+
+342
+00:13:52.740 --> 00:13:55.540
+we actually won't just learn one set of weights
+
+343
+00:13:55.540 --> 00:13:57.440
+for a particular kernel,
+
+344
+00:13:57.440 --> 00:14:00.910
+we'll learn more than one kernel at a time.
+
+345
+00:14:00.910 --> 00:14:03.550
+So here, we would take these kernels.
+
+346
+00:14:03.550 --> 00:14:05.200
+We could stack them up.
+
+347
+00:14:05.200 --> 00:14:08.100
+And then we would just apply these three kernels
+
+348
+00:14:08.100 --> 00:14:10.930
+at the same time, in the same layer,
+
+349
+00:14:10.930 --> 00:14:12.450
+to the same image.
+
+350
+00:14:12.450 --> 00:14:13.840
+So let's go over that, now.
+
+351
+00:14:13.840 --> 00:14:15.860
+Here, we're using no padding.
+
+352
+00:14:15.860 --> 00:14:17.580
+We're simply taking these three kernels
+
+353
+00:14:17.580 --> 00:14:20.510
+and sliding them the same way across the image
+
+354
+00:14:20.510 --> 00:14:21.790
+that we did earlier.
+
+355
+00:14:21.790 --> 00:14:23.930
+The only difference is now we're actually going
+
+356
+00:14:23.930 --> 00:14:26.410
+to generate three of these new images,
+
+357
+00:14:26.410 --> 00:14:27.800
+instead of just one.
+
+358
+00:14:27.800 --> 00:14:30.250
+By the way, instead of calling these, new images,
+
+359
+00:14:30.250 --> 00:14:32.710
+you'll actually hear these be called feature maps.
+
+360
+00:14:32.710 --> 00:14:35.540
+Now, these feature maps would actually be stacked
+
+361
+00:14:35.540 --> 00:14:38.840
+in the same way that we stacked our kernels.
+
+362
+00:14:38.840 --> 00:14:41.370
+Now, generally the number of kernels can vary
+
+363
+00:14:41.370 --> 00:14:43.380
+from four per layer
+
+364
+00:14:43.380 --> 00:14:44.963
+to over 500.
+
+365
+00:14:46.030 --> 00:14:47.830
+So, one question that may come up is
+
+366
+00:14:47.830 --> 00:14:49.660
+how do we know that these kernels,
+
+367
+00:14:49.660 --> 00:14:52.220
+since we're applying them at the same exact time
+
+368
+00:14:52.220 --> 00:14:53.460
+to the same image,
+
+369
+00:14:53.460 --> 00:14:55.870
+aren't learning the exact same things?
+
+370
+00:14:55.870 --> 00:14:57.000
+Basically, how do we know
+
+371
+00:14:57.000 --> 00:14:59.770
+that these W's across the different kernels,
+
+372
+00:14:59.770 --> 00:15:01.600
+don't all equal each other?
+
+373
+00:15:01.600 --> 00:15:04.330
+Well, it comes down to initialization.
+
+374
+00:15:04.330 --> 00:15:06.000
+If we initialize our weights
+
+375
+00:15:06.000 --> 00:15:07.950
+with the different initialization strategies
+
+376
+00:15:07.950 --> 00:15:11.400
+that we talked about in the original neural network video,
+
+377
+00:15:11.400 --> 00:15:14.980
+we can avoid each of these kernels learning the same thing.
+
+378
+00:15:14.980 --> 00:15:17.510
+So one kernel could learn an edge,
+
+379
+00:15:17.510 --> 00:15:19.630
+another kernel could learn maybe a zigzag,
+
+380
+00:15:19.630 --> 00:15:23.020
+another kernel could maybe learn a particular texture.
+
+381
+00:15:23.020 --> 00:15:24.590
+Okay, so now that we know we can learn
+
+382
+00:15:24.590 --> 00:15:26.410
+more than one kernel per layer,
+
+383
+00:15:26.410 --> 00:15:28.680
+we have to now talk about the number of channels.
+
+384
+00:15:28.680 --> 00:15:31.880
+So, do you remember how we talked about the grayscale image
+
+385
+00:15:31.880 --> 00:15:34.080
+where we just had one value per pixel
+
+386
+00:15:34.080 --> 00:15:37.620
+in which it ranged between zero and 255?
+
+387
+00:15:37.620 --> 00:15:40.950
+What that means is we're using one channel in our input.
+
+388
+00:15:40.950 --> 00:15:43.170
+Typically, images will be represented
+
+389
+00:15:43.170 --> 00:15:44.920
+by red, green, blue,
+
+390
+00:15:44.920 --> 00:15:47.320
+which means that we'll have an X1 for red,
+
+391
+00:15:47.320 --> 00:15:48.540
+we'll have an X1 for green,
+
+392
+00:15:48.540 --> 00:15:49.970
+and X1 for blue,
+
+393
+00:15:49.970 --> 00:15:52.150
+each between zero and 255.
+
+394
+00:15:52.150 --> 00:15:54.940
+So how do we take these three channels
+
+395
+00:15:54.940 --> 00:15:56.240
+and apply a kernel?
+
+396
+00:15:56.240 --> 00:15:58.620
+Well, we actually do it in the same exact way.
+
+397
+00:15:58.620 --> 00:16:00.070
+So we take our kernel.
+
+398
+00:16:00.070 --> 00:16:01.900
+And instead of applying our kernel
+
+399
+00:16:01.900 --> 00:16:03.890
+to just one image,
+
+400
+00:16:03.890 --> 00:16:06.340
+we're actually applying our kernel
+
+401
+00:16:06.340 --> 00:16:10.350
+to three images; one for red, one for green, one for blue.
+
+402
+00:16:10.350 --> 00:16:12.510
+And since we have one kernel,
+
+403
+00:16:12.510 --> 00:16:15.140
+we're going to get one feature map out.
+
+404
+00:16:15.140 --> 00:16:18.230
+So how we get from one kernel across three images
+
+405
+00:16:18.230 --> 00:16:19.460
+to one feature map,
+
+406
+00:16:19.460 --> 00:16:21.720
+is we actually just sum the result.
+
+407
+00:16:21.720 --> 00:16:22.920
+Since we're using no padding,
+
+408
+00:16:22.920 --> 00:16:25.520
+we'll end up with a four by four.
+
+409
+00:16:25.520 --> 00:16:27.610
+If this value, here, came out to be four,
+
+410
+00:16:27.610 --> 00:16:29.420
+if this pixel value came out to be six,
+
+411
+00:16:29.420 --> 00:16:31.690
+and if this pixel value came out to be eight,
+
+412
+00:16:31.690 --> 00:16:34.460
+we simply would sum up the results.
+
+413
+00:16:34.460 --> 00:16:35.810
+So here, it would be 18,
+
+414
+00:16:35.810 --> 00:16:37.350
+here, would be negative two.
+
+415
+00:16:37.350 --> 00:16:40.050
+If we moved over here, we would get 10.
+
+416
+00:16:40.050 --> 00:16:42.610
+And over here, we would get negative eight.
+
+417
+00:16:42.610 --> 00:16:44.880
+What this means is that no matter the number
+
+418
+00:16:44.880 --> 00:16:46.160
+of input channels.
+
+419
+00:16:46.160 --> 00:16:47.320
+Here, three,
+
+420
+00:16:47.320 --> 00:16:49.430
+if we have one kernel,
+
+421
+00:16:49.430 --> 00:16:51.600
+we will get out one feature map.
+
+422
+00:16:51.600 --> 00:16:53.950
+Now, typically, what you'll see is these channels
+
+423
+00:16:53.950 --> 00:16:56.160
+actually stacked on top of each other
+
+424
+00:16:56.160 --> 00:16:58.520
+to form a three-dimensional array.
+
+425
+00:16:58.520 --> 00:17:01.170
+All right, so this is effectively everything that we need
+
+426
+00:17:01.170 --> 00:17:04.210
+to know for a convolutional layer itself.
+
+427
+00:17:04.210 --> 00:17:06.580
+So let's see how this would actually look when we apply it
+
+428
+00:17:06.580 --> 00:17:07.800
+to an image.
+
+429
+00:17:07.800 --> 00:17:09.600
+You'll see that we have an input here.
+
+430
+00:17:09.600 --> 00:17:11.380
+Our input is just an image.
+
+431
+00:17:11.380 --> 00:17:13.920
+It has three channels; one for red, one for green,
+
+432
+00:17:13.920 --> 00:17:15.160
+one for blue.
+
+433
+00:17:15.160 --> 00:17:20.160
+And its dimensions are 185 pixels by 185 pixels.
+
+434
+00:17:21.070 --> 00:17:23.550
+Now, if we wanted to apply a convolutional layer
+
+435
+00:17:23.550 --> 00:17:25.410
+to our input image,
+
+436
+00:17:25.410 --> 00:17:26.580
+here, we would specify
+
+437
+00:17:26.580 --> 00:17:29.300
+that as a five-by-five kernel,
+
+438
+00:17:29.300 --> 00:17:30.820
+valid padding.
+
+439
+00:17:30.820 --> 00:17:34.280
+Valid padding, here, just means no padding.
+
+440
+00:17:34.280 --> 00:17:36.890
+Finally, we've applied a stride of two
+
+441
+00:17:36.890 --> 00:17:38.500
+in our convolutional layer.
+
+442
+00:17:38.500 --> 00:17:41.150
+So after applying these convolutions, here,
+
+443
+00:17:41.150 --> 00:17:46.150
+we end up with six channels at 91 times 91.
+
+444
+00:17:46.750 --> 00:17:48.470
+Where did the six come from?
+
+445
+00:17:48.470 --> 00:17:50.910
+Well, this is just what we picked as the number
+
+446
+00:17:50.910 --> 00:17:52.670
+of kernels to learn,
+
+447
+00:17:52.670 --> 00:17:54.580
+for this input image.
+
+448
+00:17:54.580 --> 00:17:57.950
+Remember that no matter the number of input channels,
+
+449
+00:17:57.950 --> 00:18:00.150
+if you apply a single kernel to it,
+
+450
+00:18:00.150 --> 00:18:02.100
+you will get a single kernel out.
+
+451
+00:18:02.100 --> 00:18:05.220
+Here, we just wanted to learn six kernels.
+
+452
+00:18:05.220 --> 00:18:08.140
+Which means that our new number of channels will be six.
+
+453
+00:18:08.140 --> 00:18:10.130
+How about this 91 by 91?
+
+454
+00:18:10.130 --> 00:18:12.270
+Well, there's a formula that allows us
+
+455
+00:18:12.270 --> 00:18:13.980
+to figure out these new dimensions.
+
+456
+00:18:13.980 --> 00:18:16.600
+So here, we take our N input,
+
+457
+00:18:16.600 --> 00:18:18.550
+which is the dimensions of our input.
+
+458
+00:18:18.550 --> 00:18:20.500
+We're assuming that they're square.
+
+459
+00:18:20.500 --> 00:18:24.370
+We then add that to two times the padding,
+
+460
+00:18:24.370 --> 00:18:26.230
+which since we used valid padding,
+
+461
+00:18:26.230 --> 00:18:27.490
+padding would be zero.
+
+462
+00:18:27.490 --> 00:18:29.410
+We subtract the kernel size, here,
+
+463
+00:18:29.410 --> 00:18:30.680
+which is five.
+
+464
+00:18:30.680 --> 00:18:32.830
+And then finally we divide by the stride.
+
+465
+00:18:32.830 --> 00:18:35.290
+That result, we then just add one to.
+
+466
+00:18:35.290 --> 00:18:37.240
+So let's substitute those numbers.
+
+467
+00:18:37.240 --> 00:18:38.860
+So here we have 185,
+
+468
+00:18:38.860 --> 00:18:40.500
+zero for the padding,
+
+469
+00:18:40.500 --> 00:18:43.100
+five for the dimensions of the kernel,
+
+470
+00:18:43.100 --> 00:18:45.940
+and then we have a stride of two.
+
+471
+00:18:45.940 --> 00:18:48.020
+Since we're assuming square images
+
+472
+00:18:48.020 --> 00:18:49.520
+and feature maps, here,
+
+473
+00:18:49.520 --> 00:18:52.920
+that results in a 91 by 91 dimensionality.
+
+474
+00:18:52.920 --> 00:18:56.170
+So this is actually just one convolutional layer.
+
+475
+00:18:56.170 --> 00:18:59.590
+But in reality, more than one conv layer
+
+476
+00:18:59.590 --> 00:19:01.970
+or convolutional layer, is used.
+
+477
+00:19:01.970 --> 00:19:05.150
+The idea is that the earlier layers can learn lines
+
+478
+00:19:05.150 --> 00:19:06.380
+or corners,
+
+479
+00:19:06.380 --> 00:19:09.290
+and then the deeper layers themselves can learn curves
+
+480
+00:19:09.290 --> 00:19:11.570
+and shapes from the lines and corners.
+
+481
+00:19:11.570 --> 00:19:13.030
+So let's see how that would look.
+
+482
+00:19:13.030 --> 00:19:14.497
+We have our input image, here,
+
+483
+00:19:14.497 --> 00:19:16.900
+and we have our same convolutional layer
+
+484
+00:19:16.900 --> 00:19:19.260
+and our same feature map results
+
+485
+00:19:19.260 --> 00:19:22.080
+as we had in the previous convolutional layer.
+
+486
+00:19:22.080 --> 00:19:23.910
+This time though, we've now added
+
+487
+00:19:23.910 --> 00:19:25.330
+another convolutional layer
+
+488
+00:19:25.330 --> 00:19:27.890
+in which we wanted to learn nine kernels.
+
+489
+00:19:27.890 --> 00:19:30.830
+Here, we learned a five by five kernel
+
+490
+00:19:30.830 --> 00:19:32.260
+with no padding,
+
+491
+00:19:32.260 --> 00:19:33.740
+which is valid padding,
+
+492
+00:19:33.740 --> 00:19:35.080
+and a stride of two.
+
+493
+00:19:35.080 --> 00:19:37.130
+We'll call out a couple of things here.
+
+494
+00:19:37.130 --> 00:19:40.970
+One, the number of kernels per layer is growing.
+
+495
+00:19:40.970 --> 00:19:43.460
+The idea is that the number of ways
+
+496
+00:19:43.460 --> 00:19:46.320
+to learn lines or zig-zags,
+
+497
+00:19:46.320 --> 00:19:47.750
+is pretty limited.
+
+498
+00:19:47.750 --> 00:19:51.710
+But the number of ways to combine those lines and zig-zags
+
+499
+00:19:51.710 --> 00:19:54.470
+has far more combinations and possibilities.
+
+500
+00:19:54.470 --> 00:19:57.500
+We'll actually choose to learn more kernels
+
+501
+00:19:57.500 --> 00:20:02.040
+as the convolutional neural network gets deeper and deeper.
+
+502
+00:20:02.040 --> 00:20:04.600
+Another thing I want to mention is that we started out
+
+503
+00:20:04.600 --> 00:20:07.500
+with 185 by 185.
+
+504
+00:20:07.500 --> 00:20:09.680
+And through these different convolutional layers,
+
+505
+00:20:09.680 --> 00:20:12.650
+since we're using a stride of two,
+
+506
+00:20:12.650 --> 00:20:16.520
+we've actually decreased our image dimensions.
+
+507
+00:20:16.520 --> 00:20:20.530
+Here, the idea is that we can learn a summary
+
+508
+00:20:20.530 --> 00:20:22.050
+of our input image
+
+509
+00:20:22.050 --> 00:20:24.560
+by applying these convolutional layers to it.
+
+510
+00:20:24.560 --> 00:20:28.530
+So here, we're summarizing 185 by 185,
+
+511
+00:20:28.530 --> 00:20:30.610
+down to 44 by 44,
+
+512
+00:20:30.610 --> 00:20:31.630
+with the understanding
+
+513
+00:20:31.630 --> 00:20:35.630
+that we're preserving the important parts of this image
+
+514
+00:20:35.630 --> 00:20:37.150
+in these feature maps.
+
+515
+00:20:37.150 --> 00:20:38.830
+Now, most of the time you won't actually see
+
+516
+00:20:38.830 --> 00:20:42.680
+two convolutional layers adjacent to one another.
+
+517
+00:20:42.680 --> 00:20:44.530
+What you'll actually see is another way
+
+518
+00:20:44.530 --> 00:20:46.260
+to cut down these dimensions,
+
+519
+00:20:46.260 --> 00:20:50.250
+beside using the stride and the convolution.
+
+520
+00:20:50.250 --> 00:20:52.630
+What you'll actually see is something called
+
+521
+00:20:52.630 --> 00:20:53.900
+a pooling layer.
+
+522
+00:20:53.900 --> 00:20:55.470
+A pooling layer, we're going to go back
+
+523
+00:20:55.470 --> 00:20:56.710
+to grayscale images, now,
+
+524
+00:20:56.710 --> 00:20:58.010
+just for simplicity.
+
+525
+00:20:58.010 --> 00:21:00.720
+So, typically, we've applied a kernel with weights
+
+526
+00:21:00.720 --> 00:21:02.170
+to our image.
+
+527
+00:21:02.170 --> 00:21:03.710
+But what a pooling layer does,
+
+528
+00:21:03.710 --> 00:21:05.860
+for instance, a max pooling layer,
+
+529
+00:21:05.860 --> 00:21:08.330
+all it does is when you overlay it on an image...
+
+530
+00:21:08.330 --> 00:21:11.240
+So let's say this is our image values.
+
+531
+00:21:11.240 --> 00:21:13.900
+We simply take the maximum value
+
+532
+00:21:13.900 --> 00:21:15.770
+of whatever exists in this kernel.
+
+533
+00:21:15.770 --> 00:21:19.250
+So here, for a kernel centered at this value six,
+
+534
+00:21:19.250 --> 00:21:22.120
+the maximum value is 143.
+
+535
+00:21:22.120 --> 00:21:24.710
+So we would just put 143, here.
+
+536
+00:21:24.710 --> 00:21:26.740
+Then in the same way that we did earlier,
+
+537
+00:21:26.740 --> 00:21:29.720
+we would slide our kernel one to the right,
+
+538
+00:21:29.720 --> 00:21:31.020
+centering it here, now,
+
+539
+00:21:31.020 --> 00:21:32.620
+and we would take the maximum value
+
+540
+00:21:32.620 --> 00:21:34.640
+of whatever's in the kernel space, now.
+
+541
+00:21:34.640 --> 00:21:35.970
+And that would be 72.
+
+542
+00:21:35.970 --> 00:21:38.870
+We continue this process on for the rest of the image.
+
+543
+00:21:38.870 --> 00:21:40.350
+So what does this do for us?
+
+544
+00:21:40.350 --> 00:21:43.020
+So one, it gets our dimensions down.
+
+545
+00:21:43.020 --> 00:21:46.480
+Remember our goal is to summarize the input image,
+
+546
+00:21:46.480 --> 00:21:48.170
+the best way that we can.
+
+547
+00:21:48.170 --> 00:21:49.830
+With this, comes two things.
+
+548
+00:21:49.830 --> 00:21:53.100
+One, we need to reduce the dimensions of the image,
+
+549
+00:21:53.100 --> 00:21:54.420
+that is the summary,
+
+550
+00:21:54.420 --> 00:21:55.970
+and then the weights we're learning
+
+551
+00:21:55.970 --> 00:21:58.520
+will hopefully extract the important elements
+
+552
+00:21:58.520 --> 00:21:59.480
+within the image,
+
+553
+00:21:59.480 --> 00:22:02.500
+according to whatever loss we're trying to optimize.
+
+554
+00:22:02.500 --> 00:22:06.070
+So what this does is it helps us reduce those dimensions.
+
+555
+00:22:06.070 --> 00:22:09.360
+Another thing that it does is that since we're looking
+
+556
+00:22:09.360 --> 00:22:12.190
+for the max values in this image,
+
+557
+00:22:12.190 --> 00:22:13.770
+according to the kernel,
+
+558
+00:22:13.770 --> 00:22:15.360
+it increases the chances
+
+559
+00:22:15.360 --> 00:22:17.980
+that we will become shift in variant.
+
+560
+00:22:17.980 --> 00:22:21.510
+All that means is that if a certain pixel value over here,
+
+561
+00:22:21.510 --> 00:22:23.610
+then shifted over to here,
+
+562
+00:22:23.610 --> 00:22:25.910
+well, the kernel would actually capture that,
+
+563
+00:22:25.910 --> 00:22:28.160
+instill extract that maximum value.
+
+564
+00:22:28.160 --> 00:22:31.660
+So what that means is that we can shift different objects
+
+565
+00:22:31.660 --> 00:22:32.840
+in the image
+
+566
+00:22:32.840 --> 00:22:35.510
+and still be able to identify those objects
+
+567
+00:22:35.510 --> 00:22:36.640
+within the image.
+
+568
+00:22:36.640 --> 00:22:39.520
+Additionally, these pooling layers act as a way
+
+569
+00:22:39.520 --> 00:22:41.330
+to denoise the image.
+
+570
+00:22:41.330 --> 00:22:43.150
+All right, so there's another pooling layer
+
+571
+00:22:43.150 --> 00:22:44.810
+which is less common
+
+572
+00:22:44.810 --> 00:22:46.760
+and which is called average pooling.
+
+573
+00:22:46.760 --> 00:22:48.090
+The same principles apply,
+
+574
+00:22:48.090 --> 00:22:50.250
+except instead of taking the maximum
+
+575
+00:22:50.250 --> 00:22:51.310
+of all the pixels,
+
+576
+00:22:51.310 --> 00:22:52.670
+you actually average it.
+
+577
+00:22:52.670 --> 00:22:54.990
+In general, max pooling is preferred.
+
+578
+00:22:54.990 --> 00:22:56.700
+So what we'll now do is return
+
+579
+00:22:56.700 --> 00:22:59.090
+to our convolutional layer.
+
+580
+00:22:59.090 --> 00:23:02.180
+And instead of inserting a convolutional layer, here,
+
+581
+00:23:02.180 --> 00:23:05.390
+we're now going to insert a max pooling layer.
+
+582
+00:23:05.390 --> 00:23:07.610
+So the max pooling layer will have a kernel size
+
+583
+00:23:07.610 --> 00:23:08.900
+of three by three,
+
+584
+00:23:08.900 --> 00:23:10.720
+and we're going to use a stride of four.
+
+585
+00:23:10.720 --> 00:23:12.360
+Now, two things I wanna point out:
+
+586
+00:23:12.360 --> 00:23:14.350
+when you have a max pooling layer,
+
+587
+00:23:14.350 --> 00:23:16.750
+the number of channels will remain the same
+
+588
+00:23:16.750 --> 00:23:18.090
+as the previous layer.
+
+589
+00:23:18.090 --> 00:23:21.560
+Also you'll notice that these dimensions are a lot less
+
+590
+00:23:21.560 --> 00:23:22.393
+than this.
+
+591
+00:23:22.393 --> 00:23:23.740
+We used a stride of four.
+
+592
+00:23:23.740 --> 00:23:26.270
+This means we were skipping four of the values,
+
+593
+00:23:26.270 --> 00:23:29.970
+every time that we shifted the max pooling kernel.
+
+594
+00:23:29.970 --> 00:23:34.380
+This means our resulting image is going to now be 23 by 23.
+
+595
+00:23:34.380 --> 00:23:36.920
+Remember the goal is to summarize this image.
+
+596
+00:23:36.920 --> 00:23:39.710
+So now, we summarized it here with feature maps,
+
+597
+00:23:39.710 --> 00:23:42.650
+and then we applied max pooling to this feature maps
+
+598
+00:23:42.650 --> 00:23:45.250
+to get even a smaller representation
+
+599
+00:23:45.250 --> 00:23:47.020
+of this original image.
+
+600
+00:23:47.020 --> 00:23:50.210
+So now, what we'll do is insert another convolutional layer
+
+601
+00:23:50.210 --> 00:23:52.300
+after this max pooling layer.
+
+602
+00:23:52.300 --> 00:23:54.560
+Here, we have a kernel size of seven by seven.
+
+603
+00:23:54.560 --> 00:23:56.840
+We used valid padding or no padding,
+
+604
+00:23:56.840 --> 00:23:58.850
+and we also used a stride of four.
+
+605
+00:23:58.850 --> 00:24:01.830
+We also chose to extract 10 kernels
+
+606
+00:24:01.830 --> 00:24:03.440
+from this previous layer.
+
+607
+00:24:03.440 --> 00:24:06.020
+All this means we can use the same formula
+
+608
+00:24:06.020 --> 00:24:07.540
+we talked about before,
+
+609
+00:24:07.540 --> 00:24:08.710
+is we'll actually end up
+
+610
+00:24:08.710 --> 00:24:10.570
+with a five by five image.
+
+611
+00:24:10.570 --> 00:24:11.810
+So what do we actually do
+
+612
+00:24:11.810 --> 00:24:13.900
+with these resulting feature maps?
+
+613
+00:24:13.900 --> 00:24:15.090
+Well, we can actually add
+
+614
+00:24:15.090 --> 00:24:16.940
+what's called a flatten layer.
+
+615
+00:24:16.940 --> 00:24:20.610
+And what that does is it just unravels this entire thing
+
+616
+00:24:20.610 --> 00:24:22.010
+into one flat layer.
+
+617
+00:24:22.010 --> 00:24:24.430
+So here, we have five by five,
+
+618
+00:24:24.430 --> 00:24:26.480
+which is 25 pixels.
+
+619
+00:24:26.480 --> 00:24:30.450
+And we have 10 feature maps learned from the 10 kernels
+
+620
+00:24:30.450 --> 00:24:33.510
+that we applied to this max pooling layer, here.
+
+621
+00:24:33.510 --> 00:24:35.970
+And those values will go here in this flattened layer.
+
+622
+00:24:35.970 --> 00:24:40.070
+So this flattened layer will have 250 inputs.
+
+623
+00:24:40.070 --> 00:24:43.140
+By the way, these layers are fully connected.
+
+624
+00:24:43.140 --> 00:24:44.530
+And those will be finally sent out
+
+625
+00:24:44.530 --> 00:24:46.770
+to a single neuron, here,
+
+626
+00:24:46.770 --> 00:24:50.160
+which will end up in our binary classification.
+
+627
+00:24:50.160 --> 00:24:51.910
+This value will be zero
+
+628
+00:24:51.910 --> 00:24:55.000
+if the input image did not contain mountains.
+
+629
+00:24:55.000 --> 00:24:56.883
+And it will be one if it did.
+
+630
+00:24:57.840 --> 00:25:00.730
+So let's go into our practical application, here.
+
+631
+00:25:00.730 --> 00:25:03.350
+Let's say it's early 2017,
+
+632
+00:25:03.350 --> 00:25:06.070
+and we worked for a very small hedge fund
+
+633
+00:25:06.070 --> 00:25:09.540
+that's interested in making better earnings predictions.
+
+634
+00:25:09.540 --> 00:25:12.000
+Earnings which are typically released to the public,
+
+635
+00:25:12.000 --> 00:25:13.550
+once every quarter,
+
+636
+00:25:13.550 --> 00:25:17.060
+are reports detailing financial information of a company,
+
+637
+00:25:17.060 --> 00:25:19.360
+like revenue and expenses.
+
+638
+00:25:19.360 --> 00:25:22.960
+Investors, now, with the knowledge of the earnings report,
+
+639
+00:25:22.960 --> 00:25:25.470
+will trade the particular company's stock.
+
+640
+00:25:25.470 --> 00:25:27.750
+In that, it could either go up or down,
+
+641
+00:25:27.750 --> 00:25:29.710
+based on the earnings report.
+
+642
+00:25:29.710 --> 00:25:32.910
+The idea is that if we can predict the earnings report
+
+643
+00:25:32.910 --> 00:25:34.270
+before they're released,
+
+644
+00:25:34.270 --> 00:25:37.260
+then we can place a trade before earnings
+
+645
+00:25:37.260 --> 00:25:40.650
+and make money if the trade goes in our favor.
+
+646
+00:25:40.650 --> 00:25:42.190
+Fortunately, around this time,
+
+647
+00:25:42.190 --> 00:25:43.660
+a gaming company was set
+
+648
+00:25:43.660 --> 00:25:47.020
+to release a somewhat novel gaming device
+
+649
+00:25:47.020 --> 00:25:48.670
+within the coming months.
+
+650
+00:25:48.670 --> 00:25:51.410
+Our hypothesis was that if we could determine
+
+651
+00:25:51.410 --> 00:25:53.840
+how many of these devices were being distributed out
+
+652
+00:25:53.840 --> 00:25:54.820
+to customers,
+
+653
+00:25:54.820 --> 00:25:56.230
+we could get a better idea
+
+654
+00:25:56.230 --> 00:25:58.510
+of what their earnings report would look like.
+
+655
+00:25:58.510 --> 00:26:00.840
+At the time, there were three distribution centers
+
+656
+00:26:00.840 --> 00:26:01.950
+in North America,
+
+657
+00:26:01.950 --> 00:26:03.670
+two were in the United States,
+
+658
+00:26:03.670 --> 00:26:05.710
+and one was in Canada.
+
+659
+00:26:05.710 --> 00:26:07.840
+Our thought was that if we can monitor
+
+660
+00:26:07.840 --> 00:26:10.130
+how many tractor, trailers, or trucks,
+
+661
+00:26:10.130 --> 00:26:11.750
+leave the distribution center
+
+662
+00:26:11.750 --> 00:26:13.710
+for a few months before the release,
+
+663
+00:26:13.710 --> 00:26:15.510
+and then measure the increase in the number
+
+664
+00:26:15.510 --> 00:26:18.830
+of trucks trafficking the distribution center after release,
+
+665
+00:26:18.830 --> 00:26:21.690
+we could get an idea of how many consoles they're selling
+
+666
+00:26:21.690 --> 00:26:24.170
+and hopefully form a better earnings prediction.
+
+667
+00:26:24.170 --> 00:26:27.210
+So we need a way to monitor these distribution centers.
+
+668
+00:26:27.210 --> 00:26:28.860
+Let's start with traffic cameras.
+
+669
+00:26:28.860 --> 00:26:32.100
+In the U.S. we can use the Freedom of Information Act
+
+670
+00:26:32.100 --> 00:26:33.870
+and work with local and state governments
+
+671
+00:26:33.870 --> 00:26:36.290
+to get traffic camera footage in the vicinity
+
+672
+00:26:36.290 --> 00:26:38.330
+of these distribution centers.
+
+673
+00:26:38.330 --> 00:26:40.080
+Now, unfortunately, this tactic won't work
+
+674
+00:26:40.080 --> 00:26:43.520
+for the distribution center outside of the United States.
+
+675
+00:26:43.520 --> 00:26:44.710
+But fortunately for us,
+
+676
+00:26:44.710 --> 00:26:46.630
+cloud coverage was not a huge problem.
+
+677
+00:26:46.630 --> 00:26:49.590
+So that allowed us to work with satellite imaging companies.
+
+678
+00:26:49.590 --> 00:26:51.380
+So for this video, let's go ahead and stick
+
+679
+00:26:51.380 --> 00:26:54.700
+to the distribution centers in the United States, here.
+
+680
+00:26:54.700 --> 00:26:58.210
+And let's assume that we did obtain traffic camera footage,
+
+681
+00:26:58.210 --> 00:27:00.360
+just outside of the distribution center.
+
+682
+00:27:00.360 --> 00:27:02.450
+So over here is the distribution center.
+
+683
+00:27:02.450 --> 00:27:04.700
+Here is just a four way intersection.
+
+684
+00:27:04.700 --> 00:27:06.060
+Over here is to the highway,
+
+685
+00:27:06.060 --> 00:27:07.700
+and here cuts across through town.
+
+686
+00:27:07.700 --> 00:27:09.960
+Now, what we could do is just hire someone
+
+687
+00:27:09.960 --> 00:27:12.200
+to count the number of trucks coming and going,
+
+688
+00:27:12.200 --> 00:27:13.790
+and report back a number.
+
+689
+00:27:13.790 --> 00:27:15.800
+However, if we wanted to apply this concept
+
+690
+00:27:15.800 --> 00:27:17.550
+to other distribution centers
+
+691
+00:27:17.550 --> 00:27:18.800
+or different tactics,
+
+692
+00:27:18.800 --> 00:27:20.100
+then that wouldn't scale.
+
+693
+00:27:20.100 --> 00:27:23.600
+So what we need to do now is build a model which can tell us
+
+694
+00:27:23.600 --> 00:27:26.960
+whether a truck is in the frame or not.
+
+695
+00:27:26.960 --> 00:27:31.230
+We don't care about regular cars like sedans or SUVs.
+
+696
+00:27:31.230 --> 00:27:33.240
+And we also don't care if the truck is coming
+
+697
+00:27:33.240 --> 00:27:35.920
+or going from this particular location,
+
+698
+00:27:35.920 --> 00:27:38.130
+because we assume that for every truck that enters,
+
+699
+00:27:38.130 --> 00:27:39.910
+a truck will leave.
+
+700
+00:27:39.910 --> 00:27:42.030
+So what are these traffic camera feeds?
+
+701
+00:27:42.030 --> 00:27:44.710
+Well, they're actually just 30 images per second.
+
+702
+00:27:44.710 --> 00:27:47.460
+We need to model if the truck is in the frame or not.
+
+703
+00:27:47.460 --> 00:27:49.720
+And we also need logic surrounding the model
+
+704
+00:27:49.720 --> 00:27:51.580
+to actually count the number of trucks.
+
+705
+00:27:51.580 --> 00:27:54.720
+So what we can do is that as a truck enters the frame
+
+706
+00:27:54.720 --> 00:27:55.750
+of the image,
+
+707
+00:27:55.750 --> 00:27:56.960
+we can start a counter
+
+708
+00:27:56.960 --> 00:27:59.860
+for how many times the truck is identified in the image.
+
+709
+00:27:59.860 --> 00:28:02.570
+And then as soon as the truck is no longer identified
+
+710
+00:28:02.570 --> 00:28:03.410
+in the image,
+
+711
+00:28:03.410 --> 00:28:06.390
+we can divide by the total number of images
+
+712
+00:28:06.390 --> 00:28:08.240
+in which the truck was found.
+
+713
+00:28:08.240 --> 00:28:09.870
+All this means is that we will end up
+
+714
+00:28:09.870 --> 00:28:11.150
+with the number one
+
+715
+00:28:11.150 --> 00:28:14.210
+for every truck that enters and exits the frame.
+
+716
+00:28:14.210 --> 00:28:16.610
+As well, we'll divide the final count by two
+
+717
+00:28:16.610 --> 00:28:19.410
+because we don't care if trucks are coming or going.
+
+718
+00:28:19.410 --> 00:28:21.720
+Let's say that we need 100,000 images
+
+719
+00:28:21.720 --> 00:28:23.130
+to train our network.
+
+720
+00:28:23.130 --> 00:28:25.190
+This will equate to about an hour of video.
+
+721
+00:28:25.190 --> 00:28:30.060
+The image sizes are 335 in their RGB.
+
+722
+00:28:30.060 --> 00:28:32.820
+We're gonna have half of these 100,000 images,
+
+723
+00:28:32.820 --> 00:28:33.760
+one hour of video.
+
+724
+00:28:33.760 --> 00:28:35.400
+Half no trucks in them.
+
+725
+00:28:35.400 --> 00:28:38.640
+And then what we're gonna do is take these 100,000 images
+
+726
+00:28:38.640 --> 00:28:40.200
+with half no truck,
+
+727
+00:28:40.200 --> 00:28:43.150
+and we're gonna ship them off to Mechanical Turk.
+
+728
+00:28:43.150 --> 00:28:46.000
+Mechanical Turk is a service owned by Amazon
+
+729
+00:28:46.000 --> 00:28:49.230
+which allows people to outsource simple tasks
+
+730
+00:28:49.230 --> 00:28:51.230
+to a massive amount of workers.
+
+731
+00:28:51.230 --> 00:28:52.180
+So the first stage
+
+732
+00:28:52.180 --> 00:28:54.020
+that we'll send off to mechanical Turk
+
+733
+00:28:54.020 --> 00:28:56.410
+will be identifying segments of the video
+
+734
+00:28:56.410 --> 00:28:57.547
+which contain a truck
+
+735
+00:28:57.547 --> 00:28:59.670
+and which don't contain a truck.
+
+736
+00:28:59.670 --> 00:29:02.490
+The second stage will be taking those segments
+
+737
+00:29:02.490 --> 00:29:05.720
+and labeling each image in those segments,
+
+738
+00:29:05.720 --> 00:29:08.370
+either one or zero for containing
+
+739
+00:29:08.370 --> 00:29:10.520
+or not containing a truck.
+
+740
+00:29:10.520 --> 00:29:13.800
+The idea is that we want various angles of the truck,
+
+741
+00:29:13.800 --> 00:29:17.150
+pulling into or out of these distribution centers.
+
+742
+00:29:17.150 --> 00:29:20.570
+Again, we'll end up with 100,000 images labeled
+
+743
+00:29:20.570 --> 00:29:21.700
+of whether a truck
+
+744
+00:29:21.700 --> 00:29:24.360
+or a truck does not appear in the image.
+
+745
+00:29:24.360 --> 00:29:26.970
+And we'll have various angles of that truck.
+
+746
+00:29:26.970 --> 00:29:29.180
+All right, so what does our model look like?
+
+747
+00:29:29.180 --> 00:29:31.690
+Well, we're gonna use a convolutional neural network, here.
+
+748
+00:29:31.690 --> 00:29:33.740
+Our input is going to be RGB.
+
+749
+00:29:33.740 --> 00:29:36.130
+So three channels by 335.
+
+750
+00:29:36.130 --> 00:29:38.070
+We're going to have our first convolutional layer
+
+751
+00:29:38.070 --> 00:29:39.800
+which will have eight kernels.
+
+752
+00:29:39.800 --> 00:29:42.070
+It will use a three by three dimension
+
+753
+00:29:42.070 --> 00:29:44.170
+for each of those eight kernels.
+
+754
+00:29:44.170 --> 00:29:45.520
+The stride will be two
+
+755
+00:29:45.520 --> 00:29:47.240
+and it will use valid padding,
+
+756
+00:29:47.240 --> 00:29:49.220
+which means no padding.
+
+757
+00:29:49.220 --> 00:29:51.390
+Then those eight feature maps produced
+
+758
+00:29:51.390 --> 00:29:53.010
+by that convolutional layer
+
+759
+00:29:53.010 --> 00:29:55.160
+will be fed into a max pool layer
+
+760
+00:29:55.160 --> 00:29:56.760
+of a kernel of three by three
+
+761
+00:29:56.760 --> 00:29:58.120
+and a stride of four.
+
+762
+00:29:58.120 --> 00:30:00.310
+This similar pattern will continue on
+
+763
+00:30:00.310 --> 00:30:01.610
+with increasing the number
+
+764
+00:30:01.610 --> 00:30:03.650
+of kernels per convolutional layer.
+
+765
+00:30:03.650 --> 00:30:07.000
+As we said before, to learn more and more complex features
+
+766
+00:30:07.000 --> 00:30:08.070
+within the image.
+
+767
+00:30:08.070 --> 00:30:10.590
+We'll finally end with a flattening,
+
+768
+00:30:10.590 --> 00:30:12.110
+which is a fully connected layer
+
+769
+00:30:12.110 --> 00:30:13.890
+with a log loss.
+
+770
+00:30:13.890 --> 00:30:15.270
+As for hyper parameters,
+
+771
+00:30:15.270 --> 00:30:17.777
+for regularization, we're going to use L1
+
+772
+00:30:17.777 --> 00:30:20.210
+and L2 regularization.
+
+773
+00:30:20.210 --> 00:30:21.930
+We're going to use ReLUs
+
+774
+00:30:21.930 --> 00:30:23.740
+for our convolutional layers,
+
+775
+00:30:23.740 --> 00:30:26.120
+as well as our fully connected layers.
+
+776
+00:30:26.120 --> 00:30:28.490
+We're going to use Adam as our optimizer
+
+777
+00:30:28.490 --> 00:30:31.110
+and we're going to use Kaiming initialization
+
+778
+00:30:31.110 --> 00:30:34.350
+because of our asymmetric activation function.
+
+779
+00:30:34.350 --> 00:30:35.510
+If you need to review these,
+
+780
+00:30:35.510 --> 00:30:38.840
+go ahead and watch the original neural network video
+
+781
+00:30:38.840 --> 00:30:40.850
+in the deep learning section.
+
+782
+00:30:40.850 --> 00:30:43.960
+For training, we're going to have an 80/10/10 split.
+
+783
+00:30:43.960 --> 00:30:47.070
+What that means is 80% of our images will be used
+
+784
+00:30:47.070 --> 00:30:48.010
+for training,
+
+785
+00:30:48.010 --> 00:30:50.090
+10% will be used for validation,
+
+786
+00:30:50.090 --> 00:30:53.650
+and then 10% will be used as the test set.
+
+787
+00:30:53.650 --> 00:30:55.400
+We're going to use 10 epochs, here,
+
+788
+00:30:55.400 --> 00:30:56.590
+which means we're going to iterate
+
+789
+00:30:56.590 --> 00:30:58.520
+through our entire dataset
+
+790
+00:30:58.520 --> 00:30:59.630
+or this 80%, here,
+
+791
+00:30:59.630 --> 00:31:00.790
+10 times.
+
+792
+00:31:00.790 --> 00:31:04.570
+And our mini batch is going to be the size of 128.
+
+793
+00:31:04.570 --> 00:31:06.460
+So for that gradient step update,
+
+794
+00:31:06.460 --> 00:31:09.790
+we're going to process 128 images.
+
+795
+00:31:09.790 --> 00:31:11.880
+So after doing all of these things,
+
+796
+00:31:11.880 --> 00:31:13.010
+we had a problem.
+
+797
+00:31:13.010 --> 00:31:14.340
+It was overfitting,
+
+798
+00:31:14.340 --> 00:31:17.600
+which means that our training loss looked really great.
+
+799
+00:31:17.600 --> 00:31:19.370
+It looked like it had converged,
+
+800
+00:31:19.370 --> 00:31:22.000
+but when we went over to the validation set,
+
+801
+00:31:22.000 --> 00:31:23.300
+it didn't perform well.
+
+802
+00:31:23.300 --> 00:31:25.850
+So what that means is we're going to add dropout
+
+803
+00:31:25.850 --> 00:31:26.880
+to our neural network.
+
+804
+00:31:26.880 --> 00:31:30.800
+Here, we're going to add dropout after our pooling layers.
+
+805
+00:31:30.800 --> 00:31:33.050
+Additionally, we're going to add dropout
+
+806
+00:31:33.050 --> 00:31:36.080
+with our fully connected layer upon flattening.
+
+807
+00:31:36.080 --> 00:31:37.410
+So after we did this,
+
+808
+00:31:37.410 --> 00:31:41.080
+the problem was that the model was too slow to converge.
+
+809
+00:31:41.080 --> 00:31:43.610
+So training this neural network took too long
+
+810
+00:31:43.610 --> 00:31:45.880
+for the loss function to decrease.
+
+811
+00:31:45.880 --> 00:31:47.260
+So what we can add instead
+
+812
+00:31:47.260 --> 00:31:49.760
+is something called batch normalization.
+
+813
+00:31:49.760 --> 00:31:53.250
+All this means here is that we normalize the values,
+
+814
+00:31:53.250 --> 00:31:54.800
+that means subtracting the mean
+
+815
+00:31:54.800 --> 00:31:56.940
+and dividing by the standard deviation,
+
+816
+00:31:56.940 --> 00:31:58.370
+for all the values,
+
+817
+00:31:58.370 --> 00:32:01.680
+before they get passed to the activation function
+
+818
+00:32:01.680 --> 00:32:03.560
+within the convolutional layers.
+
+819
+00:32:03.560 --> 00:32:05.240
+We can also do this to the values
+
+820
+00:32:05.240 --> 00:32:07.690
+before they enter the activation functions
+
+821
+00:32:07.690 --> 00:32:11.110
+of the fully connected layers in the flattening layer.
+
+822
+00:32:11.110 --> 00:32:12.350
+This will help smooth
+
+823
+00:32:12.350 --> 00:32:15.650
+and speed up the loss function convergence.
+
+824
+00:32:15.650 --> 00:32:18.010
+We can also decrease the amount of dropout
+
+825
+00:32:18.010 --> 00:32:20.920
+because batch normalization usually contributes
+
+826
+00:32:20.920 --> 00:32:22.410
+to regularization.
+
+827
+00:32:22.410 --> 00:32:24.760
+All right, so after all of those things,
+
+828
+00:32:24.760 --> 00:32:28.030
+we actually ended up with about 100% test accuracy,
+
+829
+00:32:28.030 --> 00:32:30.430
+and identifying which frames did
+
+830
+00:32:30.430 --> 00:32:32.000
+and did not contain a truck.
+
+831
+00:32:32.000 --> 00:32:33.760
+So that's extremely good for us.
+
+832
+00:32:33.760 --> 00:32:35.950
+The output of our model, though,
+
+833
+00:32:35.950 --> 00:32:37.200
+in counting these trucks,
+
+834
+00:32:37.200 --> 00:32:39.570
+actually goes into another model
+
+835
+00:32:39.570 --> 00:32:41.960
+to predict the earnings report.
+
+836
+00:32:41.960 --> 00:32:45.340
+And then that actually is a feature into another model
+
+837
+00:32:45.340 --> 00:32:48.280
+which allows us to predict which trading strategy to use
+
+838
+00:32:48.280 --> 00:32:50.750
+in order to reflect what we think will happen
+
+839
+00:32:50.750 --> 00:32:52.480
+with our predicted earnings report.
+
+840
+00:32:52.480 --> 00:32:55.180
+Fortunately, our feature generated from this model was found
+
+841
+00:32:55.180 --> 00:32:56.400
+to be very predictive
+
+842
+00:32:56.400 --> 00:32:58.910
+and it helped us place a very nice trade
+
+843
+00:32:58.910 --> 00:33:00.240
+that paid off well.
+
+844
+00:33:00.240 --> 00:33:02.250
+Now, our convolutional neural network
+
+845
+00:33:02.250 --> 00:33:03.500
+is actually pretty simple.
+
+846
+00:33:03.500 --> 00:33:05.200
+Let's take a look at some of the state
+
+847
+00:33:05.200 --> 00:33:07.230
+of the art convolutional neural networks.
+
+848
+00:33:07.230 --> 00:33:08.370
+And by that, I mean some
+
+849
+00:33:08.370 --> 00:33:11.540
+of the best available convolutional neural networks.
+
+850
+00:33:11.540 --> 00:33:14.930
+AlexNet actually runs two convolutional neural networks
+
+851
+00:33:14.930 --> 00:33:16.150
+in parallel,
+
+852
+00:33:16.150 --> 00:33:19.570
+and introduces cross connections between them.
+
+853
+00:33:19.570 --> 00:33:21.460
+This has performed pretty well.
+
+854
+00:33:21.460 --> 00:33:22.900
+GoogLeNet, on the other hand,
+
+855
+00:33:22.900 --> 00:33:25.250
+introduces something called an inception layer,
+
+856
+00:33:25.250 --> 00:33:26.740
+which is really just a cool name
+
+857
+00:33:26.740 --> 00:33:31.150
+for using different kernel sizes per convolution.
+
+858
+00:33:31.150 --> 00:33:33.320
+These different sized kernels produce
+
+859
+00:33:33.320 --> 00:33:35.117
+different sized feature maps.
+
+860
+00:33:35.117 --> 00:33:38.010
+And these feature maps are actually just upended on top
+
+861
+00:33:38.010 --> 00:33:38.960
+of each other,
+
+862
+00:33:38.960 --> 00:33:42.610
+and the smaller feature maps are actually just zero padded
+
+863
+00:33:42.610 --> 00:33:45.050
+to match the larger feature maps
+
+864
+00:33:45.050 --> 00:33:47.730
+in which were generated from the larger kernels.
+
+865
+00:33:47.730 --> 00:33:49.750
+Finally, we'll look at ResNet,
+
+866
+00:33:49.750 --> 00:33:51.920
+which is a convolutional neural network
+
+867
+00:33:51.920 --> 00:33:54.960
+which introduces residual connections.
+
+868
+00:33:54.960 --> 00:33:57.000
+This can be effective at eliminating
+
+869
+00:33:57.000 --> 00:33:59.120
+these vanishing gradients
+
+870
+00:33:59.120 --> 00:34:01.490
+as the network grows deeper and deeper.
+
+871
+00:34:01.490 --> 00:34:02.410
+And they're implemented
+
+872
+00:34:02.410 --> 00:34:05.600
+by simply adding past feature map values
+
+873
+00:34:05.600 --> 00:34:07.400
+to future feature maps.
+
+874
+00:34:07.400 --> 00:34:12.250
+This allows networks using these skip connections or ResNet
+
+875
+00:34:12.250 --> 00:34:13.970
+to go fairly deep.
+
+876
+00:34:13.970 --> 00:34:17.190
+ResNet actually has 150 layers.
+
+877
+00:34:17.190 --> 00:34:19.750
+And these residual connections have been used
+
+878
+00:34:19.750 --> 00:34:20.890
+in some networks
+
+879
+00:34:20.890 --> 00:34:23.000
+to go up to 1000 layers.
+
+880
+00:34:23.000 --> 00:34:25.410
+The assumption is that the deeper the network,
+
+881
+00:34:25.410 --> 00:34:27.760
+the more ability the network has
+
+882
+00:34:27.760 --> 00:34:30.150
+to represent complex data.
+
+883
+00:34:30.150 --> 00:34:32.390
+ResNet did beat GoogLeNet and AlexNet.
+
+884
+00:34:32.390 --> 00:34:34.280
+So the results speak for themselves.
+
+885
+00:34:34.280 --> 00:34:35.420
+So to wrap up,
+
+886
+00:34:35.420 --> 00:34:38.030
+Keras is a good library that I recommend.
+
+887
+00:34:38.030 --> 00:34:40.460
+They offer convolutional layers,
+
+888
+00:34:40.460 --> 00:34:42.150
+it's called Conv2D,
+
+889
+00:34:42.150 --> 00:34:44.610
+where you can specify the number of kernels you want,
+
+890
+00:34:44.610 --> 00:34:46.800
+the kernel dimensions or sizes,
+
+891
+00:34:46.800 --> 00:34:50.180
+what activation functions you want at the particular layer.
+
+892
+00:34:50.180 --> 00:34:52.540
+They offer dense layers and fully connected layers
+
+893
+00:34:52.540 --> 00:34:54.930
+if you just wanna make regular neural networks.
+
+894
+00:34:54.930 --> 00:34:56.270
+They have flattening layers.
+
+895
+00:34:56.270 --> 00:34:58.140
+And they offer GPU support
+
+896
+00:34:58.140 --> 00:35:00.070
+which is a graphical processing unit.
+
+897
+00:35:00.070 --> 00:35:01.840
+If you're not familiar with this yet,
+
+898
+00:35:01.840 --> 00:35:03.730
+don't worry, we'll actually discuss that more
+
+899
+00:35:03.730 --> 00:35:06.590
+in the large scale machine learning section.
+
+900
+00:35:06.590 --> 00:35:08.560
+Now, if you don't want to start from scratch
+
+901
+00:35:08.560 --> 00:35:10.970
+and instead you want to use other models,
+
+902
+00:35:10.970 --> 00:35:12.730
+especially those state of the art models
+
+903
+00:35:12.730 --> 00:35:14.100
+that we talked about earlier,
+
+904
+00:35:14.100 --> 00:35:16.350
+you can use something called Keras Applications
+
+905
+00:35:16.350 --> 00:35:18.730
+which gives you access to pre-trained models.
+
+906
+00:35:18.730 --> 00:35:21.070
+So then you can go in there and you can access ResNet
+
+907
+00:35:21.070 --> 00:35:23.410
+or you can access InceptionNet.
+
+908
+00:35:23.410 --> 00:35:25.480
+All right, well, that wraps it up for this video.
+
+909
+00:35:25.480 --> 00:35:26.540
+Thanks for joining.
+
+910
+00:35:26.540 --> 00:35:29.120
+Join us in our next video as we continue
+
+911
+00:35:29.120 --> 00:35:30.553
+our deep learning journey.
+

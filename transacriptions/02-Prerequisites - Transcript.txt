@@ -1,0 +1,558 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:01.640
+<v Instructor>Hello, everybody.</v>
+
+2
+00:00:01.640 --> 00:00:03.690
+Welcome to the machine learning crash course
+
+3
+00:00:03.690 --> 00:00:07.570
+prerequisites video. Here, the idea is to give you some idea
+
+4
+00:00:07.570 --> 00:00:09.460
+of what background could be useful
+
+5
+00:00:09.460 --> 00:00:12.510
+before we begin the machine learning crash course.
+
+6
+00:00:12.510 --> 00:00:15.024
+Now, if your goal is to just become conversational
+
+7
+00:00:15.024 --> 00:00:18.140
+in machine learning, then I wouldn't focus too much
+
+8
+00:00:18.140 --> 00:00:19.780
+on the concepts in this video.
+
+9
+00:00:19.780 --> 00:00:21.670
+However, if your goal is to interview for
+
+10
+00:00:21.670 --> 00:00:24.940
+a technical ML based role then it will be really helpful
+
+11
+00:00:24.940 --> 00:00:27.710
+to know these things to help you grasp the math
+
+12
+00:00:27.710 --> 00:00:30.880
+behind the models. So first let's go over some terminology
+
+13
+00:00:30.880 --> 00:00:33.610
+generally models we'll take in features.
+
+14
+00:00:33.610 --> 00:00:35.550
+An example of features is what we saw
+
+15
+00:00:35.550 --> 00:00:37.970
+in the introduction video which had the price
+
+16
+00:00:37.970 --> 00:00:40.980
+of Bitcoin organized by each month.
+
+17
+00:00:40.980 --> 00:00:44.200
+Features are generally observations that can be continuous
+
+18
+00:00:44.200 --> 00:00:47.558
+such as the price of Bitcoin. It could be categorical such
+
+19
+00:00:47.558 --> 00:00:49.960
+as the label that we had for Bitcoin
+
+20
+00:00:49.960 --> 00:00:52.920
+which is either up or down, and it can also be ordinal.
+
+21
+00:00:52.920 --> 00:00:54.960
+This is the case where it's a category but
+
+22
+00:00:54.960 --> 00:00:57.240
+it can be ordered. This could be something like small
+
+23
+00:00:57.240 --> 00:00:59.760
+medium and large. Features are useful
+
+24
+00:00:59.760 --> 00:01:02.360
+when we want to predict something of interest.
+
+25
+00:01:02.360 --> 00:01:05.410
+Features are generally paired with labels.
+
+26
+00:01:05.410 --> 00:01:07.980
+Like we mentioned earlier, the label that we used
+
+27
+00:01:07.980 --> 00:01:11.100
+in the Bitcoin example was a directional indicator
+
+28
+00:01:11.100 --> 00:01:14.440
+of up or down. That would be a categorical label.
+
+29
+00:01:14.440 --> 00:01:16.090
+However, labels can also take on
+
+30
+00:01:16.090 --> 00:01:18.820
+continuous variables as well as ordinal.
+
+31
+00:01:18.820 --> 00:01:20.440
+Labels are generally something
+
+32
+00:01:20.440 --> 00:01:23.020
+that's going to be useful that we want to know.
+
+33
+00:01:23.020 --> 00:01:27.244
+Now, examples are pairs of features and labels.
+
+34
+00:01:27.244 --> 00:01:29.544
+Examples are typically going to be used
+
+35
+00:01:29.544 --> 00:01:32.870
+in a supervised model. Unsupervised models
+
+36
+00:01:32.870 --> 00:01:35.456
+will not have the label. Now in terms of math,
+
+37
+00:01:35.456 --> 00:01:39.296
+we'll be going over concepts such as arrays or vectors.
+
+38
+00:01:39.296 --> 00:01:42.340
+In this case, an array is just a feature
+
+39
+00:01:42.340 --> 00:01:45.773
+which has been transformed to a list of values.
+
+40
+00:01:45.773 --> 00:01:48.620
+These could be words as well as numbers.
+
+41
+00:01:48.620 --> 00:01:50.210
+Now, these factors can be assigned
+
+42
+00:01:50.210 --> 00:01:53.670
+to some variable in our case, I'll be using x-bar a lot.
+
+43
+00:01:53.670 --> 00:01:56.410
+The bar just indicates that it is in fact a vector
+
+44
+00:01:56.410 --> 00:01:58.380
+and each element in the vector will be called
+
+45
+00:01:58.380 --> 00:02:00.920
+x one, x two, x three, x four,
+
+46
+00:02:00.920 --> 00:02:04.750
+and so on for how many of our values are in the vector.
+
+47
+00:02:04.750 --> 00:02:08.520
+Now, in some cases, what you'll see me do is select a couple
+
+48
+00:02:08.520 --> 00:02:12.060
+of these elements in the vector and actually plot them out.
+
+49
+00:02:12.060 --> 00:02:16.500
+So we could have x one on this axis, x two on this axis.
+
+50
+00:02:16.500 --> 00:02:21.500
+And if we plot 29.3 K and 33.5 K together on these axis
+
+51
+00:02:22.340 --> 00:02:24.490
+we would have a point right here.
+
+52
+00:02:24.490 --> 00:02:27.950
+Again, this is just plotting a vector that we have.
+
+53
+00:02:27.950 --> 00:02:30.757
+Now next we can have a two dimensional array
+
+54
+00:02:30.757 --> 00:02:33.000
+and that will give us a matrix.
+
+55
+00:02:33.000 --> 00:02:35.050
+So for instance, this is a matrix
+
+56
+00:02:35.050 --> 00:02:38.740
+and I'll generally assign a variable to some capital letter.
+
+57
+00:02:38.740 --> 00:02:42.510
+So here, this matrix could be A, and that could be matrix B.
+
+58
+00:02:42.510 --> 00:02:44.780
+Now, once we have these two matrices
+
+59
+00:02:44.780 --> 00:02:47.550
+what we can do is a matrix multiplication
+
+60
+00:02:47.550 --> 00:02:49.490
+that will look something like this.
+
+61
+00:02:49.490 --> 00:02:53.060
+Now, if we just have a single matrix, we can do the inverse
+
+62
+00:02:53.060 --> 00:02:55.810
+of a matrix that would be notated like this.
+
+63
+00:02:55.810 --> 00:02:58.920
+And then finally, we can transpose a single matrix.
+
+64
+00:02:58.920 --> 00:03:01.900
+Now we don't often use these across the crash course
+
+65
+00:03:01.900 --> 00:03:04.040
+but we do use them a couple of times.
+
+66
+00:03:04.040 --> 00:03:06.790
+So I just want to let you know that we will see them,
+
+67
+00:03:06.790 --> 00:03:08.890
+as well, in a couple of videos, we'll be talking
+
+68
+00:03:08.890 --> 00:03:11.850
+about polynomials. Now specifically, we'll be talking
+
+69
+00:03:11.850 --> 00:03:14.980
+about lines. This is just the equation of a line.
+
+70
+00:03:14.980 --> 00:03:16.810
+We'll also be talking about quadratics.
+
+71
+00:03:16.810 --> 00:03:19.020
+So here's an example of that, but in general
+
+72
+00:03:19.020 --> 00:03:22.370
+we'll only be talking about polynomials a couple of times.
+
+73
+00:03:22.370 --> 00:03:24.758
+Finally, we're going to have to take the derivative
+
+74
+00:03:24.758 --> 00:03:28.780
+of these polynomials for some of the advanced
+
+75
+00:03:28.780 --> 00:03:30.630
+machine learning models, but we'll cover
+
+76
+00:03:30.630 --> 00:03:32.770
+that when we get there. Now beyond the math
+
+77
+00:03:32.770 --> 00:03:35.650
+we also want to know a little bit about probability.
+
+78
+00:03:35.650 --> 00:03:38.210
+So we'll want to know basic probability, for instance
+
+79
+00:03:38.210 --> 00:03:42.550
+rolling a two on a six sided die would have the probability
+
+80
+00:03:42.550 --> 00:03:45.480
+of one out of six, that's because there's one way
+
+81
+00:03:45.480 --> 00:03:48.730
+to get a two out of all of the possible ways
+
+82
+00:03:48.730 --> 00:03:50.040
+that we can also roll the die.
+
+83
+00:03:50.040 --> 00:03:52.350
+So we could roll a one, a two or three or four and five
+
+84
+00:03:52.350 --> 00:03:56.660
+and a six, which gives us a probability of one over six.
+
+85
+00:03:56.660 --> 00:03:59.240
+Now the probability of rolling two twos
+
+86
+00:03:59.240 --> 00:04:02.160
+with a pair of dice is just that multiplied
+
+87
+00:04:02.160 --> 00:04:05.620
+with itself because both of those have to happen.
+
+88
+00:04:05.620 --> 00:04:07.410
+We will be using the equivalent
+
+89
+00:04:07.410 --> 00:04:09.920
+of an end in the world of probability.
+
+90
+00:04:09.920 --> 00:04:12.010
+So rolling the first two was one out of six
+
+91
+00:04:12.010 --> 00:04:14.899
+and rolling a second two will take on the probability
+
+92
+00:04:14.899 --> 00:04:18.810
+of 1 over 36. Now a little bit more in depth
+
+93
+00:04:18.810 --> 00:04:20.590
+on the probabilities. We'll want to know
+
+94
+00:04:20.590 --> 00:04:22.950
+conditional probabilities. So for instance,
+
+95
+00:04:22.950 --> 00:04:26.460
+the probability of drawing two hearts in a row from a deck
+
+96
+00:04:26.460 --> 00:04:31.460
+of cards would first begin with a 13 out of 52 chance.
+
+97
+00:04:31.630 --> 00:04:35.570
+That's because there are 13 hearts out of all 52 cards.
+
+98
+00:04:35.570 --> 00:04:38.200
+And then once we drew that card out
+
+99
+00:04:38.200 --> 00:04:41.930
+there's only 51 cards now, and 12 of those
+
+100
+00:04:41.930 --> 00:04:44.670
+are hearts that's because we already drew a heart.
+
+101
+00:04:44.670 --> 00:04:46.980
+So here, the probability of drawing two hearts
+
+102
+00:04:46.980 --> 00:04:51.270
+in a row would be 5.88%. Lastly, in probability,
+
+103
+00:04:51.270 --> 00:04:53.350
+we'll be talking about distributions.
+
+104
+00:04:53.350 --> 00:04:56.530
+So a very common distribution is the gaussian distribution.
+
+105
+00:04:56.530 --> 00:04:59.020
+An example of a Gaussian distribution would be
+
+106
+00:04:59.020 --> 00:05:01.960
+the heights in inches of a population.
+
+107
+00:05:01.960 --> 00:05:05.190
+So let's say the average would be 63 inches.
+
+108
+00:05:05.190 --> 00:05:08.650
+So that would be the most likely height for a person.
+
+109
+00:05:08.650 --> 00:05:11.120
+And then it will get less and less likely
+
+110
+00:05:11.120 --> 00:05:14.680
+for the height to be away from that average.
+
+111
+00:05:14.680 --> 00:05:18.430
+So here, the chance of being 60 inches tall is less likely
+
+112
+00:05:18.430 --> 00:05:21.270
+than being 63 inches tall. Another distribution
+
+113
+00:05:21.270 --> 00:05:24.300
+we'll be talking about is the uniform distribution.
+
+114
+00:05:24.300 --> 00:05:27.010
+When we talked about rolling a dice, every single number
+
+115
+00:05:27.010 --> 00:05:30.860
+on the dice had an equal probability of being landed on.
+
+116
+00:05:30.860 --> 00:05:33.850
+So in that case, it would be a uniform distribution
+
+117
+00:05:33.850 --> 00:05:36.310
+across all of the sides of the dice.
+
+118
+00:05:36.310 --> 00:05:39.770
+Lastly, we'll also be covering the beta distribution
+
+119
+00:05:39.770 --> 00:05:41.560
+and this is good if we want to model something
+
+120
+00:05:41.560 --> 00:05:43.730
+such as rates. So let's say that we wanted
+
+121
+00:05:43.730 --> 00:05:46.720
+to measure the conversion rate of some model.
+
+122
+00:05:46.720 --> 00:05:49.450
+Here, conversion rate just means, did they click on the ad?
+
+123
+00:05:49.450 --> 00:05:51.690
+Did they purchase a product? Did they view the video?
+
+124
+00:05:51.690 --> 00:05:55.020
+Things like that? This will help us understand better.
+
+125
+00:05:55.020 --> 00:05:58.570
+The actual conversion rate that we've measured so far.
+
+126
+00:05:58.570 --> 00:06:00.010
+So in this case, if we've measured
+
+127
+00:06:00.010 --> 00:06:03.440
+that half of our users clicked on a particular ad
+
+128
+00:06:03.440 --> 00:06:07.060
+then the conversion rate would most likely be 50%
+
+129
+00:06:07.060 --> 00:06:10.170
+but there's also a distribution around this 50% such
+
+130
+00:06:10.170 --> 00:06:13.780
+that it could less likely be, 75%
+
+131
+00:06:13.780 --> 00:06:16.630
+as the model continues to operate.
+
+132
+00:06:16.630 --> 00:06:19.990
+It could also less likely be 25% conversion rate
+
+133
+00:06:19.990 --> 00:06:21.840
+as the model continues to operate.
+
+134
+00:06:21.840 --> 00:06:24.530
+And we get down to extremely unlikely
+
+135
+00:06:24.530 --> 00:06:26.520
+for the conversion rate to be zero
+
+136
+00:06:26.520 --> 00:06:30.750
+or 100% based on the models performance so far.
+
+137
+00:06:30.750 --> 00:06:33.530
+We'll talk more about beta distributions once we get there
+
+138
+00:06:33.530 --> 00:06:35.120
+that's all that we'll need to know for now.
+
+139
+00:06:35.120 --> 00:06:36.523
+Let's go ahead and begin.
+

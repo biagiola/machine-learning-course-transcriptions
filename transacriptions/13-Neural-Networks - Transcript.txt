@@ -1,0 +1,3282 @@
+WEBVTT
+
+1
+00:00:00.310 --> 00:00:02.570
+<v Instructor>Welcome back to MLExpert's</v>
+
+2
+00:00:02.570 --> 00:00:04.110
+Machine Learning Crash Course.
+
+3
+00:00:04.110 --> 00:00:04.943
+In this session,
+
+4
+00:00:04.943 --> 00:00:07.710
+we're going to be talking about neural networks.
+
+5
+00:00:07.710 --> 00:00:10.150
+We've gone over several supervised learning models,
+
+6
+00:00:10.150 --> 00:00:12.570
+and one of them was logistic regression.
+
+7
+00:00:12.570 --> 00:00:15.600
+In that video, we went over how to use logistic regression
+
+8
+00:00:15.600 --> 00:00:18.700
+to separate non-linear data.
+
+9
+00:00:18.700 --> 00:00:22.090
+As well, we also went over SPMs, which through kernels,
+
+10
+00:00:22.090 --> 00:00:25.040
+could also classify non-linear data.
+
+11
+00:00:25.040 --> 00:00:27.380
+Those models will work for a lot of cases
+
+12
+00:00:27.380 --> 00:00:28.550
+in machine learning.
+
+13
+00:00:28.550 --> 00:00:30.450
+However, there are other methods available
+
+14
+00:00:30.450 --> 00:00:32.880
+when working with non-linear data.
+
+15
+00:00:32.880 --> 00:00:35.560
+One such method is called a neural network.
+
+16
+00:00:35.560 --> 00:00:37.690
+First, we're going to talk about a neuron.
+
+17
+00:00:37.690 --> 00:00:41.350
+It takes inputs, multiplies the input by weight.
+
+18
+00:00:41.350 --> 00:00:45.670
+So here X1 would be multiplied by W1,
+
+19
+00:00:45.670 --> 00:00:47.613
+X2 would be multiplied by W2,
+
+20
+00:00:48.680 --> 00:00:52.210
+and, finally, X3 would be multiplied by W3.
+
+21
+00:00:52.210 --> 00:00:56.170
+All of these terms are then added up into this summation.
+
+22
+00:00:56.170 --> 00:00:58.950
+That result of the summation is then passed
+
+23
+00:00:58.950 --> 00:01:01.210
+through a non-linear function.
+
+24
+00:01:01.210 --> 00:01:05.180
+Here, we'll call it sigma to represent the sigmoid function
+
+25
+00:01:05.180 --> 00:01:07.910
+that we talked about in the logistic regression video.
+
+26
+00:01:07.910 --> 00:01:11.530
+Now, this entire result is equal to our output.
+
+27
+00:01:11.530 --> 00:01:13.120
+Now, in the supervised learning section,
+
+28
+00:01:13.120 --> 00:01:16.250
+we talked about how that can be represented with this.
+
+29
+00:01:16.250 --> 00:01:18.903
+So this is W transpose X.
+
+30
+00:01:20.160 --> 00:01:22.010
+Now, this should sound very familiar,
+
+31
+00:01:22.010 --> 00:01:25.460
+because this is effectively what logistic regression does.
+
+32
+00:01:25.460 --> 00:01:29.460
+It has some weight, which is multiplied by some feature,
+
+33
+00:01:29.460 --> 00:01:32.560
+and then that is put into a sigmoid function.
+
+34
+00:01:32.560 --> 00:01:34.180
+Now, here we're missing a bias,
+
+35
+00:01:34.180 --> 00:01:36.240
+so let's go ahead and add that.
+
+36
+00:01:36.240 --> 00:01:39.080
+Here, this input will always be one,
+
+37
+00:01:39.080 --> 00:01:42.780
+and then the weight or the bias here that we'll learn
+
+38
+00:01:42.780 --> 00:01:44.610
+is the term that we would learn
+
+39
+00:01:44.610 --> 00:01:47.150
+in our bias for logistic regression.
+
+40
+00:01:47.150 --> 00:01:51.410
+So, this neuron and the logistic regression model
+
+41
+00:01:51.410 --> 00:01:54.310
+that we went over are equivalent, in this case.
+
+42
+00:01:54.310 --> 00:01:55.780
+In the logistic regression video,
+
+43
+00:01:55.780 --> 00:01:57.510
+we also went over a loss.
+
+44
+00:01:57.510 --> 00:01:59.440
+So here we can define our loss
+
+45
+00:01:59.440 --> 00:02:02.830
+as the difference between y hat, our output,
+
+46
+00:02:02.830 --> 00:02:07.100
+and y, the actual label of the example.
+
+47
+00:02:07.100 --> 00:02:09.760
+That loss that we use here is the exact same loss
+
+48
+00:02:09.760 --> 00:02:12.220
+that we use for logistic regression.
+
+49
+00:02:12.220 --> 00:02:15.180
+So here we have the negative log loss summed
+
+50
+00:02:15.180 --> 00:02:18.150
+and averaged across all the examples.
+
+51
+00:02:18.150 --> 00:02:19.860
+Now, with that loss function,
+
+52
+00:02:19.860 --> 00:02:22.520
+in order to update our weights appropriately,
+
+53
+00:02:22.520 --> 00:02:24.430
+we have to take the gradient.
+
+54
+00:02:24.430 --> 00:02:27.380
+So here we take the gradient in the same way that we did
+
+55
+00:02:27.380 --> 00:02:29.760
+in the logistic regression video.
+
+56
+00:02:29.760 --> 00:02:33.070
+So here we have the partial derivative of the loss
+
+57
+00:02:33.070 --> 00:02:35.840
+with respect to the bias.
+
+58
+00:02:35.840 --> 00:02:38.360
+We would also have the derivative of the loss
+
+59
+00:02:38.360 --> 00:02:40.060
+with respect to weight one,
+
+60
+00:02:40.060 --> 00:02:41.430
+which would be in here somewhere.
+
+61
+00:02:41.430 --> 00:02:44.320
+Finally, we'd have the partial derivative of the loss
+
+62
+00:02:44.320 --> 00:02:46.140
+with respect to weight three.
+
+63
+00:02:46.140 --> 00:02:47.860
+Now that we have the gradient,
+
+64
+00:02:47.860 --> 00:02:49.820
+we can go ahead and update our weights.
+
+65
+00:02:49.820 --> 00:02:52.440
+So whatever our weights are at a particular time,
+
+66
+00:02:52.440 --> 00:02:56.040
+we'd move in the opposite direction of our gradient
+
+67
+00:02:56.040 --> 00:02:59.350
+and adjust by some factor called the learning rate.
+
+68
+00:02:59.350 --> 00:03:02.470
+So one question could be, why do we need this bias here?
+
+69
+00:03:02.470 --> 00:03:05.020
+Let's say that we wanted to train our neuron
+
+70
+00:03:05.020 --> 00:03:09.200
+to be able to output a one, or that was the true label,
+
+71
+00:03:09.200 --> 00:03:11.520
+so that's what we want our prediction to be.
+
+72
+00:03:11.520 --> 00:03:13.770
+Well, since the inputs are all zero,
+
+73
+00:03:13.770 --> 00:03:15.990
+all of these multiplications would be zero,
+
+74
+00:03:15.990 --> 00:03:18.680
+which would mean the sum would be zero,
+
+75
+00:03:18.680 --> 00:03:22.703
+and the value of a sigmoid function at zero is 0.5.
+
+76
+00:03:23.810 --> 00:03:26.420
+So it's not possible to train this neuron
+
+77
+00:03:26.420 --> 00:03:28.150
+to do what we want.
+
+78
+00:03:28.150 --> 00:03:30.420
+Now, if we had a bias here,
+
+79
+00:03:30.420 --> 00:03:32.170
+so this input would always be one,
+
+80
+00:03:32.170 --> 00:03:34.930
+and we would just train a weight of how much we want
+
+81
+00:03:34.930 --> 00:03:37.510
+to multiply this one by,
+
+82
+00:03:37.510 --> 00:03:39.610
+if we included that in our summation,
+
+83
+00:03:39.610 --> 00:03:42.260
+all the sudden, we would now be able to train B,
+
+84
+00:03:42.260 --> 00:03:44.740
+such that we could output a one,
+
+85
+00:03:44.740 --> 00:03:47.980
+'cause now B could be trained to be something quite large
+
+86
+00:03:47.980 --> 00:03:51.510
+maybe 20, such that our sigmoid function
+
+87
+00:03:51.510 --> 00:03:54.260
+could actually output a one now
+
+88
+00:03:54.260 --> 00:03:56.490
+So now that we have our trained model,
+
+89
+00:03:56.490 --> 00:03:59.870
+this is effectively logistic regression, and we can see
+
+90
+00:03:59.870 --> 00:04:03.580
+that we'd be able to separate these two clusters here
+
+91
+00:04:03.580 --> 00:04:06.050
+with a linear decision boundary
+
+92
+00:04:06.050 --> 00:04:08.693
+just as we did with logistic regression.
+
+93
+00:04:10.460 --> 00:04:12.730
+For logistic regression and SPM,
+
+94
+00:04:12.730 --> 00:04:15.070
+we had approaches to handle data
+
+95
+00:04:15.070 --> 00:04:17.550
+that was not linearly separable.
+
+96
+00:04:17.550 --> 00:04:20.880
+However, perceptrons take on another perspective.
+
+97
+00:04:20.880 --> 00:04:23.270
+While we could use feature transforms
+
+98
+00:04:23.270 --> 00:04:28.210
+like X squared here to separate data like this,
+
+99
+00:04:28.210 --> 00:04:31.680
+I couldn't find a proper feature transformation
+
+100
+00:04:31.680 --> 00:04:34.340
+that would be able to separate this data.
+
+101
+00:04:34.340 --> 00:04:37.150
+There are other tools like k-nearest neighbors,
+
+102
+00:04:37.150 --> 00:04:39.710
+which looks at the nearest neighbors
+
+103
+00:04:39.710 --> 00:04:41.570
+in order to classify something.
+
+104
+00:04:41.570 --> 00:04:45.100
+And since we have these gaps here between the spirals,
+
+105
+00:04:45.100 --> 00:04:47.370
+this would actually work quite well.
+
+106
+00:04:47.370 --> 00:04:49.360
+We could also use boosted trees here,
+
+107
+00:04:49.360 --> 00:04:52.550
+but since boosted trees have to create decision boundaries
+
+108
+00:04:52.550 --> 00:04:54.700
+that are parallel to either access,
+
+109
+00:04:54.700 --> 00:04:57.710
+it may not be the greatest algorithm for us.
+
+110
+00:04:57.710 --> 00:05:00.390
+So how do neurons handle this case?
+
+111
+00:05:00.390 --> 00:05:03.530
+Well, they employ a pretty unique strategy.
+
+112
+00:05:03.530 --> 00:05:05.810
+Let's first take a copy of this node,
+
+113
+00:05:05.810 --> 00:05:08.120
+which is just a summation and a sigmoid,
+
+114
+00:05:08.120 --> 00:05:10.330
+and put one over here.
+
+115
+00:05:10.330 --> 00:05:12.520
+You know, it doesn't look like we did very much,
+
+116
+00:05:12.520 --> 00:05:16.350
+but what we can do now is add another node here
+
+117
+00:05:16.350 --> 00:05:18.210
+and connect all of the inputs
+
+118
+00:05:18.210 --> 00:05:20.940
+to both this node and this node.
+
+119
+00:05:20.940 --> 00:05:24.030
+So, effectively, what we've done is all of our inputs
+
+120
+00:05:24.030 --> 00:05:27.030
+like logistic regression, go to this node, this node,
+
+121
+00:05:27.030 --> 00:05:29.570
+this node, and then that is summed through a sigmoid.
+
+122
+00:05:29.570 --> 00:05:33.090
+Additionally, though, we also have all of the inputs going
+
+123
+00:05:33.090 --> 00:05:36.150
+to this second logistic regression function.
+
+124
+00:05:36.150 --> 00:05:40.080
+And then we have a third logistic regression function,
+
+125
+00:05:40.080 --> 00:05:43.460
+which takes as inputs the previous two outputs
+
+126
+00:05:43.460 --> 00:05:45.150
+from the other neurons.
+
+127
+00:05:45.150 --> 00:05:48.100
+This node would also have a bias, so keep that in mind.
+
+128
+00:05:48.100 --> 00:05:50.850
+So, let's look at what happened to our parameters.
+
+129
+00:05:50.850 --> 00:05:52.650
+We have a couple of biases here.
+
+130
+00:05:52.650 --> 00:05:55.840
+We have now double the weight over here,
+
+131
+00:05:55.840 --> 00:05:58.130
+and we have two added weights over here
+
+132
+00:05:58.130 --> 00:05:59.940
+to feed into this neuron.
+
+133
+00:05:59.940 --> 00:06:02.390
+So, let's figure out what's going on here
+
+134
+00:06:02.390 --> 00:06:04.580
+and why we added two nodes.
+
+135
+00:06:04.580 --> 00:06:06.700
+So what if we had data like this?
+
+136
+00:06:06.700 --> 00:06:09.050
+Well, it's not linearly separable
+
+137
+00:06:09.050 --> 00:06:10.980
+in the sense of here and here.
+
+138
+00:06:10.980 --> 00:06:13.240
+We could use feature transforms here
+
+139
+00:06:13.240 --> 00:06:16.430
+if you just multiply X1 times X2.
+
+140
+00:06:16.430 --> 00:06:20.020
+All of the sudden this will become linearly separable,
+
+141
+00:06:20.020 --> 00:06:22.380
+but, instead, let's say that we didn't want to use
+
+142
+00:06:22.380 --> 00:06:24.200
+feature transformations here.
+
+143
+00:06:24.200 --> 00:06:26.480
+In that case, we're back to a single line, right?
+
+144
+00:06:26.480 --> 00:06:29.460
+And we can't separate this data either way we slice it.
+
+145
+00:06:29.460 --> 00:06:32.930
+Really, the only idea is that we have two lines
+
+146
+00:06:32.930 --> 00:06:34.220
+to separate our data.
+
+147
+00:06:34.220 --> 00:06:37.290
+This way, everything within the lines is one class,
+
+148
+00:06:37.290 --> 00:06:40.030
+and everything outside of the lines is another class.
+
+149
+00:06:40.030 --> 00:06:41.850
+So how do we actually do this?
+
+150
+00:06:41.850 --> 00:06:45.170
+Well, this neuron here, since we know it can learn only
+
+151
+00:06:45.170 --> 00:06:48.560
+a single line could learn this line.
+
+152
+00:06:48.560 --> 00:06:51.780
+This neuron could learn this line.
+
+153
+00:06:51.780 --> 00:06:54.300
+And then this neuron here,
+
+154
+00:06:54.300 --> 00:06:58.610
+since it's just a weighted sum of both of those lines,
+
+155
+00:06:58.610 --> 00:07:01.560
+could learn to use both of those lines as tools
+
+156
+00:07:01.560 --> 00:07:04.280
+to complete the classification.
+
+157
+00:07:04.280 --> 00:07:06.870
+This is exactly how a neural network learns
+
+158
+00:07:06.870 --> 00:07:09.450
+to classify non-linear data.
+
+159
+00:07:09.450 --> 00:07:11.800
+All right, so what if we have something like this?
+
+160
+00:07:11.800 --> 00:07:13.920
+It seems a little bit more challenging.
+
+161
+00:07:13.920 --> 00:07:15.040
+Well, what we can do,
+
+162
+00:07:15.040 --> 00:07:19.100
+instead of just having two neurons here, let's make four.
+
+163
+00:07:19.100 --> 00:07:21.000
+This neuron can learn this line.
+
+164
+00:07:21.000 --> 00:07:24.547
+This neuron can learn that line, that one, this one,
+
+165
+00:07:24.547 --> 00:07:26.590
+and that one, that one.
+
+166
+00:07:26.590 --> 00:07:30.180
+Finally, this neuron can learn a linear combination
+
+167
+00:07:30.180 --> 00:07:34.230
+of all of these lines in order to classify all examples
+
+168
+00:07:34.230 --> 00:07:36.770
+within this box as one class
+
+169
+00:07:36.770 --> 00:07:39.913
+and all of the examples outside of the box as another.
+
+170
+00:07:40.900 --> 00:07:42.600
+Well, what about this data?
+
+171
+00:07:42.600 --> 00:07:45.560
+What we could do is just add a bunch more neurons
+
+172
+00:07:45.560 --> 00:07:48.180
+and have this neuron learn this line,
+
+173
+00:07:48.180 --> 00:07:50.530
+this neuron learn this line, and so on
+
+174
+00:07:50.530 --> 00:07:53.280
+for maybe 1,000 neurons.
+
+175
+00:07:53.280 --> 00:07:56.530
+And then this neuron can learn the linear combination
+
+176
+00:07:56.530 --> 00:07:59.150
+of thousands of lines, perhaps,
+
+177
+00:07:59.150 --> 00:08:02.180
+such that everything in this line is one category,
+
+178
+00:08:02.180 --> 00:08:05.030
+and everything on the right side of this line is another.
+
+179
+00:08:05.030 --> 00:08:06.727
+That is one way you could do it.
+
+180
+00:08:06.727 --> 00:08:10.010
+And technically you only need one hidden layer,
+
+181
+00:08:10.010 --> 00:08:14.240
+it's called, to represent any arbitrary function.
+
+182
+00:08:14.240 --> 00:08:16.860
+However, that's not typically what's done.
+
+183
+00:08:16.860 --> 00:08:20.740
+What's usually done is that we just add another layer of,
+
+184
+00:08:20.740 --> 00:08:23.010
+we'll say, K neurons here.
+
+185
+00:08:23.010 --> 00:08:24.580
+We'll call this N neurons.
+
+186
+00:08:24.580 --> 00:08:27.460
+And K is typically a little bit smaller than N,
+
+187
+00:08:27.460 --> 00:08:29.530
+and you generally work your way down
+
+188
+00:08:29.530 --> 00:08:32.100
+in the case of binary classification
+
+189
+00:08:32.100 --> 00:08:35.110
+to a single output of which class it is.
+
+190
+00:08:35.110 --> 00:08:37.100
+Why would you do something like this?
+
+191
+00:08:37.100 --> 00:08:39.390
+Well, what this layer can do
+
+192
+00:08:39.390 --> 00:08:42.730
+is start to put together different lines,
+
+193
+00:08:42.730 --> 00:08:45.310
+such that this neuron can learn a corner,
+
+194
+00:08:45.310 --> 00:08:48.600
+this neuron can learn maybe a little zigzag,
+
+195
+00:08:48.600 --> 00:08:51.620
+and this neuron can learn this corner over here.
+
+196
+00:08:51.620 --> 00:08:53.100
+And then what we can do,
+
+197
+00:08:53.100 --> 00:08:55.700
+if we have even more layers over here,
+
+198
+00:08:55.700 --> 00:08:59.780
+this neuron, say, can connect corners and zigzags together
+
+199
+00:08:59.780 --> 00:09:01.410
+to make a little swirl,
+
+200
+00:09:01.410 --> 00:09:05.110
+and this neuron can learn this little swirl in here.
+
+201
+00:09:05.110 --> 00:09:06.810
+An generally all of these neurons will learn
+
+202
+00:09:06.810 --> 00:09:10.440
+more and more refined characteristics about the data.
+
+203
+00:09:10.440 --> 00:09:12.640
+And then, finally, if we add enough,
+
+204
+00:09:12.640 --> 00:09:15.710
+then this neuron can learn a linear combination
+
+205
+00:09:15.710 --> 00:09:16.960
+of all the swirls,
+
+206
+00:09:16.960 --> 00:09:20.800
+such that we can finally classify the data correctly.
+
+207
+00:09:20.800 --> 00:09:23.700
+This is the preferred way to use a neural network.
+
+208
+00:09:23.700 --> 00:09:27.200
+And as you progress your layers onward
+
+209
+00:09:27.200 --> 00:09:30.350
+to learn more and more refined features about your data,
+
+210
+00:09:30.350 --> 00:09:32.160
+you're increasing the depth
+
+211
+00:09:32.160 --> 00:09:35.050
+or how deep your neural network is.
+
+212
+00:09:35.050 --> 00:09:38.360
+This is where deep and deep learning comes from.
+
+213
+00:09:38.360 --> 00:09:41.550
+Now, another reason that we actually want to go deeper,
+
+214
+00:09:41.550 --> 00:09:43.890
+in most cases, than wider
+
+215
+00:09:43.890 --> 00:09:47.423
+is because generally less parameters, these lines here,
+
+216
+00:09:47.423 --> 00:09:49.630
+because remember each line here is a weight
+
+217
+00:09:49.630 --> 00:09:51.030
+that we have to learn,
+
+218
+00:09:51.030 --> 00:09:54.510
+typically it means that there's less overall parameters
+
+219
+00:09:54.510 --> 00:09:57.440
+than if we would've went with one hidden layer
+
+220
+00:09:57.440 --> 00:09:59.180
+to learn everything.
+
+221
+00:09:59.180 --> 00:10:00.550
+So speaking of learning,
+
+222
+00:10:00.550 --> 00:10:03.610
+how does this huge deep neural network
+
+223
+00:10:03.610 --> 00:10:06.940
+with, we'll say, h hidden layers actually learn?
+
+224
+00:10:06.940 --> 00:10:08.840
+Well, let's go through an example.
+
+225
+00:10:08.840 --> 00:10:11.620
+Obviously, this network is a lot smaller
+
+226
+00:10:11.620 --> 00:10:12.910
+than the one we just saw,
+
+227
+00:10:12.910 --> 00:10:15.050
+and that's because I'm not a computer.
+
+228
+00:10:15.050 --> 00:10:16.410
+I'll probably make a mistake
+
+229
+00:10:16.410 --> 00:10:18.350
+if I do anything larger than this
+
+230
+00:10:18.350 --> 00:10:21.860
+I think the still showcases exactly what's going on
+
+231
+00:10:21.860 --> 00:10:25.160
+when we're talking about training a neural network
+
+232
+00:10:25.160 --> 00:10:27.970
+or how a neural network learns.
+
+233
+00:10:27.970 --> 00:10:31.790
+So let's write an equation for this network.
+
+234
+00:10:31.790 --> 00:10:35.480
+For reference, this is going to be called h1in
+
+235
+00:10:35.480 --> 00:10:40.480
+So h1in is going to be the hidden layer neuron one input.
+
+236
+00:10:40.870 --> 00:10:45.530
+This is going to be hidden layer second neuron input.
+
+237
+00:10:45.530 --> 00:10:47.200
+For every input into the neuron,
+
+238
+00:10:47.200 --> 00:10:48.530
+we're going to have an output.
+
+239
+00:10:48.530 --> 00:10:49.840
+So this is h1out.
+
+240
+00:10:49.840 --> 00:10:51.390
+This is h2out.
+
+241
+00:10:51.390 --> 00:10:53.690
+And, finally, this is yin,
+
+242
+00:10:53.690 --> 00:10:56.400
+and, respectively, this is yout,
+
+243
+00:10:56.400 --> 00:10:59.410
+which is going to be equal to our prediction.
+
+244
+00:10:59.410 --> 00:11:01.830
+Keep in mind, too, even though I'm not showing them,
+
+245
+00:11:01.830 --> 00:11:05.090
+these will have biases attached to every single neuron
+
+246
+00:11:05.090 --> 00:11:06.120
+that we have.
+
+247
+00:11:06.120 --> 00:11:09.030
+Okay, so let's write our first couple of equations.
+
+248
+00:11:09.030 --> 00:11:14.030
+So h1in is going to be equal to X1 here times W1
+
+249
+00:11:14.400 --> 00:11:17.680
+plus X2 times W3
+
+250
+00:11:17.680 --> 00:11:19.630
+this year is called fully connected.
+
+251
+00:11:19.630 --> 00:11:23.210
+So every single input connects to every single neuron
+
+252
+00:11:23.210 --> 00:11:24.670
+in the next layer.
+
+253
+00:11:24.670 --> 00:11:29.670
+h2 input is going to be X1 times W2 plus X2 times W4.
+
+254
+00:11:32.700 --> 00:11:36.830
+hout is just going to be the sigmoid of hin.
+
+255
+00:11:36.830 --> 00:11:38.545
+Same with h2.
+
+256
+00:11:38.545 --> 00:11:43.300
+yin is going to be h1out here times W5,
+
+257
+00:11:43.300 --> 00:11:48.300
+the weight plus, since we're summing, h2out here times W6.
+
+258
+00:11:49.020 --> 00:11:53.790
+Finally, yout is just going to be the sigmoid of yin.
+
+259
+00:11:53.790 --> 00:11:57.550
+So, now that we have our equation for what yout is,
+
+260
+00:11:57.550 --> 00:12:00.780
+we need to compare that prediction or yout
+
+261
+00:12:00.780 --> 00:12:04.730
+compared to what y should actually be or its label.
+
+262
+00:12:04.730 --> 00:12:07.740
+So here we already went over is our loss function,
+
+263
+00:12:07.740 --> 00:12:11.770
+which is the negative log loss or the cross entropy.
+
+264
+00:12:11.770 --> 00:12:14.000
+These summations here and divided by N
+
+265
+00:12:14.000 --> 00:12:15.390
+just means we're averaging
+
+266
+00:12:15.390 --> 00:12:18.430
+across every single example that we have.
+
+267
+00:12:18.430 --> 00:12:21.480
+But what we'll do now is just look at a single example.
+
+268
+00:12:21.480 --> 00:12:23.370
+So we'll drop that averaging,
+
+269
+00:12:23.370 --> 00:12:26.450
+and we'll say that our predicted y hat here
+
+270
+00:12:26.450 --> 00:12:31.210
+this is equivalent to y hat out is 0.33,
+
+271
+00:12:31.210 --> 00:12:35.550
+and our label for the particular example is one.
+
+272
+00:12:35.550 --> 00:12:38.350
+So since our label is one,
+
+273
+00:12:38.350 --> 00:12:41.100
+we're actually going to look at this side of the equation,
+
+274
+00:12:41.100 --> 00:12:43.870
+because the side of the equation will be zeroed out.
+
+275
+00:12:43.870 --> 00:12:47.560
+And then we'll just take the log of y hat.
+
+276
+00:12:47.560 --> 00:12:50.970
+Now, this is equal to the log of y hat out,
+
+277
+00:12:50.970 --> 00:12:53.120
+because that's what we defined previously.
+
+278
+00:12:53.120 --> 00:12:55.480
+So what do we know about yout?
+
+279
+00:12:55.480 --> 00:12:58.870
+Well, we defined yout earlier as the sigmoid
+
+280
+00:12:58.870 --> 00:13:03.870
+of yin, and we defined yin as the sigmoid of h1out
+
+281
+00:13:04.410 --> 00:13:08.280
+times W5 plus h2out times W6.
+
+282
+00:13:08.280 --> 00:13:11.790
+Now, h1out was just the sigmoid of h1in, h2out,
+
+283
+00:13:11.790 --> 00:13:14.710
+which was just a sigmoid of h2in,
+
+284
+00:13:14.710 --> 00:13:17.410
+and then we can reach our final expansion,
+
+285
+00:13:17.410 --> 00:13:22.410
+because h1in was X1 times W1 plus X2 times W3,
+
+286
+00:13:22.697 --> 00:13:25.590
+and h2in was just this.
+
+287
+00:13:25.590 --> 00:13:27.620
+So now we have our loss defined,
+
+288
+00:13:27.620 --> 00:13:30.250
+and we should now take the gradient of the loss,
+
+289
+00:13:30.250 --> 00:13:32.940
+so that we know how to update our parameters.
+
+290
+00:13:32.940 --> 00:13:33.920
+Well, we can do that
+
+291
+00:13:33.920 --> 00:13:36.770
+by taking the gradient of this function at weight one,
+
+292
+00:13:36.770 --> 00:13:38.320
+weight two, weight three,
+
+293
+00:13:38.320 --> 00:13:41.270
+all the biases all the way up to weight six.
+
+294
+00:13:41.270 --> 00:13:43.760
+So, how do we actually find the derivative
+
+295
+00:13:43.760 --> 00:13:45.280
+of these functions?
+
+296
+00:13:45.280 --> 00:13:46.940
+Well, there's two ways.
+
+297
+00:13:46.940 --> 00:13:49.900
+One, we can use what's called the numerical gradient.
+
+298
+00:13:49.900 --> 00:13:52.380
+All that means is that we would take whatever value
+
+299
+00:13:52.380 --> 00:13:56.520
+weight one is now, and we would add a small increment amount
+
+300
+00:13:56.520 --> 00:13:59.390
+and see what happened to the output of the loss function,
+
+301
+00:13:59.390 --> 00:14:03.660
+and then we would decrease weight one by a little bit
+
+302
+00:14:03.660 --> 00:14:06.290
+and we would see how that affects the loss function.
+
+303
+00:14:06.290 --> 00:14:08.177
+We would repeat this process for all the weights
+
+304
+00:14:08.177 --> 00:14:11.100
+and the biases and update each one
+
+305
+00:14:11.100 --> 00:14:15.590
+according to which one made the loss go down.
+
+306
+00:14:15.590 --> 00:14:18.050
+The problem with this is it's extremely inefficient
+
+307
+00:14:18.050 --> 00:14:19.640
+and it takes a long time.
+
+308
+00:14:19.640 --> 00:14:22.470
+The other approach is called the analytic gradient.
+
+309
+00:14:22.470 --> 00:14:24.090
+The analytic gradient is similar
+
+310
+00:14:24.090 --> 00:14:25.880
+to what we've been doing before
+
+311
+00:14:25.880 --> 00:14:29.160
+where we literally just take the derivative
+
+312
+00:14:29.160 --> 00:14:32.360
+of the loss function with respect to some parameter
+
+313
+00:14:32.360 --> 00:14:35.110
+and get the mathematical gradient itself.
+
+314
+00:14:35.110 --> 00:14:37.360
+The problem is we're going to need some tools
+
+315
+00:14:37.360 --> 00:14:39.020
+to help us accomplish this.
+
+316
+00:14:39.020 --> 00:14:41.950
+Earlier when we were just taking the derivative of this,
+
+317
+00:14:41.950 --> 00:14:43.040
+which is pretty simple,
+
+318
+00:14:43.040 --> 00:14:45.980
+or the derivative of this times that,
+
+319
+00:14:45.980 --> 00:14:47.580
+we can handle those things,
+
+320
+00:14:47.580 --> 00:14:49.670
+but this is quite a complex function
+
+321
+00:14:49.670 --> 00:14:50.930
+to take the derivative of.
+
+322
+00:14:50.930 --> 00:14:53.360
+As well, we were only looking at a neural network
+
+323
+00:14:53.360 --> 00:14:55.210
+with only one hidden layer.
+
+324
+00:14:55.210 --> 00:14:57.300
+So one mathematical tool that we can use
+
+325
+00:14:57.300 --> 00:14:58.600
+is called the chain rule.
+
+326
+00:14:58.600 --> 00:15:00.640
+The chain rule states that if we want to know
+
+327
+00:15:00.640 --> 00:15:03.610
+the partial derivative of the loss function
+
+328
+00:15:03.610 --> 00:15:08.610
+with respect to W6, instead what we can do is multiply
+
+329
+00:15:08.740 --> 00:15:11.800
+all of these together and they will be equivalent.
+
+330
+00:15:11.800 --> 00:15:13.200
+So, what is this term?
+
+331
+00:15:13.200 --> 00:15:15.220
+What this is asking for is the derivative
+
+332
+00:15:15.220 --> 00:15:17.960
+of the loss function with respect to yout.
+
+333
+00:15:17.960 --> 00:15:20.430
+Well, what was the loss function again?
+
+334
+00:15:20.430 --> 00:15:21.560
+This was the loss,
+
+335
+00:15:21.560 --> 00:15:24.340
+and we can take the derivative of this pretty easily.
+
+336
+00:15:24.340 --> 00:15:25.260
+What about this term?
+
+337
+00:15:25.260 --> 00:15:28.910
+It's asking for the partial derivative of yout
+
+338
+00:15:28.910 --> 00:15:30.810
+with respect to yin.
+
+339
+00:15:30.810 --> 00:15:31.989
+What was yout again?
+
+340
+00:15:31.989 --> 00:15:35.510
+Yout was just the sigmoid of yin.
+
+341
+00:15:35.510 --> 00:15:38.360
+In our last term, we have the derivative of yin
+
+342
+00:15:38.360 --> 00:15:42.620
+with respect to W6 which is what we were looking for.
+
+343
+00:15:42.620 --> 00:15:43.993
+What is yin again?
+
+344
+00:15:43.993 --> 00:15:48.993
+yin was just h1out times W5 plus h2out times W6.
+
+345
+00:15:49.670 --> 00:15:53.240
+We can take the derivative of this pretty easily too.
+
+346
+00:15:53.240 --> 00:15:54.650
+So now that we know how to do this,
+
+347
+00:15:54.650 --> 00:15:56.130
+I'll just condense it.
+
+348
+00:15:56.130 --> 00:15:59.930
+Next up, I wanna figure out how we should adjust W1
+
+349
+00:15:59.930 --> 00:16:01.660
+in regards to the loss function.
+
+350
+00:16:01.660 --> 00:16:04.260
+Well, let's use the chain rule on this equation.
+
+351
+00:16:04.260 --> 00:16:06.850
+So here, the partial derivative of the loss
+
+352
+00:16:06.850 --> 00:16:09.390
+with respect to weight one is just going to be
+
+353
+00:16:09.390 --> 00:16:13.520
+all of the terms that trace down until we get to W1.
+
+354
+00:16:13.520 --> 00:16:15.470
+So we start with the loss, then get to yout.
+
+355
+00:16:15.470 --> 00:16:18.423
+Then from yout, we go to yin, yin, h1out, h1out, h1in,
+
+356
+00:16:20.760 --> 00:16:23.330
+and then, finally, we can get to W1.
+
+357
+00:16:23.330 --> 00:16:26.350
+Now, those of you who are Algo Experts may have noticed
+
+358
+00:16:26.350 --> 00:16:29.740
+that these terms here and these terms here are the same.
+
+359
+00:16:29.740 --> 00:16:33.400
+So what we can do is use dynamic programming
+
+360
+00:16:33.400 --> 00:16:35.980
+in addition to the chain rule, such that we start
+
+361
+00:16:35.980 --> 00:16:39.870
+with W6 first and work our way in towards W1.
+
+362
+00:16:39.870 --> 00:16:42.980
+We can reuse this computation in this step.
+
+363
+00:16:42.980 --> 00:16:44.860
+So to find the analytic gradient
+
+364
+00:16:44.860 --> 00:16:47.840
+by using the chain rule and dynamic programming,
+
+365
+00:16:47.840 --> 00:16:50.829
+this gives us something called backpropagation.
+
+366
+00:16:50.829 --> 00:16:52.760
+Backpropagation is the standard way
+
+367
+00:16:52.760 --> 00:16:54.610
+to train neural networks.
+
+368
+00:16:54.610 --> 00:16:57.170
+So for training, we need a forward pass
+
+369
+00:16:57.170 --> 00:16:59.140
+through the neural network to figure out
+
+370
+00:16:59.140 --> 00:17:02.250
+how far our prediction is away from the actual value.
+
+371
+00:17:02.250 --> 00:17:04.240
+And then once we have the loss,
+
+372
+00:17:04.240 --> 00:17:06.820
+we can backpropagate those gradients
+
+373
+00:17:06.820 --> 00:17:09.940
+to update all of the weights in our neural network.
+
+374
+00:17:09.940 --> 00:17:12.630
+Speaking of, how do we update those weights?
+
+375
+00:17:12.630 --> 00:17:14.090
+Well, it's very simple.
+
+376
+00:17:14.090 --> 00:17:16.970
+It's the same equation we've been using all along.
+
+377
+00:17:16.970 --> 00:17:19.210
+We have the current weight value.
+
+378
+00:17:19.210 --> 00:17:22.880
+We're going to go in the opposite direction of the gradient
+
+379
+00:17:22.880 --> 00:17:25.440
+with respect to the loss, and we're going to multiply
+
+380
+00:17:25.440 --> 00:17:27.770
+by a factor of the learning rate.
+
+381
+00:17:27.770 --> 00:17:30.100
+So if we plot the average loss obtained
+
+382
+00:17:30.100 --> 00:17:32.560
+from all of the training examples
+
+383
+00:17:32.560 --> 00:17:36.320
+against a particular value of, we'll just say, W1,
+
+384
+00:17:36.320 --> 00:17:39.200
+it could be any W here, if we plot that,
+
+385
+00:17:39.200 --> 00:17:42.130
+we'll end up with some function like this.
+
+386
+00:17:42.130 --> 00:17:44.920
+The difference between this function and the function
+
+387
+00:17:44.920 --> 00:17:48.580
+that we had with logistic regression is that here
+
+388
+00:17:48.580 --> 00:17:50.610
+we have local optima.
+
+389
+00:17:50.610 --> 00:17:52.710
+So before in logistic regression,
+
+390
+00:17:52.710 --> 00:17:55.530
+we were guaranteed to have one minimum,
+
+391
+00:17:55.530 --> 00:17:57.730
+and that would have been the global minimum.
+
+392
+00:17:58.630 --> 00:18:01.270
+Now, if we used a single neuron, this wouldn't be the case,
+
+393
+00:18:01.270 --> 00:18:02.270
+'cause that would have been equivalent
+
+394
+00:18:02.270 --> 00:18:03.800
+to logistic regression,
+
+395
+00:18:03.800 --> 00:18:06.540
+but since we've stacked these neurons on top of each other
+
+396
+00:18:06.540 --> 00:18:08.070
+and we've also added layers,
+
+397
+00:18:08.070 --> 00:18:11.980
+we've opened up ourselves to local optima.
+
+398
+00:18:11.980 --> 00:18:15.500
+Local optima, which we talked about in the k-means video,
+
+399
+00:18:15.500 --> 00:18:18.580
+brings us an opportunity for our convergence to stop
+
+400
+00:18:18.580 --> 00:18:21.480
+before it gets to the global optima.
+
+401
+00:18:21.480 --> 00:18:25.250
+So our convergence could end here, here, or here.
+
+402
+00:18:25.250 --> 00:18:26.980
+So there are some mitigation techniques
+
+403
+00:18:26.980 --> 00:18:29.810
+that we can use that increase the chances
+
+404
+00:18:29.810 --> 00:18:32.890
+that we won't get stuck in these local optima.
+
+405
+00:18:32.890 --> 00:18:35.170
+One technique that we talked about earlier,
+
+406
+00:18:35.170 --> 00:18:38.490
+stochastic gradient descent, can help
+
+407
+00:18:38.490 --> 00:18:40.800
+with not getting stuck in a local optima.
+
+408
+00:18:40.800 --> 00:18:43.300
+This is actually just a by-product of the fact
+
+409
+00:18:43.300 --> 00:18:47.000
+that we're taking random examples and updating the weights
+
+410
+00:18:47.000 --> 00:18:48.880
+with just that single example.
+
+411
+00:18:48.880 --> 00:18:51.660
+This randomness in the weight updates
+
+412
+00:18:51.660 --> 00:18:54.290
+can increase the chances that we don't get stuck
+
+413
+00:18:54.290 --> 00:18:55.530
+in a local optima.
+
+414
+00:18:55.530 --> 00:18:58.540
+The problem, however, with stochastic gradient descent,
+
+415
+00:18:58.540 --> 00:19:01.790
+as we mentioned earlier, is that it's slow to converge.
+
+416
+00:19:01.790 --> 00:19:04.270
+So we instead need a better solution.
+
+417
+00:19:04.270 --> 00:19:07.530
+One of the solutions is incorporating momentum
+
+418
+00:19:07.530 --> 00:19:09.660
+into your gradient descent.
+
+419
+00:19:09.660 --> 00:19:11.970
+So here was our weight update.
+
+420
+00:19:11.970 --> 00:19:14.800
+Now, the idea of momentum is to remember
+
+421
+00:19:14.800 --> 00:19:17.670
+or to keep track of the previous updates
+
+422
+00:19:17.670 --> 00:19:22.400
+and have this update be influenced by previous updates.
+
+423
+00:19:22.400 --> 00:19:23.880
+So if the previous gradient
+
+424
+00:19:23.880 --> 00:19:27.380
+before this time step's gradient was three,
+
+425
+00:19:27.380 --> 00:19:30.270
+and let's assume the learning rates are one,
+
+426
+00:19:30.270 --> 00:19:32.870
+so if this value was three in the previous time step,
+
+427
+00:19:32.870 --> 00:19:35.530
+and this time step's gradient is three,
+
+428
+00:19:35.530 --> 00:19:38.160
+then our weight update would actually be six.
+
+429
+00:19:38.160 --> 00:19:40.180
+Now, there's a parameter we can tune,
+
+430
+00:19:40.180 --> 00:19:43.310
+which says how much the past should influence
+
+431
+00:19:43.310 --> 00:19:44.840
+what we're seeing now.
+
+432
+00:19:44.840 --> 00:19:47.090
+Momentum carries this concept further
+
+433
+00:19:47.090 --> 00:19:50.620
+by incorporating the history of every single gradient update
+
+434
+00:19:50.620 --> 00:19:51.550
+that we've had.
+
+435
+00:19:51.550 --> 00:19:53.780
+This is just a recursive function.
+
+436
+00:19:53.780 --> 00:19:56.940
+So we have a weight update here.
+
+437
+00:19:56.940 --> 00:19:59.660
+We'll now assign this to be v of t,
+
+438
+00:19:59.660 --> 00:20:03.740
+and v of t is just going to be equal to v of t minus one
+
+439
+00:20:03.740 --> 00:20:06.680
+minus whatever the current loss is right now.
+
+440
+00:20:06.680 --> 00:20:10.430
+So these two equations is the same as this
+
+441
+00:20:10.430 --> 00:20:12.850
+just written in a compact form.
+
+442
+00:20:12.850 --> 00:20:15.860
+This overall strategy is called momentum.
+
+443
+00:20:15.860 --> 00:20:17.120
+So let's see it in action.
+
+444
+00:20:17.120 --> 00:20:19.930
+So here our negative gradient will be two.
+
+445
+00:20:19.930 --> 00:20:22.800
+And here our negative gradient will be three.
+
+446
+00:20:22.800 --> 00:20:25.270
+What we'll do is we'll add that two to the three.
+
+447
+00:20:25.270 --> 00:20:27.700
+So our weight update would actually be five.
+
+448
+00:20:27.700 --> 00:20:31.960
+And then we'll take this five and we'll add it to this one,
+
+449
+00:20:31.960 --> 00:20:34.020
+because this is less of a slope here.
+
+450
+00:20:34.020 --> 00:20:36.500
+So now our update here will be six.
+
+451
+00:20:36.500 --> 00:20:38.690
+We physically have built momentum
+
+452
+00:20:38.690 --> 00:20:40.350
+as we've gone down this hill,
+
+453
+00:20:40.350 --> 00:20:42.390
+and that's why it's called momentum.
+
+454
+00:20:42.390 --> 00:20:45.626
+Now, remember there is technically a parameter here.
+
+455
+00:20:45.626 --> 00:20:46.540
+It's usually 0.9,
+
+456
+00:20:47.430 --> 00:20:50.210
+so that previous gradients don't matter as much
+
+457
+00:20:50.210 --> 00:20:51.780
+as the current gradient.
+
+458
+00:20:51.780 --> 00:20:54.430
+So one of the problems with momentum is that
+
+459
+00:20:54.430 --> 00:20:56.460
+even though it builds momentum to get you
+
+460
+00:20:56.460 --> 00:20:58.680
+out of these local optima,
+
+461
+00:20:58.680 --> 00:21:00.890
+it could build so much momentum
+
+462
+00:21:00.890 --> 00:21:05.040
+that you actually go right past the global optima.
+
+463
+00:21:05.040 --> 00:21:08.460
+Now there's another method called Adagrad,
+
+464
+00:21:08.460 --> 00:21:11.520
+which adjusts the learning rate per parameter.
+
+465
+00:21:11.520 --> 00:21:14.170
+So to see this, let's de generalize this.
+
+466
+00:21:14.170 --> 00:21:17.910
+So let's look at a single gradient and a single weight.
+
+467
+00:21:17.910 --> 00:21:20.570
+Now we can speak about having a learning rate
+
+468
+00:21:20.570 --> 00:21:22.680
+for a particular parameter.
+
+469
+00:21:22.680 --> 00:21:27.010
+This learning rate will also be different as time goes on.
+
+470
+00:21:27.010 --> 00:21:29.140
+So, why would you wanna do something like this?
+
+471
+00:21:29.140 --> 00:21:30.340
+Why would you want to have
+
+472
+00:21:30.340 --> 00:21:32.240
+a different learning rate per parameter?
+
+473
+00:21:32.240 --> 00:21:34.810
+Well, let's look at the formula and figure out why.
+
+474
+00:21:34.810 --> 00:21:38.520
+So here, the learning rate of perimeter one
+
+475
+00:21:38.520 --> 00:21:40.610
+at some time, t, is going to be equal
+
+476
+00:21:40.610 --> 00:21:45.000
+to some r general, which is typically 0.01.
+
+477
+00:21:45.000 --> 00:21:46.790
+We're then going to divide that
+
+478
+00:21:46.790 --> 00:21:50.480
+by these square root of the squared sum
+
+479
+00:21:50.480 --> 00:21:53.800
+of all of the previous gradients that we've seen.
+
+480
+00:21:53.800 --> 00:21:55.950
+So what is this actually doing?
+
+481
+00:21:55.950 --> 00:21:59.000
+So let's say that W1 is updated quite a bit,
+
+482
+00:21:59.000 --> 00:22:02.270
+and the gradient always comes back to be pretty high.
+
+483
+00:22:02.270 --> 00:22:06.110
+In that case, this algorithm will lower the learning rate,
+
+484
+00:22:06.110 --> 00:22:10.230
+such that it has smoother weight updates per gradient step.
+
+485
+00:22:10.230 --> 00:22:13.630
+On the other hand, let's say W1 only has a gradient
+
+486
+00:22:13.630 --> 00:22:15.870
+that's very small every time.
+
+487
+00:22:15.870 --> 00:22:18.950
+Then this value in the numerator will be small.
+
+488
+00:22:18.950 --> 00:22:21.370
+And since we're dividing by a smaller number,
+
+489
+00:22:21.370 --> 00:22:23.430
+the learning rate will be higher.
+
+490
+00:22:23.430 --> 00:22:26.170
+This means that we'll be able to take more effective steps
+
+491
+00:22:26.170 --> 00:22:29.760
+for parameters which are being updated less.
+
+492
+00:22:29.760 --> 00:22:32.650
+Now in general, you'll see a little constant here.
+
+493
+00:22:32.650 --> 00:22:36.070
+What this does is it stops us from dividing by zero.
+
+494
+00:22:36.070 --> 00:22:38.640
+Now, one final note, Adagrad really helps
+
+495
+00:22:38.640 --> 00:22:40.850
+in the case of sparse features,
+
+496
+00:22:40.850 --> 00:22:42.670
+because if we have sparse features,
+
+497
+00:22:42.670 --> 00:22:45.510
+that means that weights associated with those features
+
+498
+00:22:45.510 --> 00:22:47.090
+will be updated less,
+
+499
+00:22:47.090 --> 00:22:49.850
+and, therefore, the learning rate will be higher.
+
+500
+00:22:49.850 --> 00:22:51.560
+Now, let's go over another method.
+
+501
+00:22:51.560 --> 00:22:55.260
+Adam, our last method we're gonna cover, combines momentum,
+
+502
+00:22:55.260 --> 00:22:58.170
+which we went over, and adaptive learning rates,
+
+503
+00:22:58.170 --> 00:23:00.300
+which is what Adagrad does.
+
+504
+00:23:00.300 --> 00:23:03.053
+So Adam's update equation looks like this.
+
+505
+00:23:04.400 --> 00:23:06.330
+Here we have the r general.
+
+506
+00:23:06.330 --> 00:23:10.030
+v of t is a recursive function we talked about.
+
+507
+00:23:10.030 --> 00:23:14.310
+m here is going to be another recursively defined term.
+
+508
+00:23:14.310 --> 00:23:17.520
+An these betas, beta one and beta two
+
+509
+00:23:17.520 --> 00:23:19.630
+are going to be hyper parameters.
+
+510
+00:23:19.630 --> 00:23:21.090
+Notice that the only difference
+
+511
+00:23:21.090 --> 00:23:25.370
+between mt and vt is this squared term here.
+
+512
+00:23:25.370 --> 00:23:26.490
+Finally, you may have noticed
+
+513
+00:23:26.490 --> 00:23:28.710
+that these have hats on top of them.
+
+514
+00:23:28.710 --> 00:23:31.250
+That's because we technically need to adjust
+
+515
+00:23:31.250 --> 00:23:33.530
+these mt and vts.
+
+516
+00:23:33.530 --> 00:23:36.540
+The reason is because these are technically moments
+
+517
+00:23:36.540 --> 00:23:37.810
+of the function.
+
+518
+00:23:37.810 --> 00:23:40.880
+And in order to get an unbiased moment on these functions,
+
+519
+00:23:40.880 --> 00:23:43.730
+we have to adjust by these parameters.
+
+520
+00:23:43.730 --> 00:23:47.880
+Now I've heard Adam be described as a ball rolling
+
+521
+00:23:47.880 --> 00:23:52.880
+down a hill with momentum, but the ball also has friction.
+
+522
+00:23:53.050 --> 00:23:55.220
+So take that how you will.
+
+523
+00:23:55.220 --> 00:23:57.260
+The idea is that the friction aspect
+
+524
+00:23:57.260 --> 00:23:59.960
+helps the parameters settle in a global optima,
+
+525
+00:23:59.960 --> 00:24:03.380
+while the momentum helps the parameters escape
+
+526
+00:24:03.380 --> 00:24:05.110
+the local minimum.
+
+527
+00:24:05.110 --> 00:24:07.660
+So all of those are called optimizers.
+
+528
+00:24:07.660 --> 00:24:09.080
+Though, you can use Adagrad,
+
+529
+00:24:09.080 --> 00:24:11.120
+there's a couple more that we didn't go over,
+
+530
+00:24:11.120 --> 00:24:15.450
+Adadelta, RMSprop, and we did go over Adam.
+
+531
+00:24:15.450 --> 00:24:17.190
+if you don't know which one to start with,
+
+532
+00:24:17.190 --> 00:24:19.730
+I would just go ahead and pick Adam.
+
+533
+00:24:19.730 --> 00:24:21.250
+So once we have the gradients
+
+534
+00:24:21.250 --> 00:24:23.700
+from whatever optimizer we use,
+
+535
+00:24:23.700 --> 00:24:25.650
+multiplying these gradients together
+
+536
+00:24:25.650 --> 00:24:27.490
+can result in a problem.
+
+537
+00:24:27.490 --> 00:24:29.270
+So let's say that we have this network.
+
+538
+00:24:29.270 --> 00:24:32.780
+Now, if we want to find the gradient of the loss function
+
+539
+00:24:32.780 --> 00:24:35.700
+with respect to weight one here, by the chain rule,
+
+540
+00:24:35.700 --> 00:24:39.060
+we need to multiply all of these terms together.
+
+541
+00:24:39.060 --> 00:24:42.330
+Well, one major problem is that the maximum value
+
+542
+00:24:42.330 --> 00:24:45.520
+of the sigmoid is actually 0.25.
+
+543
+00:24:45.520 --> 00:24:47.300
+So all of these multiplications,
+
+544
+00:24:47.300 --> 00:24:49.460
+which involve the derivative of the sigmoid,
+
+545
+00:24:49.460 --> 00:24:52.320
+will have at maximum a value of 0.25.
+
+546
+00:24:52.320 --> 00:24:55.750
+And if we multiply a lot of 0.25s together,
+
+547
+00:24:55.750 --> 00:24:59.210
+this total value can brace towards zero,
+
+548
+00:24:59.210 --> 00:25:01.670
+and we can result in an underflow.
+
+549
+00:25:01.670 --> 00:25:03.810
+For instance, here, if we plug in all these values,
+
+550
+00:25:03.810 --> 00:25:06.310
+we could get something very, very close to zero.
+
+551
+00:25:06.310 --> 00:25:09.370
+Now, on the other hand, some of these term's derivative
+
+552
+00:25:09.370 --> 00:25:12.090
+include the value of the weight itself.
+
+553
+00:25:12.090 --> 00:25:14.690
+So if weights are extremely large,
+
+554
+00:25:14.690 --> 00:25:18.410
+so let's say a weight over here is 100, this weight is 75,
+
+555
+00:25:18.410 --> 00:25:21.820
+another weight in this network has the value of 68,
+
+556
+00:25:21.820 --> 00:25:24.440
+as you're multiplying these terms together,
+
+557
+00:25:24.440 --> 00:25:27.070
+you're going to get an extremely large value.
+
+558
+00:25:27.070 --> 00:25:29.060
+This is called an exploding gradient,
+
+559
+00:25:29.060 --> 00:25:31.750
+and it's the opposite of a vanishing ingredient.
+
+560
+00:25:31.750 --> 00:25:34.230
+Both of them are problems though.
+
+561
+00:25:34.230 --> 00:25:36.860
+So there's a few methods to mitigate this.
+
+562
+00:25:36.860 --> 00:25:39.470
+One of them is initializing the weights
+
+563
+00:25:39.470 --> 00:25:42.730
+of the neural network in a particular way.
+
+564
+00:25:42.730 --> 00:25:44.920
+Some pretty bad ways to initialize the weight
+
+565
+00:25:44.920 --> 00:25:49.160
+is just to use a uniform distribution between zero and one.
+
+566
+00:25:49.160 --> 00:25:52.530
+Another bad way is to just initialize these parameters
+
+567
+00:25:52.530 --> 00:25:55.447
+with a normal distribution in which the mean is zero
+
+568
+00:25:55.447 --> 00:25:57.650
+and the standard deviation is one.
+
+569
+00:25:57.650 --> 00:26:00.580
+What we can do instead is initialize these weights
+
+570
+00:26:00.580 --> 00:26:03.927
+from a normal distribution in which the mean is zero
+
+571
+00:26:03.927 --> 00:26:06.770
+and the standard deviation is this.
+
+572
+00:26:06.770 --> 00:26:09.472
+So what is fi and of?
+
+573
+00:26:09.472 --> 00:26:13.590
+fi is fan in, and fo is fan out.
+
+574
+00:26:13.590 --> 00:26:18.350
+Fan in is the number of inputs to a particular layer.
+
+575
+00:26:18.350 --> 00:26:21.750
+Fan out is the number of outputs for that layer.
+
+576
+00:26:21.750 --> 00:26:25.940
+So here to initialize the weights of layer one,
+
+577
+00:26:25.940 --> 00:26:29.190
+we're going to sample a normal distribution,
+
+578
+00:26:29.190 --> 00:26:33.640
+which has a mean of zero and a standard deviation of this.
+
+579
+00:26:33.640 --> 00:26:36.380
+In order to initialize the weights here,
+
+580
+00:26:36.380 --> 00:26:40.280
+we have a fan in of eight and a fan out of two.
+
+581
+00:26:40.280 --> 00:26:43.050
+So we would sample from a normal distribution
+
+582
+00:26:43.050 --> 00:26:45.520
+according to this formula.
+
+583
+00:26:45.520 --> 00:26:49.130
+This is called Xavier or a Glorot initialization.
+
+584
+00:26:49.130 --> 00:26:50.500
+The reason why this helps
+
+585
+00:26:50.500 --> 00:26:53.450
+is because we're shrinking the standard deviation
+
+586
+00:26:53.450 --> 00:26:56.060
+by how many ever times we will be multiplying
+
+587
+00:26:56.060 --> 00:26:59.180
+these variables together per layer.
+
+588
+00:26:59.180 --> 00:27:02.850
+Not doing this makes the variances of each layer
+
+589
+00:27:02.850 --> 00:27:05.700
+multiply together, and that causes the variants
+
+590
+00:27:05.700 --> 00:27:07.440
+to grow exponentially.
+
+591
+00:27:07.440 --> 00:27:10.530
+So if we can shrink the standard deviation down early,
+
+592
+00:27:10.530 --> 00:27:13.830
+then these other multiplications, hopefully, won't result
+
+593
+00:27:13.830 --> 00:27:18.060
+in exponential growth or shrinkage of our gradient.
+
+594
+00:27:18.060 --> 00:27:20.430
+Now this works best when we're using something
+
+595
+00:27:20.430 --> 00:27:23.600
+called a symmetric activation function.
+
+596
+00:27:23.600 --> 00:27:25.510
+So here, these sigmoids
+
+597
+00:27:25.510 --> 00:27:27.940
+are technically activation functions.
+
+598
+00:27:27.940 --> 00:27:28.773
+They're symmetric,
+
+599
+00:27:28.773 --> 00:27:30.640
+because they have proportional differences
+
+600
+00:27:30.640 --> 00:27:33.070
+on either the y or the x-axis.
+
+601
+00:27:33.070 --> 00:27:34.730
+Now, what if we didn't want to use
+
+602
+00:27:34.730 --> 00:27:36.820
+a symmetric activation function?
+
+603
+00:27:36.820 --> 00:27:39.490
+What if we wanted to use something like this?
+
+604
+00:27:39.490 --> 00:27:41.170
+This activation function,
+
+605
+00:27:41.170 --> 00:27:44.680
+which is called the rectified linear unit, is not symmetric.
+
+606
+00:27:44.680 --> 00:27:47.040
+Technically it's not even differentiable,
+
+607
+00:27:47.040 --> 00:27:49.430
+but as we talked about in previous videos,
+
+608
+00:27:49.430 --> 00:27:51.170
+you can use subgradient methods
+
+609
+00:27:51.170 --> 00:27:53.930
+to still perform gradient descent.
+
+610
+00:27:53.930 --> 00:27:57.010
+What this function is is that's all negative values,
+
+611
+00:27:57.010 --> 00:28:01.060
+their gradient will be zero, and all positive values,
+
+612
+00:28:01.060 --> 00:28:02.810
+their gradient will be one.
+
+613
+00:28:02.810 --> 00:28:06.140
+So why would we use this rectified linear unit
+
+614
+00:28:06.140 --> 00:28:08.700
+or ReLU in place of a sigmoid?
+
+615
+00:28:08.700 --> 00:28:11.180
+Well, one, it's more computationally efficient.
+
+616
+00:28:11.180 --> 00:28:14.040
+All negative values take on the value of zero,
+
+617
+00:28:14.040 --> 00:28:17.000
+and all positive values take on the value of itself.
+
+618
+00:28:17.000 --> 00:28:19.000
+Likewise, when you're taking the derivative,
+
+619
+00:28:19.000 --> 00:28:20.780
+the derivative of zero is zero,
+
+620
+00:28:20.780 --> 00:28:23.950
+and the derivative of any value is just one.
+
+621
+00:28:23.950 --> 00:28:27.300
+Two, empirically, it just tends to perform better
+
+622
+00:28:27.300 --> 00:28:28.900
+than the sigmoid function.
+
+623
+00:28:28.900 --> 00:28:31.420
+Three, one reason that it could perform better
+
+624
+00:28:31.420 --> 00:28:34.160
+is that it has an element of sparsity to it,
+
+625
+00:28:34.160 --> 00:28:36.190
+so it can reduce overfitting.
+
+626
+00:28:36.190 --> 00:28:39.490
+This comes from the fact that all values that are negative
+
+627
+00:28:39.490 --> 00:28:43.890
+on the input, the rectified linear unit will output a zero.
+
+628
+00:28:43.890 --> 00:28:46.760
+So not all neurons will output a value,
+
+629
+00:28:46.760 --> 00:28:50.520
+because the neurons that have a negative valued input
+
+630
+00:28:50.520 --> 00:28:52.120
+will just output zero.
+
+631
+00:28:52.120 --> 00:28:54.630
+So what are some downsides to the ReLU?
+
+632
+00:28:54.630 --> 00:28:57.180
+Well, it has an uncapped activation.
+
+633
+00:28:57.180 --> 00:29:00.100
+With sigmoid. we would have something called saturation
+
+634
+00:29:00.100 --> 00:29:02.270
+where the value of the output of the neuron
+
+635
+00:29:02.270 --> 00:29:05.640
+could be no larger than the value of one.
+
+636
+00:29:05.640 --> 00:29:09.080
+However, the ReLU can output any value,
+
+637
+00:29:09.080 --> 00:29:11.160
+and that means that we could be susceptible
+
+638
+00:29:11.160 --> 00:29:13.770
+to exploding gradients more often.
+
+639
+00:29:13.770 --> 00:29:16.010
+As well, we can even now be susceptible
+
+640
+00:29:16.010 --> 00:29:18.180
+to exploding forward passes
+
+641
+00:29:18.180 --> 00:29:20.700
+where by simply doing multiplications
+
+642
+00:29:20.700 --> 00:29:23.440
+in the forward pass all the way through the neural network.
+
+643
+00:29:23.440 --> 00:29:27.780
+we can also get unreasonably large numbers that overflow.
+
+644
+00:29:27.780 --> 00:29:31.470
+So another problem called the dying ReLU problem
+
+645
+00:29:31.470 --> 00:29:34.370
+comes from the fact that when the neuron takes on
+
+646
+00:29:34.370 --> 00:29:37.920
+a value of zero, it will be zero forever.
+
+647
+00:29:37.920 --> 00:29:39.590
+So let's visualize this.
+
+648
+00:29:39.590 --> 00:29:41.720
+Let's say this ReLU got past to it
+
+649
+00:29:41.720 --> 00:29:44.020
+a value of negative three.
+
+650
+00:29:44.020 --> 00:29:45.710
+Then on the backpropagation
+
+651
+00:29:45.710 --> 00:29:48.560
+when we went to go do a gradient update,
+
+652
+00:29:48.560 --> 00:29:50.890
+the gradient will be zero.
+
+653
+00:29:50.890 --> 00:29:54.080
+So this weight will always have the same value.
+
+654
+00:29:54.080 --> 00:29:56.970
+That means that this neuron is completely dead.
+
+655
+00:29:56.970 --> 00:30:00.460
+It will never output another value except zero.
+
+656
+00:30:00.460 --> 00:30:02.240
+Even though those problems exist,
+
+657
+00:30:02.240 --> 00:30:03.920
+rectified linear units, or ReLUs,
+
+658
+00:30:03.920 --> 00:30:05.920
+typically perform well in practice.
+
+659
+00:30:05.920 --> 00:30:09.350
+So for this activation function, which is asymmetric,
+
+660
+00:30:09.350 --> 00:30:12.610
+instead of using the Xavier initialization technique,
+
+661
+00:30:12.610 --> 00:30:15.926
+we're going to be using Kaiming initialization.
+
+662
+00:30:15.926 --> 00:30:19.410
+Kaiming initialization is very similar to Xavier,
+
+663
+00:30:19.410 --> 00:30:23.840
+but, in this case, it only takes in fan in as a variable.
+
+664
+00:30:23.840 --> 00:30:26.330
+Now you want to use Kaiming initialization
+
+665
+00:30:26.330 --> 00:30:29.870
+for any of the asymmetric activation functions
+
+666
+00:30:29.870 --> 00:30:30.703
+that you have.
+
+667
+00:30:30.703 --> 00:30:33.290
+For instance, we talked about the ReLU,
+
+668
+00:30:33.290 --> 00:30:36.120
+but there's actually a lot more activation functions.
+
+669
+00:30:36.120 --> 00:30:38.400
+One is called the leaky ReLU,
+
+670
+00:30:38.400 --> 00:30:41.140
+which tries to get around the dead neuron problem
+
+671
+00:30:41.140 --> 00:30:45.450
+by adding a slight angle to this or slope to this line.
+
+672
+00:30:45.450 --> 00:30:47.980
+So far to avoid some of the degeneracies
+
+673
+00:30:47.980 --> 00:30:49.520
+that can happen with neural networks,
+
+674
+00:30:49.520 --> 00:30:51.750
+we found that initialization is helpful,
+
+675
+00:30:51.750 --> 00:30:54.530
+and through that, Xavier, Kaiming,
+
+676
+00:30:54.530 --> 00:30:57.420
+and also you'll want to scale your features
+
+677
+00:30:57.420 --> 00:31:00.440
+in order to improve the rate at which you can converge.
+
+678
+00:31:00.440 --> 00:31:02.050
+As for activation functions,
+
+679
+00:31:02.050 --> 00:31:04.480
+we have gone over the sigmoid already.
+
+680
+00:31:04.480 --> 00:31:07.020
+We've gone over ReLU and one of its variants
+
+681
+00:31:07.020 --> 00:31:08.630
+called the leaky ReLU.
+
+682
+00:31:08.630 --> 00:31:11.950
+There's a final activation function that is popular.
+
+683
+00:31:11.950 --> 00:31:13.310
+We haven't gone over it yet.
+
+684
+00:31:13.310 --> 00:31:17.060
+It's called the hyperbolic tangent or Tanh.
+
+685
+00:31:17.060 --> 00:31:19.630
+It's extremely similar to the sigmoid function,
+
+686
+00:31:19.630 --> 00:31:22.810
+but instead of being in the range of zero to one,
+
+687
+00:31:22.810 --> 00:31:26.960
+TanH lies in the range of negative one to one.
+
+688
+00:31:26.960 --> 00:31:28.880
+The idea is to cross validate
+
+689
+00:31:28.880 --> 00:31:30.960
+between all of these activation functions
+
+690
+00:31:30.960 --> 00:31:33.150
+to see which works best for your data.
+
+691
+00:31:33.150 --> 00:31:35.800
+In general, though, I recommend you start with ReLU.
+
+692
+00:31:35.800 --> 00:31:38.240
+By the way, you can use many different types
+
+693
+00:31:38.240 --> 00:31:41.180
+of activation functions in your neural network.
+
+694
+00:31:41.180 --> 00:31:43.170
+So here this one's using a sigmoid,
+
+695
+00:31:43.170 --> 00:31:44.880
+and this one's using a ReLU.
+
+696
+00:31:44.880 --> 00:31:47.580
+Finally, the last neuron will dictate
+
+697
+00:31:47.580 --> 00:31:49.290
+what your output looks like.
+
+698
+00:31:49.290 --> 00:31:53.260
+So for us, we use the sigmoid for binary classification.
+
+699
+00:31:53.260 --> 00:31:55.930
+However, you can also use the softmax function
+
+700
+00:31:55.930 --> 00:31:58.700
+in which all of these will be softmax functions,
+
+701
+00:31:58.700 --> 00:32:00.780
+and you'll have how many ever output nodes
+
+702
+00:32:00.780 --> 00:32:02.330
+that you have classes.
+
+703
+00:32:02.330 --> 00:32:04.410
+By the way, the softmax function will ensure
+
+704
+00:32:04.410 --> 00:32:08.890
+that the sum of all these outputs will equal to 100%,
+
+705
+00:32:08.890 --> 00:32:10.400
+as we talked about earlier.
+
+706
+00:32:10.400 --> 00:32:14.440
+And then the maximum value of the softmax output
+
+707
+00:32:14.440 --> 00:32:16.540
+will be your prediction.
+
+708
+00:32:16.540 --> 00:32:19.280
+So what if you wanted to use this for regression?
+
+709
+00:32:19.280 --> 00:32:20.580
+Well, all that you have to use
+
+710
+00:32:20.580 --> 00:32:23.230
+is a linear activation function.
+
+711
+00:32:23.230 --> 00:32:26.760
+So what that will do is just pass the value of the summation
+
+712
+00:32:26.760 --> 00:32:28.330
+through to the output.
+
+713
+00:32:28.330 --> 00:32:30.810
+Now that we've gone over these activation functions
+
+714
+00:32:30.810 --> 00:32:32.080
+for different use cases,
+
+715
+00:32:32.080 --> 00:32:34.190
+let's go over different loss functions.
+
+716
+00:32:34.190 --> 00:32:37.450
+For regression, we're going to use mean squared error.
+
+717
+00:32:37.450 --> 00:32:40.250
+which is sometimes called the L2 loss.
+
+718
+00:32:40.250 --> 00:32:41.770
+That's just going to be the difference
+
+719
+00:32:41.770 --> 00:32:46.150
+between your predicted output and the actual output squared.
+
+720
+00:32:46.150 --> 00:32:48.170
+Here we're showing for the entire dataset.
+
+721
+00:32:48.170 --> 00:32:51.950
+but usually it would be for a mini batch of size N.
+
+722
+00:32:51.950 --> 00:32:54.350
+You can use something called mean absolute error,
+
+723
+00:32:54.350 --> 00:32:57.000
+which is sometimes called L1 loss
+
+724
+00:32:57.000 --> 00:33:00.360
+where you just take the absolute value of the differences.
+
+725
+00:33:00.360 --> 00:33:02.680
+For classification, you can use cross entropy,
+
+726
+00:33:02.680 --> 00:33:05.960
+sometimes called log loss, which we've been over before
+
+727
+00:33:05.960 --> 00:33:08.090
+with binary logistic regression.
+
+728
+00:33:08.090 --> 00:33:11.150
+As well, you can generalize this across K classes.
+
+729
+00:33:11.150 --> 00:33:13.040
+So now that we have our activations
+
+730
+00:33:13.040 --> 00:33:15.280
+and we have our loss functions settled,
+
+731
+00:33:15.280 --> 00:33:17.510
+we need to make sure we're not going to overfit.
+
+732
+00:33:17.510 --> 00:33:20.289
+How we can do that is L1 or L2 regularization,
+
+733
+00:33:20.289 --> 00:33:22.810
+which we've already talked about
+
+734
+00:33:22.810 --> 00:33:25.010
+in terms of adding that to the loss.
+
+735
+00:33:25.010 --> 00:33:28.420
+So here, this would be L1 regularization attached
+
+736
+00:33:28.420 --> 00:33:30.860
+to the multi-class log loss.
+
+737
+00:33:30.860 --> 00:33:33.850
+And here is the L2 regularization.
+
+738
+00:33:33.850 --> 00:33:36.470
+One interesting thing that neural networks can do
+
+739
+00:33:36.470 --> 00:33:39.520
+for regularization is called dropout.
+
+740
+00:33:39.520 --> 00:33:43.660
+So dropout is when you have per layer of a neural network,
+
+741
+00:33:43.660 --> 00:33:47.740
+a particular neuron in that layer will have some probability
+
+742
+00:33:47.740 --> 00:33:49.100
+of sticking around.
+
+743
+00:33:49.100 --> 00:33:51.340
+The others will be dropped out
+
+744
+00:33:51.340 --> 00:33:53.540
+for this particular training iteration.
+
+745
+00:33:53.540 --> 00:33:56.060
+So here, if we wanted to dropout these two nodes,
+
+746
+00:33:56.060 --> 00:33:58.200
+our neural network would look like this.
+
+747
+00:33:58.200 --> 00:33:59.490
+For the next training iteration,
+
+748
+00:33:59.490 --> 00:34:01.490
+these nodes could very well come back,
+
+749
+00:34:01.490 --> 00:34:03.000
+and these could be gone.
+
+750
+00:34:03.000 --> 00:34:05.610
+All it depends on is this probability
+
+751
+00:34:05.610 --> 00:34:08.270
+of a particular node being dropped out.
+
+752
+00:34:08.270 --> 00:34:11.400
+As well, this layer can also include dropout.
+
+753
+00:34:11.400 --> 00:34:14.700
+Now, the problem with dropout is that during training,
+
+754
+00:34:14.700 --> 00:34:16.570
+this layer will only have 50%
+
+755
+00:34:16.570 --> 00:34:18.150
+of the nodes present on average,
+
+756
+00:34:18.150 --> 00:34:21.910
+this layer only 60% of the nodes present on average.
+
+757
+00:34:21.910 --> 00:34:23.650
+When forming predictions
+
+758
+00:34:23.650 --> 00:34:26.710
+outside of the training environment,
+
+759
+00:34:26.710 --> 00:34:29.070
+these nodes will not be dropped out anymore.
+
+760
+00:34:29.070 --> 00:34:32.930
+So all the sudden, these summations will be a lot higher,
+
+761
+00:34:32.930 --> 00:34:36.350
+because we're going to have double the total amount
+
+762
+00:34:36.350 --> 00:34:38.340
+of summations coming through,
+
+763
+00:34:38.340 --> 00:34:40.710
+because we're no longer dropping out.
+
+764
+00:34:40.710 --> 00:34:43.240
+That can really mess up subsequent layers
+
+765
+00:34:43.240 --> 00:34:46.040
+during test time or prediction time.
+
+766
+00:34:46.040 --> 00:34:48.760
+So we can use something called inverted dropout.
+
+767
+00:34:48.760 --> 00:34:52.040
+What inverted dropout does is during training,
+
+768
+00:34:52.040 --> 00:34:54.360
+after every mini batch, say,
+
+769
+00:34:54.360 --> 00:34:56.360
+they'll take the output of these layers
+
+770
+00:34:56.360 --> 00:35:00.970
+and divide by the keep alive rate or the dropout rate,
+
+771
+00:35:00.970 --> 00:35:02.560
+depending on how you look at it.
+
+772
+00:35:02.560 --> 00:35:05.550
+They'll do this for each layer that has dropout.
+
+773
+00:35:05.550 --> 00:35:08.830
+This ensures that the total sum coming into here,
+
+774
+00:35:08.830 --> 00:35:13.130
+this final node, will match on average the total sum
+
+775
+00:35:13.130 --> 00:35:17.830
+coming into this node during prediction time or test time.
+
+776
+00:35:17.830 --> 00:35:21.530
+So, so far for the configuration of our neural network,
+
+777
+00:35:21.530 --> 00:35:23.080
+we've gone over feature scaling,
+
+778
+00:35:23.080 --> 00:35:25.810
+we've gone over the activation functions we can use,
+
+779
+00:35:25.810 --> 00:35:29.060
+the different types of loss functions, the optimizers,
+
+780
+00:35:29.060 --> 00:35:32.210
+the regularization techniques or terms we can do,
+
+781
+00:35:32.210 --> 00:35:35.840
+and the dropout specifications that we need per layer.
+
+782
+00:35:35.840 --> 00:35:38.100
+So, I think the last remaining question is,
+
+783
+00:35:38.100 --> 00:35:41.310
+how do I know what my neural network should look like?
+
+784
+00:35:41.310 --> 00:35:43.160
+How many hidden layers should it have?
+
+785
+00:35:43.160 --> 00:35:45.540
+How many neurons per hidden layer should it have,
+
+786
+00:35:45.540 --> 00:35:46.423
+things like that?
+
+787
+00:35:47.400 --> 00:35:49.810
+If your data is linearly separable,
+
+788
+00:35:49.810 --> 00:35:52.440
+you don't need any hidden layers at all.
+
+789
+00:35:52.440 --> 00:35:54.680
+Beyond that, I think it's safe to start
+
+790
+00:35:54.680 --> 00:35:56.710
+with a single hidden layer,
+
+791
+00:35:56.710 --> 00:35:58.320
+and then the number of neurons
+
+792
+00:35:58.320 --> 00:35:59.860
+in that single hidden layer
+
+793
+00:35:59.860 --> 00:36:03.750
+should be the average of your input and output.
+
+794
+00:36:03.750 --> 00:36:07.230
+So for instance, if you have 11 features on the input
+
+795
+00:36:07.230 --> 00:36:09.990
+and you're doing binary classification,
+
+796
+00:36:09.990 --> 00:36:12.590
+which means you'll have one output node,
+
+797
+00:36:12.590 --> 00:36:15.120
+then, generally, your hidden layer
+
+798
+00:36:15.120 --> 00:36:17.700
+should have no more than six neurons.
+
+799
+00:36:17.700 --> 00:36:20.860
+Another alternative is to start with more layers or units
+
+800
+00:36:20.860 --> 00:36:22.160
+than you need,
+
+801
+00:36:22.160 --> 00:36:25.110
+and then go examine the weights of your connections.
+
+802
+00:36:25.110 --> 00:36:28.360
+The weights that are close to zero should allow you
+
+803
+00:36:28.360 --> 00:36:30.450
+to prune the surrounding neuron.
+
+804
+00:36:30.450 --> 00:36:34.150
+For instance, if this weight right here was really tiny
+
+805
+00:36:34.150 --> 00:36:35.430
+based on this connection,
+
+806
+00:36:35.430 --> 00:36:39.190
+then I would try to prune this neuron right here
+
+807
+00:36:39.190 --> 00:36:41.430
+and rerun my cross validation
+
+808
+00:36:41.430 --> 00:36:44.050
+to see how much my performance was affected.
+
+809
+00:36:44.050 --> 00:36:46.340
+If my performance isn't affected at all,
+
+810
+00:36:46.340 --> 00:36:49.660
+then I would finalize the removal of this neuron.
+
+811
+00:36:49.660 --> 00:36:51.960
+So to wrap up, we learned how to train
+
+812
+00:36:51.960 --> 00:36:54.500
+and use a fully connected neural network.
+
+813
+00:36:54.500 --> 00:36:57.220
+We've gone over everything from feature scaling, all the way
+
+814
+00:36:57.220 --> 00:36:59.980
+to the architecture of the neural network itself.
+
+815
+00:36:59.980 --> 00:37:01.730
+The remainder of the videos in this section
+
+816
+00:37:01.730 --> 00:37:03.840
+will cover different types of neural networks
+
+817
+00:37:03.840 --> 00:37:06.920
+and their uses, but for this video, that's it.
+
+818
+00:37:06.920 --> 00:37:08.130
+Thanks so much for joining.
+
+819
+00:37:08.130 --> 00:37:09.810
+And join us next video
+
+820
+00:37:09.810 --> 00:37:12.103
+as we continue our machine learning journey.
+
